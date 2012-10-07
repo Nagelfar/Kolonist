@@ -25,7 +25,8 @@ namespace Kolonist.Web
 
             bundles.Add(new ScriptBundle("~/bundles/webgl").Include(
                     "~/Scripts/glMatrix*",
-                    "~/Scripts/three.*"
+                    "~/Scripts/three.*",
+                    "~/Scripts/Kolonist.*"
                     )
                  );
 

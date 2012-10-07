@@ -229,6 +229,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\NeHe\Lesson1.cshtml" />
     <Content Include="Views\NeHe\Three.cshtml" />
+    <Content Include="Scripts\Kolonist.Renderer.js" />
+    <Content Include="Views\NeHe\ThreeTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -16,5 +16,10 @@ namespace Kolonist.Web.Controllers
             return View();
         }
 
+        public ActionResult Three()
+        {
+            return View();
+        }
+
     }
 }

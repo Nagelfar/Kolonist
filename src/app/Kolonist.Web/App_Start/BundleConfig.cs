@@ -25,10 +25,14 @@ namespace Kolonist.Web
 
             bundles.Add(new ScriptBundle("~/bundles/webgl").Include(
                     "~/Scripts/glMatrix*",
-                    "~/Scripts/three.*",
-                    "~/Scripts/Kolonist.*"
+                    "~/Scripts/three.*"
                     )
                  );
+
+            bundles.Add(new ScriptBundle("~/bundles/kolonist").Include(
+                    "~/Scripts/Kolonist.*"
+                    )
+                );
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 

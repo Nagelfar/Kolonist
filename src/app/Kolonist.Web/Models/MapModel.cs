@@ -7,7 +7,7 @@ namespace Kolonist.Web.Models
 {
     public class MapModel
     {
-        public static MapModel Create(int width = 400, int height = 400)
+        public static MapModel Create(int width = 40, int height = 40)
         {
             var data = new int[width][];
             foreach (var w in Enumerable.Range(0, width))
@@ -32,7 +32,7 @@ namespace Kolonist.Web.Models
 
         public string ResourceSet { get; set; }
 
-        public int[][] Data { get; set; }
+        public double[][] Data { get; set; }
 
         public string Name { get; set; }
     }

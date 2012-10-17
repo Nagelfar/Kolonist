@@ -3,5 +3,75 @@
 }
 
 <h2>Index</h2>
+<div id="container">
+</div>
+@section Scripts{
+    <script>
+        var oldPos = new THREE.Vector3(0, 0, 0);
 
-<h3>Home!</h3>
+
+        $(function () {
+            
+            $(document).keydown(function (evnt) {
+
+                switch (evnt.keyCode) {
+                    case 39: // right
+                        oldPos.addSelf(new THREE.Vector3(1, 0, 0));
+                        break;
+                    case 37: //left
+                        oldPos.addSelf(new THREE.Vector3(-1, 0, 0));
+                        break;
+                    case 38: //up
+                        oldPos.addSelf(new THREE.Vector3(0, -1, 0));
+                        break;
+                    case 40: //down
+                        oldPos.addSelf(new THREE.Vector3(0, 1, 0));
+                        break;
+                }
+                renderer.lookAt(oldPos);
+                //var pos = {
+                //    x: (evnt.clientX / $(this).width()) * 100,
+                //    y: (evnt.clientY / $(this).height()) * 100,
+                //    z:0
+                //};
+                //renderer.lookAt(pos);
+            });
+        });
+
+        var renderer;
+
+        function init() {
+            renderer = new Renderer($('#container'));
+
+            renderer.init();
+
+            //$.get("~/api/map", { id: 1600 }, function (data) {
+            var geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
+
+
+            for (var i = 0; i < geometry.vertices.length; i++) {
+                var vertex = geometry.vertices[i];
+                vertex.z = (((i + 1) * (vertex.y + 1) * (vertex.x + 1)) % 100) / 10.0;
+            }
+            var material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+
+            var mesh = new THREE.Mesh(geometry, material);
+
+            renderer.addMesh(mesh);
+
+            renderer.animate(function () {
+                //mesh.rotation.x += 0.01;
+                //mesh.rotation.y += 0.02;
+            });
+            //});
+            //var geometry = new THREE.CubeGeometry(20, 20, 20);
+
+
+
+
+
+        }
+        init();
+
+    </script>
+}

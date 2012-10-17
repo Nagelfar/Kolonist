@@ -10,20 +10,11 @@ namespace Kolonist.Web.Controllers
 {
     public class MapController : ApiController
     {
-        private static readonly MapModel[] MapModels = new[]{
-            MapModel.Create()
-        };
-
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return MapModels.Select(x => x.Name);
-        }
-
         // GET api/<controller>/5
-        public MapModel Get(string name)
+        public MapModel Get(int id)
         {
-            return MapModels.SingleOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var world =  WorldController.MapModels.SingleOrDefault(x => x.Id == id);
+            return MapModel.Create(world);
         }
 
         // POST api/<controller>

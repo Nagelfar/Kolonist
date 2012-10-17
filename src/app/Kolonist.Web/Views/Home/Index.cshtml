@@ -11,24 +11,44 @@
 
 
         $(function () {
-            
+
             $(document).keydown(function (evnt) {
 
-                switch (evnt.keyCode) {
-                    case 39: // right
-                        oldPos.addSelf(new THREE.Vector3(1, 0, 0));
-                        break;
-                    case 37: //left
-                        oldPos.addSelf(new THREE.Vector3(-1, 0, 0));
-                        break;
-                    case 38: //up
-                        oldPos.addSelf(new THREE.Vector3(0, -1, 0));
-                        break;
-                    case 40: //down
-                        oldPos.addSelf(new THREE.Vector3(0, 1, 0));
-                        break;
+                var events = [
+                    {
+                        key: 33, // page up
+                        vector: new THREE.Vector3(0, 0, 1)
+                    },
+                    {
+                        key: 34, // page down
+                        vector: new THREE.Vector3(0, 0, -1)
+                    },
+                    {
+                        key: 39, // right
+                        vector: new THREE.Vector3(1, 0, 0)
+                    },
+                    {
+                        key: 37, // left
+                        vector: new THREE.Vector3(-1, 0, 0)
+                    },
+                    {
+                        key: 38, // up
+                        vector: new THREE.Vector3(0, -1, 0)
+                    },
+                    {
+                        key: 40,//down
+                        vector: new THREE.Vector3(0, 1, 0)
+                    }
+                ];
+
+                var match = events.filter(function (value) {
+                    return value.key === evnt.keyCode
+                });
+
+                if (match && match.length === 1) {
+                    oldPos.addSelf(match[0].vector);
+                    renderer.lookAt(oldPos);
                 }
-                renderer.lookAt(oldPos);
                 //var pos = {
                 //    x: (evnt.clientX / $(this).width()) * 100,
                 //    y: (evnt.clientY / $(this).height()) * 100,
@@ -45,19 +65,23 @@
 
             renderer.init();
 
-            //$.get("~/api/map", { id: 1600 }, function (data) {
-            var geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
-
-
-            for (var i = 0; i < geometry.vertices.length; i++) {
-                var vertex = geometry.vertices[i];
-                vertex.z = (((i + 1) * (vertex.y + 1) * (vertex.x + 1)) % 100) / 10.0;
-            }
             var material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+            var geometry = new THREE.JSONLoader();
+            geometry.load('http://localhost:12930/api/map/1600', function (data) {
 
-            var mesh = new THREE.Mesh(geometry, material);
+                var mesh = new THREE.Mesh(data, material);
 
-            renderer.addMesh(mesh);
+                renderer.addMesh(mesh);
+            });
+            //$.get("~/api/map", { id: 1600 }, function (data) {
+            //var geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
+
+
+            //for (var i = 0; i < geometry.vertices.length; i++) {
+            //    var vertex = geometry.vertices[i];
+            //    vertex.z = (((i + 1) * (vertex.y + 1) * (vertex.x + 1)) % 100) / 10.0;
+            //}
+
 
             renderer.animate(function () {
                 //mesh.rotation.x += 0.01;

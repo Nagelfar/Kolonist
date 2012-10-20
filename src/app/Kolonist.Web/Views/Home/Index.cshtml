@@ -14,15 +14,18 @@
 
             $(document).keydown(function (evnt) {
 
-                var events = [
+                var cameraEvents = [
                     {
                         key: 33, // page up
-                        vector: new THREE.Vector3(0, 0, 1)
+                        vector: new THREE.Vector3(0, 0, 10)
                     },
                     {
                         key: 34, // page down
-                        vector: new THREE.Vector3(0, 0, -1)
-                    },
+                        vector: new THREE.Vector3(0, 0, -10)
+                    }
+                ];
+                var lookAtEvents = [
+
                     {
                         key: 39, // right
                         vector: new THREE.Vector3(1, 0, 0)
@@ -41,13 +44,19 @@
                     }
                 ];
 
-                var match = events.filter(function (value) {
+                var lookAtmatch = lookAtEvents.filter(function (value) {
                     return value.key === evnt.keyCode
                 });
 
-                if (match && match.length === 1) {
-                    oldPos.addSelf(match[0].vector);
+                if (lookAtmatch && lookAtmatch.length === 1) {
+                    oldPos.addSelf(lookAtmatch[0].vector);
                     renderer.lookAt(oldPos);
+                }
+                var cameraMatch = cameraEvents.filter(function (value) {
+                    return value.key === evnt.keyCode
+                });
+                if (cameraMatch && cameraMatch.length === 1) {
+                    renderer.camera(cameraMatch[0].vector);
                 }
                 //var pos = {
                 //    x: (evnt.clientX / $(this).width()) * 100,
@@ -65,11 +74,35 @@
 
             renderer.init();
 
-            var material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+            var ambientLight = new THREE.AmbientLight(0x00ff00);
+            var light = new THREE.PointLight(0x00ff00, 100);
+
             var geometry = new THREE.JSONLoader();
+
+            var imageLoader = new THREE.ImageLoader();
+            var image = new Image();
+            imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
+            var texture = new THREE.Texture(image);
+            var material = new THREE.MeshLambertMaterial({
+                color: 0xff0000,
+                wireframe: false,
+                map: texture
+            });
+
             geometry.load('http://localhost:12930/api/map/1600', function (data) {
 
+                data.computeVertexNormals();                
+                data.computeFaceNormals();
+
+
+                //var subdivision = new THREE.SubdivisionModifier(2);
+                //subdivision.modify(data);
+                data.materials[0].map = material.map;
+                
                 var mesh = new THREE.Mesh(data, material);
+
+                renderer.addMesh(ambientLight);
+                renderer.addMesh(light);
 
                 renderer.addMesh(mesh);
             });

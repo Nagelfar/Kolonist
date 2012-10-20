@@ -35,6 +35,10 @@ var Renderer = (function () {
         camera.lookAt(vector);
     }
 
+    Renderer.prototype.camera = function (vector) {
+        camera.position = camera.position.addSelf(vector);
+    }
+
     Renderer.prototype.addMesh = function (mesh) {
         scene.add(mesh);
     }

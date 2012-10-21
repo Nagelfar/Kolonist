@@ -60,8 +60,7 @@ var Renderer = (function () {
         $.getJSON(url, '', function (data) {
             var geometry = new THREE.Geometry();
 
-            //parseModel(data.vertices, data.faces);
-            generateHeightMap(data.vertices, 40, 40);
+            generateHeightMap(data.Heights, data.Width, data.Height);
 
             geometry.computeVertexNormals();
             geometry.computeFaceNormals();
@@ -78,47 +77,11 @@ var Renderer = (function () {
             var mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
-            function parseModel(vertices, faces) {
-
-                var scale = 1;
-                var offset = 0;
-                var zLength = vertices.length;
-
-                while (offset < zLength) {
-
-                    vertex = new THREE.Vector3();
-
-                    vertex.x = vertices[offset++] * scale;
-                    vertex.y = vertices[offset++] * scale;
-                    vertex.z = vertices[offset++] * scale;
-
-                    geometry.vertices.push(vertex);
-                }
-
-                offset = 0;
-                zLength = faces.length;
-
-                while (offset < zLength) {
-
-                    type = faces[offset++];
-
-                    face = new THREE.Face3();
-
-                    face.a = faces[offset++];
-                    face.b = faces[offset++];
-                    face.c = faces[offset++];
-
-                    nVertices = 3;
-
-                    geometry.faces.push(face);
-                }
-            }
             function generateHeightMap(heights, width, height) {
 
                 function calculateIndex(x, y) {
                     return x * width + y;
                 }
-
 
                 for (var x = 0; x < width; x++) {
                     for (var y = 0; y < height; y++) {

@@ -88,29 +88,42 @@ var Renderer = (function () {
                         geometry.vertices.push(new THREE.Vector3(x, y, heights[calculateIndex(x, y)]));
                     }
                 }
-
-
-                for (var x = 0; x < width - 1; x++) {
-                    for (var y = 0; y < height - 1; y++) {
-                        var face = new THREE.Face3();
-
-                        face.a = calculateIndex(x, y);
-                        face.b = calculateIndex(x + 1, y);
-                        face.c = calculateIndex(x + 1, y + 1);
-
-                        geometry.faces.push(face);
-
-
-                        face = new THREE.Face3();
-
-                        face.a = calculateIndex(x + 1, y + 1);
-                        face.b = calculateIndex(x, y + 1);
-                        face.c = calculateIndex(x, y);
-
-                        geometry.faces.push(face);
-                    }
+                
+                function pushUVs(x, y, uvs) {
+                    uvs.push(new THREE.UV(x / width, y / height));
+                    return calculateIndex(x, y);
                 }
 
+                var uvIndex = 0;
+                geometry.faceVertexUvs = [];
+                geometry.faceVertexUvs[uvIndex] = [];
+                
+                for (var x = 0; x < width - 1; x++) {
+                    for (var y = 0; y < height - 1; y++) {
+
+                        // generate the faces (2 per cell)
+                        // and assign the uv-indices
+                        var uvs = [];
+                        var face = new THREE.Face3();
+
+                        face.a = pushUVs(x, y, uvs);
+                        face.b = pushUVs(x + 1, y, uvs);
+                        face.c = pushUVs(x + 1, y + 1, uvs);
+                        
+                        geometry.faces.push(face);
+                        geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
+
+                        uvs = [];
+                        face = new THREE.Face3();
+
+                        face.a = pushUVs(x + 1, y + 1,uvs);
+                        face.b = pushUVs(x, y + 1, uvs);
+                        face.c = pushUVs(x, y,uvs);
+
+                        geometry.faces.push(face);
+                        geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
+                    }
+                }
             }
         });
     }

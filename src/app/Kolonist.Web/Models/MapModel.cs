@@ -31,7 +31,8 @@ namespace Kolonist.Web.Models
             var vertices = from x in Enumerable.Range(0, world.Width)
                            from y in Enumerable.Range(0, world.Height)
                            let height = random.NextDouble()
-                           select new double[] { (double)x, (double)y, height };
+                           select new double[] { height };
+                           //select new double[] { (double)x, (double)y, height };
             var uvs = from x in Enumerable.Range(0, world.Width)
                       from y in Enumerable.Range(0, world.Height)
                       select new double[] { (double)x / world.Width, (double)y / world.Height };

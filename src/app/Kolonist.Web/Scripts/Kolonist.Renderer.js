@@ -60,8 +60,9 @@ var Renderer = (function () {
         $.getJSON(url, '', function (data) {
             var geometry = new THREE.Geometry();
 
-            parseModel(data.vertices, data.faces);
-            
+            //parseModel(data.vertices, data.faces);
+            generateHeightMap(data.vertices, 40, 40);
+
             geometry.computeVertexNormals();
             geometry.computeFaceNormals();
 
@@ -112,7 +113,42 @@ var Renderer = (function () {
                     geometry.faces.push(face);
                 }
             }
-           
+            function generateHeightMap(heights, width, height) {
+
+                function calculateIndex(x, y) {
+                    return x * width + y;
+                }
+
+
+                for (var x = 0; x < width; x++) {
+                    for (var y = 0; y < height; y++) {
+                        geometry.vertices.push(new THREE.Vector3(x, y, heights[calculateIndex(x, y)]));
+                    }
+                }
+
+
+                for (var x = 0; x < width - 1; x++) {
+                    for (var y = 0; y < height - 1; y++) {
+                        var face = new THREE.Face3();
+
+                        face.a = calculateIndex(x, y);
+                        face.b = calculateIndex(x + 1, y);
+                        face.c = calculateIndex(x + 1, y + 1);
+
+                        geometry.faces.push(face);
+
+
+                        face = new THREE.Face3();
+
+                        face.a = calculateIndex(x + 1, y + 1);
+                        face.b = calculateIndex(x, y + 1);
+                        face.c = calculateIndex(x, y);
+
+                        geometry.faces.push(face);
+                    }
+                }
+
+            }
         });
     }
     return Renderer;

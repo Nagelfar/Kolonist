@@ -78,19 +78,11 @@
             var ambientLight = new THREE.AmbientLight(0x00ff00);
             var light = new THREE.PointLight(0x00ff00, 100);
 
-            var jsonLoader = new THREE.JSONLoader();
-
             var imageLoader = new THREE.ImageLoader();
             var image = new Image();
             imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
-            var gl = new THREE.DataTexture();
             
             var texture = new THREE.Texture(image);
-            var material = new THREE.MeshLambertMaterial({
-                color: 0xff0000,
-                wireframe: true,
-                map: texture
-            });
 
             renderer.addMesh(ambientLight);
             renderer.addMesh(light);
@@ -100,12 +92,6 @@
                 //mesh.rotation.x += 0.01;
                 //mesh.rotation.y += 0.02;
             });
-            //});
-            //var geometry = new THREE.CubeGeometry(20, 20, 20);
-
-
-
-
 
         }
         init();

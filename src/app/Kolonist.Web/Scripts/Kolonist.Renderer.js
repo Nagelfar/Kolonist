@@ -67,8 +67,7 @@ var Renderer = (function () {
 
             geometry.computeVertexNormals();
             geometry.computeFaceNormals();
-                     
-
+                   
             //    //var subdivision = new THREE.SubdivisionModifier(2);
             //    //subdivision.modify(data);
 

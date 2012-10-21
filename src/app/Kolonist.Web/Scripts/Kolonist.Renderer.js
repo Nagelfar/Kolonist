@@ -58,18 +58,16 @@ var Renderer = (function () {
 
     Renderer.prototype.loadMap = function (url) {
         $.getJSON(url, '', function (data) {
-            var geometry = new THREE.Geometry();
+            
+            var width = data.Width,
+                height = data.Height;
 
-            generateHeightMap(data.Heights, data.Width, data.Height);
+            var geometry = generateHeightMap(data.Heights);
+            var material = generateMaterial(data.TerrainTypes);
 
             geometry.computeVertexNormals();
             geometry.computeFaceNormals();
-
-            var material = new THREE.MeshLambertMaterial({
-                color: 0xff0000,
-                wireframe: true
-                //map: texture
-            });
+                     
 
             //    //var subdivision = new THREE.SubdivisionModifier(2);
             //    //subdivision.modify(data);
@@ -77,7 +75,9 @@ var Renderer = (function () {
             var mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
-            function generateHeightMap(heights, width, height) {
+            function generateHeightMap(heights) {
+
+                var geometry = new THREE.Geometry();
 
                 function calculateIndex(x, y) {
                     return x * width + y;
@@ -124,6 +124,16 @@ var Renderer = (function () {
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
                     }
                 }
+                return geometry;
+            }
+            function generateMaterial(terrainTypes) {
+                var material = new THREE.MeshLambertMaterial({
+                    color: 0xff0000,
+                    wireframe: true
+                    //map: texture
+                });
+
+                return material;
             }
         });
     }

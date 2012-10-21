@@ -18,7 +18,7 @@ var Renderer = (function () {
     }
 
     Renderer.prototype.init = function (parameters) {
-        parameters = $.extend(true, {}, parameters, defaultParameters);
+        parameters = $.extend(true, {}, defaultParameters, parameters);
 
         camera = new THREE.PerspectiveCamera(parameters.viewAngle, parameters.width / parameters.height, parameters.near, parameters.far);
         camera.position.z = parameters.cameraZPosition;
@@ -26,6 +26,7 @@ var Renderer = (function () {
         scene = new THREE.Scene();
         
         renderer = new THREE.WebGLRenderer();
+        //renderer.setFaceCulling(false);
         renderer.setSize(parameters.width, parameters.height);
         
         _$parentContainer.append(renderer.domElement);

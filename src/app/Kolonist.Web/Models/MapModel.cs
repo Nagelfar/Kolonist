@@ -39,23 +39,25 @@ namespace Kolonist.Web.Models
             var indices = from x in Enumerable.Range(0, world.Width - 1)
                           from y in Enumerable.Range(0, world.Height - 1)
                           select new[]{
-                            (1<<3) + (1<<1),
+                              0,
+                            //(1<<3) + (1<<1),
                             IndexForVertex(x,y,world),
                             IndexForVertex(x+1,y,world),
                             IndexForVertex(x+1,y+1,world),
-                            0,
-                            IndexForTexture(x,y,world),
-                            IndexForTexture(x+1,y,world),
-                            IndexForTexture(x+1,y+1,world),
+                            //0,
+                            //IndexForTexture(x,y,world),
+                            //IndexForTexture(x+1,y,world),
+                            //IndexForTexture(x+1,y+1,world),
 
-                            (1<<3) + (1<<1),
+                            0,
+                            //(1<<3) + (1<<1),
                             IndexForVertex(x+1,y+1,world),
                             IndexForVertex(x,y+1,world),
                             IndexForVertex(x,y,world),
-                            0,
-                            IndexForTexture(x+1,y+1,world),
-                            IndexForTexture(x,y+1,world),
-                            IndexForTexture(x,y,world)
+                            //0,
+                            //IndexForTexture(x+1,y+1,world),
+                            //IndexForTexture(x,y+1,world),
+                            //IndexForTexture(x,y,world)
                           };
 
 

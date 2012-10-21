@@ -3,7 +3,7 @@
 }
 
 <h2>Index</h2>
-<div id="container">
+<div id="container" style="width:100%;height:100%;">
 </div>
 @section Scripts{
     <script>
@@ -70,51 +70,31 @@
         var renderer;
 
         function init() {
-            renderer = new Renderer($('#container'));
+            var $container = $('#container');
+            renderer = new Renderer($container);
 
-            renderer.init();
+            renderer.init( { width: $container.width(), heigth: $container.height() });
 
             var ambientLight = new THREE.AmbientLight(0x00ff00);
             var light = new THREE.PointLight(0x00ff00, 100);
 
-            var geometry = new THREE.JSONLoader();
+            var jsonLoader = new THREE.JSONLoader();
 
             var imageLoader = new THREE.ImageLoader();
             var image = new Image();
             imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
+            var gl = new THREE.DataTexture();
+            
             var texture = new THREE.Texture(image);
             var material = new THREE.MeshLambertMaterial({
                 color: 0xff0000,
-                wireframe: false,
+                wireframe: true,
                 map: texture
             });
 
-            geometry.load('http://localhost:12930/api/map/1600', function (data) {
-
-                data.computeVertexNormals();                
-                data.computeFaceNormals();
-
-
-                //var subdivision = new THREE.SubdivisionModifier(2);
-                //subdivision.modify(data);
-                data.materials[0].map = material.map;
-                
-                var mesh = new THREE.Mesh(data, material);
-
-                renderer.addMesh(ambientLight);
-                renderer.addMesh(light);
-
-                renderer.addMesh(mesh);
-            });
-            //$.get("~/api/map", { id: 1600 }, function (data) {
-            //var geometry = new THREE.PlaneGeometry(20, 20, 5, 5);
-
-
-            //for (var i = 0; i < geometry.vertices.length; i++) {
-            //    var vertex = geometry.vertices[i];
-            //    vertex.z = (((i + 1) * (vertex.y + 1) * (vertex.x + 1)) % 100) / 10.0;
-            //}
-
+            renderer.addMesh(ambientLight);
+            renderer.addMesh(light);
+            renderer.loadMap('http://localhost:12930/api/map/1600');
 
             renderer.animate(function () {
                 //mesh.rotation.x += 0.01;

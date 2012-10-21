@@ -132,6 +132,11 @@ var Renderer = (function () {
                     //map: texture
                 });
 
+                var imageLoader = new THREE.ImageLoader();
+                var image = new Image();
+                imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
+
+
                 return material;
             }
         });

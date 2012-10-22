@@ -24,7 +24,7 @@ var Renderer = (function () {
         camera.position.z = parameters.cameraZPosition;
 
         scene = new THREE.Scene();
-
+        
         renderer = new THREE.WebGLRenderer();
         //renderer.setFaceCulling(false);
         renderer.setSize(parameters.width, parameters.height);
@@ -81,7 +81,7 @@ var Renderer = (function () {
 
             function generateHeightMap(heights) {
 
-                var geometry = new THREE.Geometry();                
+                var geometry = new THREE.Geometry();
 
                 for (var x = 0; x < width; x++) {
                     for (var y = 0; y < height; y++) {
@@ -127,32 +127,42 @@ var Renderer = (function () {
                 return geometry;
             }
             function generateMaterial(terrainTypes, availiableTerrainTypes) {
-                
+
 
                 var texture = new THREE.DataTexture();
 
                 var imageLoader = new THREE.ImageLoader();
                 var terrainImages = availiableTerrainTypes.map(function (terrain) {
-                    var image = new Image();
-                    imageLoader.load(terrain, image);
-                    return { terrainType: terrain, image: image };
+                    var tile = new Image();
+                    imageLoader.load(terrain, tile);
+                    return { terrainType: terrain, image: tile };
                 });
-                
+
+                function nearestPow2(n) {
+                    var l = Math.log(n) / Math.LN2;
+                    return Math.pow(2, Math.round(l));
+                }
+
                 var texture = new THREE.Texture();
                 var tileSize = 32;
                 // compose images
-                texture.image = document.createElement('canvas');
-                texture.image.width = width * tileSize;
-                texture.image.height = height * tileSize;
-                texture.image.getContext('2d').drawImage(image, 0, 0, width, height);
-                //for (var x = 0; x < width; x++) {
-                //    for (var y = 0; y < height; y++) {
-                //        var terrainType = terrainTypes[calculateIndex(x, y)];
+                texture.image = docWument.createElement('canvas');
+                texture.image.width = nearestPow2(width * tileSize);
+                texture.image.height = nearestPow2(height * tileSize);
+                var imageContext = texture.image.getContext('2d');
 
-                        
-                //    }
-                //}
-                
+                for (var x = 0; x < width; x++) {
+                    for (var y = 0; y < height; y++) {
+                        var terrainType = terrainTypes[calculateIndex(x, y)];
+                        var image = terrainImages[0].image;
+
+                        imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
+
+                    }
+                }
+
+                texture.needsUpdate = true;
+
                 var material = new THREE.MeshLambertMaterial({
                     color: 0xff0000,
                     wireframe: true,

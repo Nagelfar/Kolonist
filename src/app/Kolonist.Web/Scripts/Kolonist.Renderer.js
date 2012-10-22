@@ -26,7 +26,7 @@ var Renderer = (function () {
         scene = new THREE.Scene();
         
         renderer = new THREE.WebGLRenderer();
-        //renderer.setFaceCulling(false);
+        renderer.setFaceCulling(false);
         renderer.setSize(parameters.width, parameters.height);
 
         _$parentContainer.append(renderer.domElement);
@@ -137,7 +137,7 @@ var Renderer = (function () {
                     imageLoader.load(terrain, tile);
                     return { terrainType: terrain, image: tile };
                 });
-
+                
                 function nearestPow2(n) {
                     var l = Math.log(n) / Math.LN2;
                     return Math.pow(2, Math.round(l));
@@ -146,7 +146,7 @@ var Renderer = (function () {
                 var texture = new THREE.Texture();
                 var tileSize = 32;
                 // compose images
-                texture.image = docWument.createElement('canvas');
+                texture.image = document.createElement('canvas');
                 texture.image.width = nearestPow2(width * tileSize);
                 texture.image.height = nearestPow2(height * tileSize);
                 var imageContext = texture.image.getContext('2d');
@@ -160,7 +160,7 @@ var Renderer = (function () {
 
                     }
                 }
-
+                
                 texture.needsUpdate = true;
 
                 var material = new THREE.MeshLambertMaterial({
@@ -168,6 +168,7 @@ var Renderer = (function () {
                     wireframe: true,
                     map: texture
                 });
+
                 return material;
             }
         });

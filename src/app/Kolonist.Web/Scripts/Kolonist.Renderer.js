@@ -58,36 +58,37 @@ var Renderer = (function () {
 
     Renderer.prototype.loadMap = function (url) {
         $.getJSON(url, '', function (data) {
-            
+
             var width = data.Width,
                 height = data.Height;
 
             var geometry = generateHeightMap(data.Heights);
-            var material = generateMaterial(data.TerrainTypes);
+            data.AvailiableTerrainTypes = ['http://localhost:12930/Content/texture.jpg'];
+            var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
 
             geometry.computeVertexNormals();
             geometry.computeFaceNormals();
-                   
+
             //    //var subdivision = new THREE.SubdivisionModifier(2);
             //    //subdivision.modify(data);
 
             var mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
+            function calculateIndex(x, y) {
+                return x * width + y;
+            }
+
             function generateHeightMap(heights) {
 
-                var geometry = new THREE.Geometry();
-
-                function calculateIndex(x, y) {
-                    return x * width + y;
-                }
+                var geometry = new THREE.Geometry();                
 
                 for (var x = 0; x < width; x++) {
                     for (var y = 0; y < height; y++) {
                         geometry.vertices.push(new THREE.Vector3(x, y, heights[calculateIndex(x, y)]));
                     }
                 }
-                
+
                 function pushUVs(x, y, uvs) {
                     uvs.push(new THREE.UV(x / width, y / height));
                     return calculateIndex(x, y);
@@ -96,7 +97,7 @@ var Renderer = (function () {
                 var uvIndex = 0;
                 geometry.faceVertexUvs = [];
                 geometry.faceVertexUvs[uvIndex] = [];
-                
+
                 for (var x = 0; x < width - 1; x++) {
                     for (var y = 0; y < height - 1; y++) {
 
@@ -108,16 +109,16 @@ var Renderer = (function () {
                         face.a = pushUVs(x, y, uvs);
                         face.b = pushUVs(x + 1, y, uvs);
                         face.c = pushUVs(x + 1, y + 1, uvs);
-                        
+
                         geometry.faces.push(face);
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
 
                         uvs = [];
                         face = new THREE.Face3();
 
-                        face.a = pushUVs(x + 1, y + 1,uvs);
+                        face.a = pushUVs(x + 1, y + 1, uvs);
                         face.b = pushUVs(x, y + 1, uvs);
-                        face.c = pushUVs(x, y,uvs);
+                        face.c = pushUVs(x, y, uvs);
 
                         geometry.faces.push(face);
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
@@ -125,18 +126,38 @@ var Renderer = (function () {
                 }
                 return geometry;
             }
-            function generateMaterial(terrainTypes) {
-                var material = new THREE.MeshLambertMaterial({
-                    color: 0xff0000,
-                    wireframe: true
-                    //map: texture
-                });
+            function generateMaterial(terrainTypes, availiableTerrainTypes) {
+                
+
+                var texture = new THREE.DataTexture();
 
                 var imageLoader = new THREE.ImageLoader();
-                var image = new Image();
-                imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
+                var terrainImages = availiableTerrainTypes.map(function (terrain) {
+                    var image = new Image();
+                    imageLoader.load(terrain, image);
+                    return { terrainType: terrain, image: image };
+                });
+                
+                var texture = new THREE.Texture();
+                var tileSize = 32;
+                // compose images
+                texture.image = document.createElement('canvas');
+                texture.image.width = width * tileSize;
+                texture.image.height = height * tileSize;
+                texture.image.getContext('2d').drawImage(image, 0, 0, width, height);
+                //for (var x = 0; x < width; x++) {
+                //    for (var y = 0; y < height; y++) {
+                //        var terrainType = terrainTypes[calculateIndex(x, y)];
 
-
+                        
+                //    }
+                //}
+                
+                var material = new THREE.MeshLambertMaterial({
+                    color: 0xff0000,
+                    wireframe: true,
+                    map: texture
+                });
                 return material;
             }
         });

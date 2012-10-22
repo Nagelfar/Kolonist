@@ -20,6 +20,7 @@ namespace Kolonist.Web.Models
         public IEnumerable<double> Heights { get; set; }
         public IEnumerable<string> TerrainTypes { get; set; }
 
+        public IEnumerable<string> AvailiableTerrainTypes { get; set; }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -41,6 +42,7 @@ namespace Kolonist.Web.Models
             {
                 Heights = heights.Select(x => x.Height).ToArray(),
                 TerrainTypes = heights.Select(x => x.Terrain).ToArray(),
+                AvailiableTerrainTypes=terrainNames,
                 Width = world.Width,
                 Height = world.Height
             };

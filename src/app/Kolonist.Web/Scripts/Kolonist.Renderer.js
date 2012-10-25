@@ -170,7 +170,7 @@ var Renderer = (function () {
                     }
 
                     var tileSize = 32;
-                    // compose images
+                    
                     texture.image = document.createElement('canvas');
                     texture.image.width = nearestPow2(width * tileSize);
                     texture.image.height = nearestPow2(height * tileSize);
@@ -182,7 +182,6 @@ var Renderer = (function () {
                             var image = terrainImages[0].image;
 
                             imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
-
                         }
                     }
 

@@ -129,7 +129,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Controllers\MapController.cs" />
-    <Compile Include="Models\MapModel.cs" />
+    <Compile Include="Models\HeightMapModel.cs" />
     <Compile Include="Models\WorldModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

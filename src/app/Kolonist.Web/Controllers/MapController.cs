@@ -11,10 +11,10 @@ namespace Kolonist.Web.Controllers
     public class MapController : ApiController
     {
         // GET api/<controller>/5
-        public MapModel Get(int id)
+        public HeightMapModel Get(int id)
         {
             var world =  WorldController.MapModels.SingleOrDefault(x => x.Id == id);
-            return MapModel.Create(world);
+            return HeightMapModel.Create(world);
         }
 
         // POST api/<controller>

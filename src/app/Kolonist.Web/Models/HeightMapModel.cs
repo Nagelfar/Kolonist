@@ -14,7 +14,7 @@ namespace Kolonist.Web.Models
         Hill
     }
 
-    public class MapModel
+    public class HeightMapModel
     {
 
         public IEnumerable<double> Heights { get; set; }
@@ -25,7 +25,7 @@ namespace Kolonist.Web.Models
         public int Width { get; set; }
         public int Height { get; set; }
 
-        internal static MapModel Create(WorldModel world)
+        internal static HeightMapModel Create(WorldModel world)
         {
             var terrainNames = Enum.GetNames(typeof(TerrainType));
             var random = new Random();
@@ -38,7 +38,7 @@ namespace Kolonist.Web.Models
 
 
 
-            return new MapModel
+            return new HeightMapModel
             {
                 Heights = heights.Select(x => x.Height).ToArray(),
                 TerrainTypes = heights.Select(x => x.Terrain).ToArray(),

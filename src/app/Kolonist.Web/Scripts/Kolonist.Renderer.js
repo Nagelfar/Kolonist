@@ -155,8 +155,6 @@ var Renderer = (function () {
                     return { terrainType: terrain, image: tile };
                 });
                 
-                
-
                 var material = new THREE.MeshLambertMaterial({
                     color: 0x00ff00,
                     wireframe: false,

@@ -24,9 +24,9 @@ var Renderer = (function () {
         camera.position.z = parameters.cameraZPosition;
 
         scene = new THREE.Scene();
-        
+
         renderer = new THREE.WebGLRenderer();
-        renderer.setFaceCulling(false);
+        //renderer.setFaceCulling(false);
         renderer.setSize(parameters.width, parameters.height);
 
         _$parentContainer.append(renderer.domElement);
@@ -68,9 +68,10 @@ var Renderer = (function () {
 
             geometry.computeVertexNormals();
             geometry.computeFaceNormals();
+            geometry.computeCentroids();
 
-            //    //var subdivision = new THREE.SubdivisionModifier(2);
-            //    //subdivision.modify(data);
+            var subdivision = new THREE.SubdivisionModifier(1);
+            subdivision.modify(geometry);
 
             var mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
@@ -97,6 +98,8 @@ var Renderer = (function () {
                 var uvIndex = 0;
                 geometry.faceVertexUvs = [];
                 geometry.faceVertexUvs[uvIndex] = [];
+                geometry.faceUvs = [];
+                geometry.faceUvs[uvIndex] = [];
 
                 for (var x = 0; x < width - 1; x++) {
                     for (var y = 0; y < height - 1; y++) {
@@ -107,69 +110,86 @@ var Renderer = (function () {
                         var face = new THREE.Face3();
 
                         face.a = pushUVs(x, y, uvs);
+
                         face.b = pushUVs(x + 1, y, uvs);
                         face.c = pushUVs(x + 1, y + 1, uvs);
 
-                        geometry.faces.push(face);
+                        
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
+                        geometry.faceUvs[uvIndex][geometry.faces.length] = new THREE.UV(x / width, y / width);
+                        geometry.faces.push(face);
 
                         uvs = [];
                         face = new THREE.Face3();
 
                         face.a = pushUVs(x + 1, y + 1, uvs);
-                        face.b = pushUVs(x, y + 1, uvs);
                         face.c = pushUVs(x, y, uvs);
+                        face.b = pushUVs(x, y + 1, uvs);
 
-                        geometry.faces.push(face);
+                        
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
+                        geometry.faceUvs[uvIndex][geometry.faces.length] = new THREE.UV(x / width, y / width);
+                        geometry.faces.push(face);
                     }
                 }
                 return geometry;
             }
             function generateMaterial(terrainTypes, availiableTerrainTypes) {
 
+                var texture = new THREE.Texture();
 
-                var texture = new THREE.DataTexture();
-
+                var loadCount = 0;
                 var imageLoader = new THREE.ImageLoader();
                 var terrainImages = availiableTerrainTypes.map(function (terrain) {
                     var tile = new Image();
                     imageLoader.load(terrain, tile);
+                    
+                    tile.onload = function () {
+                        loadCount++;
+
+                        if (loadCount === availiableTerrainTypes.length) {
+                            composeTexture();
+                            texture.needsUpdate = true;
+                        }
+                    }
                     return { terrainType: terrain, image: tile };
                 });
                 
-                function nearestPow2(n) {
-                    var l = Math.log(n) / Math.LN2;
-                    return Math.pow(2, Math.round(l));
-                }
-
-                var texture = new THREE.Texture();
-                var tileSize = 32;
-                // compose images
-                texture.image = document.createElement('canvas');
-                texture.image.width = nearestPow2(width * tileSize);
-                texture.image.height = nearestPow2(height * tileSize);
-                var imageContext = texture.image.getContext('2d');
-
-                for (var x = 0; x < width; x++) {
-                    for (var y = 0; y < height; y++) {
-                        var terrainType = terrainTypes[calculateIndex(x, y)];
-                        var image = terrainImages[0].image;
-
-                        imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
-
-                    }
-                }
                 
-                texture.needsUpdate = true;
 
                 var material = new THREE.MeshLambertMaterial({
-                    color: 0xff0000,
-                    wireframe: true,
+                    color: 0x00ff00,
+                    wireframe: false,
                     map: texture
                 });
 
                 return material;
+
+                function composeTexture() {
+                    function nearestPow2(n) {
+                        var l = Math.log(n) / Math.LN2;
+                        return Math.pow(2, Math.round(l));
+                    }
+
+                    var tileSize = 32;
+                    // compose images
+                    texture.image = document.createElement('canvas');
+                    texture.image.width = nearestPow2(width * tileSize);
+                    texture.image.height = nearestPow2(height * tileSize);
+                    var imageContext = texture.image.getContext('2d');
+
+                    for (var x = 0; x < width; x++) {
+                        for (var y = 0; y < height; y++) {
+                            var terrainType = terrainTypes[calculateIndex(x, y)];
+                            var image = terrainImages[0].image;
+
+                            imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
+
+                        }
+                    }
+
+                    //$('#tmp').html(texture.image);
+                }
             }
         });
     }

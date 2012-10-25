@@ -7,10 +7,11 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Routing;
 using System.Web.Http.Routing;
+using Kolonist.Web.Infrastructure;
 
 namespace Kolonist.Web.Controllers
 {
-    public class WorldController : ApiController
+    public class WorldController : KolonistControllerBase
     {
         public static readonly WorldModel[] MapModels = new[]{
             WorldModel.Create()

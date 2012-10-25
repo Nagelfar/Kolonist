@@ -1,4 +1,5 @@
-﻿using Kolonist.Web.Models;
+﻿using Kolonist.Web.Infrastructure;
+using Kolonist.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Web.Http;
 
 namespace Kolonist.Web.Controllers
 {
-    public class MapController : ApiController
+    public class MapController : KolonistControllerBase
     {
         // GET api/<controller>/5
         public HeightMapModel Get(int id)

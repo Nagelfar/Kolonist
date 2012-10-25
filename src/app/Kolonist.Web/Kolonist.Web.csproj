@@ -129,6 +129,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Controllers\MapController.cs" />
+    <Compile Include="Infrastructure\IResourceLinker.cs" />
+    <Compile Include="Infrastructure\RouteLinker.cs" />
     <Compile Include="Models\HeightMapModel.cs" />
     <Compile Include="Models\WorldModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -21,6 +21,10 @@ namespace Kolonist.Web.Infrastructure
             this.ctx = ctx;
         }
 
+        public Uri GetContent(string relativePath)
+        {
+            return new Uri(baseUri, relativePath);
+        }
         public Uri GetUri<T>(Expression<Action<T>> method)
         {
             if (method == null)

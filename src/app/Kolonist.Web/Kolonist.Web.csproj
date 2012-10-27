@@ -124,6 +124,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NeHeController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\WorldController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -131,8 +132,10 @@
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Infrastructure\IResourceLinker.cs" />
     <Compile Include="Infrastructure\KolonistControllerBase.cs" />
+    <Compile Include="Infrastructure\Link.cs" />
     <Compile Include="Infrastructure\RouteLinker.cs" />
     <Compile Include="Models\HeightMapModel.cs" />
+    <Compile Include="Models\TerrainType.cs" />
     <Compile Include="Models\WorldModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

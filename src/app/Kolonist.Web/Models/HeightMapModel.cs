@@ -1,33 +1,26 @@
-﻿using System;
+﻿using Kolonist.Web.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace Kolonist.Web.Models
 {
-    public enum TerrainType
-    {
-        Sand,
-        Water,
-        Grass,
-        Mountain,
-        Hill
-    }
+
 
     public class HeightMapModel
     {
-
         public IEnumerable<double> Heights { get; set; }
         public IEnumerable<string> TerrainTypes { get; set; }
 
-        public IEnumerable<string> AvailiableTerrainTypes { get; set; }
+        public IEnumerable<Link> AvailiableTerrainTypes { get; set; }
 
         public int Width { get; set; }
         public int Height { get; set; }
 
         internal static HeightMapModel Create(WorldModel world)
         {
-            var terrainNames = Enum.GetNames(typeof(TerrainType));
+            var terrainNames = TerrainType.GetTypes().ToArray();
             var random = new Random();
 
             var heights = from x in Enumerable.Range(0, world.Width)
@@ -41,8 +34,8 @@ namespace Kolonist.Web.Models
             return new HeightMapModel
             {
                 Heights = heights.Select(x => x.Height).ToArray(),
-                TerrainTypes = heights.Select(x => x.Terrain).ToArray(),
-                AvailiableTerrainTypes=terrainNames,
+                TerrainTypes = heights.Select(x => x.Terrain.Caption).ToArray(),
+                //AvailiableTerrainTypes = terrainNames,
                 Width = world.Width,
                 Height = world.Height
             };

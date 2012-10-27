@@ -14,10 +14,19 @@ namespace Kolonist.Web.Controllers
         // GET api/<controller>/5
         public HeightMapModel Get(int id)
         {
-            var world =  WorldController.MapModels.SingleOrDefault(x => x.Id == id);
-            return HeightMapModel.Create(world);
-        }
+            var world = WorldController.MapModels.SingleOrDefault(x => x.Id == id);
+            var map = HeightMapModel.Create(world);
 
+            var terrainTypes = TerrainType.GetTypes();
+            map.AvailiableTerrainTypes = terrainTypes.Select(x => new Link
+            {
+                Href = _resourceLinker.GetUri<ResourceController>(action => action.TerrainType(x.Id)),
+                Rel = x.Caption
+            }).ToArray();
+
+            return map;
+        }
+        
         // POST api/<controller>
         public void Post([FromBody]string value)
         {

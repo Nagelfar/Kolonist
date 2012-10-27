@@ -9,7 +9,7 @@ var Renderer = (function () {
         cameraZPosition: 100
     };
 
-    var camera, scene, renderer;
+    var camera, scene, renderer, controls;
 
     var _$parentContainer;
 
@@ -23,11 +23,14 @@ var Renderer = (function () {
         camera = new THREE.PerspectiveCamera(parameters.viewAngle, parameters.width / parameters.height, parameters.near, parameters.far);
         camera.position.z = parameters.cameraZPosition;
 
+
         scene = new THREE.Scene();
 
         renderer = new THREE.WebGLRenderer();
         //renderer.setFaceCulling(false);
         renderer.setSize(parameters.width, parameters.height);
+
+        controls = new THREE.TrackballControls(camera, renderer.domElement);
 
         _$parentContainer.append(renderer.domElement);
     }
@@ -50,6 +53,8 @@ var Renderer = (function () {
             requestAnimationFrame(animation);
 
             callback();
+
+            controls.update();
 
             renderer.render(scene, camera);
         }
@@ -114,7 +119,7 @@ var Renderer = (function () {
                         face.b = pushUVs(x + 1, y, uvs);
                         face.c = pushUVs(x + 1, y + 1, uvs);
 
-                        
+
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
                         geometry.faceUvs[uvIndex][geometry.faces.length] = new THREE.UV(x / width, y / width);
                         geometry.faces.push(face);
@@ -126,7 +131,7 @@ var Renderer = (function () {
                         face.c = pushUVs(x, y, uvs);
                         face.b = pushUVs(x, y + 1, uvs);
 
-                        
+
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
                         geometry.faceUvs[uvIndex][geometry.faces.length] = new THREE.UV(x / width, y / width);
                         geometry.faces.push(face);
@@ -143,7 +148,7 @@ var Renderer = (function () {
                 var terrainImages = availiableTerrainTypes.map(function (terrain) {
                     var tile = new Image();
                     imageLoader.load(terrain, tile);
-                    
+
                     tile.onload = function () {
                         loadCount++;
 
@@ -154,7 +159,7 @@ var Renderer = (function () {
                     }
                     return { terrainType: terrain, image: tile };
                 });
-                
+
                 var material = new THREE.MeshLambertMaterial({
                     color: 0x00ff00,
                     wireframe: false,
@@ -170,7 +175,7 @@ var Renderer = (function () {
                     }
 
                     var tileSize = 32;
-                    
+
                     texture.image = document.createElement('canvas');
                     texture.image.width = nearestPow2(width * tileSize);
                     texture.image.height = nearestPow2(height * tileSize);

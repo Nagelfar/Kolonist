@@ -13,59 +13,59 @@
 
         $(function () {
 
-            $(document).keydown(function (evnt) {
+            //$(document).keydown(function (evnt) {
 
-                var cameraEvents = [
-                    {
-                        key: 33, // page up
-                        vector: new THREE.Vector3(0, 0, 10)
-                    },
-                    {
-                        key: 34, // page down
-                        vector: new THREE.Vector3(0, 0, -10)
-                    }
-                ];
-                var lookAtEvents = [
+            //    var cameraEvents = [
+            //        {
+            //            key: 33, // page up
+            //            vector: new THREE.Vector3(0, 0, 10)
+            //        },
+            //        {
+            //            key: 34, // page down
+            //            vector: new THREE.Vector3(0, 0, -10)
+            //        }
+            //    ];
+            //    var lookAtEvents = [
 
-                    {
-                        key: 39, // right
-                        vector: new THREE.Vector3(1, 0, 0)
-                    },
-                    {
-                        key: 37, // left
-                        vector: new THREE.Vector3(-1, 0, 0)
-                    },
-                    {
-                        key: 38, // up
-                        vector: new THREE.Vector3(0, -1, 0)
-                    },
-                    {
-                        key: 40,//down
-                        vector: new THREE.Vector3(0, 1, 0)
-                    }
-                ];
+            //        {
+            //            key: 39, // right
+            //            vector: new THREE.Vector3(1, 0, 0)
+            //        },
+            //        {
+            //            key: 37, // left
+            //            vector: new THREE.Vector3(-1, 0, 0)
+            //        },
+            //        {
+            //            key: 38, // up
+            //            vector: new THREE.Vector3(0, -1, 0)
+            //        },
+            //        {
+            //            key: 40,//down
+            //            vector: new THREE.Vector3(0, 1, 0)
+            //        }
+            //    ];
 
-                var lookAtmatch = lookAtEvents.filter(function (value) {
-                    return value.key === evnt.keyCode
-                });
+            //    var lookAtmatch = lookAtEvents.filter(function (value) {
+            //        return value.key === evnt.keyCode
+            //    });
 
-                if (lookAtmatch && lookAtmatch.length === 1) {
-                    oldPos.addSelf(lookAtmatch[0].vector);
-                    renderer.lookAt(oldPos);
-                }
-                var cameraMatch = cameraEvents.filter(function (value) {
-                    return value.key === evnt.keyCode
-                });
-                if (cameraMatch && cameraMatch.length === 1) {
-                    renderer.camera(cameraMatch[0].vector);
-                }
-                //var pos = {
-                //    x: (evnt.clientX / $(this).width()) * 100,
-                //    y: (evnt.clientY / $(this).height()) * 100,
-                //    z:0
-                //};
-                //renderer.lookAt(pos);
-            });
+            //    if (lookAtmatch && lookAtmatch.length === 1) {
+            //        oldPos.addSelf(lookAtmatch[0].vector);
+            //        renderer.lookAt(oldPos);
+            //    }
+            //    var cameraMatch = cameraEvents.filter(function (value) {
+            //        return value.key === evnt.keyCode
+            //    });
+            //    if (cameraMatch && cameraMatch.length === 1) {
+            //        renderer.camera(cameraMatch[0].vector);
+            //    }
+            //    //var pos = {
+            //    //    x: (evnt.clientX / $(this).width()) * 100,
+            //    //    y: (evnt.clientY / $(this).height()) * 100,
+            //    //    z:0
+            //    //};
+            //    //renderer.lookAt(pos);
+            //});
         });
 
         var renderer;
@@ -85,7 +85,7 @@
             imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
             
             var texture = new THREE.Texture(image);
-
+            
             //renderer.addMesh(ambientLight);
             renderer.addMesh(light);
             renderer.loadMap('http://localhost:12930/api/map/1600');

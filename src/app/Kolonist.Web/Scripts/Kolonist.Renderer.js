@@ -60,13 +60,13 @@ var Renderer = (function () {
             var width = data.Width,
                 height = data.Height;
 
-            var geometry = generateHeightMap(data.Heights);            
+            var geometry = generateHeightMap(data.Heights);
             var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
 
             geometry.computeCentroids();
             geometry.computeFaceNormals();
             geometry.computeVertexNormals();
-            
+
 
             var subdivision = new THREE.SubdivisionModifier(1);
             subdivision.modify(geometry);
@@ -115,7 +115,7 @@ var Renderer = (function () {
                         uvs = [];
                         face = new THREE.Face3();
 
-                        face.a = pushUVs(x + 1, y + 1, uvs);                        
+                        face.a = pushUVs(x + 1, y + 1, uvs);
                         face.b = pushUVs(x, y + 1, uvs);
                         face.c = pushUVs(x, y, uvs);
 
@@ -173,13 +173,64 @@ var Renderer = (function () {
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
                             var terrainType = terrainTypes[calculateIndex(x, y)];
-                            
+
                             var image = terrainImages[terrainType];
 
                             imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
                         }
                     }
 
+
+                    var improvedNoise = new ImprovedNoise();
+
+                    var data = imageContext.getImageData(0, 0, texture.image.width, texture.image.height);
+                    var newData = imageContext.createImageData(data);
+                    for (var i = 0; i < data.data.length; i++)
+                        newData.data[i] = data.data[i];
+
+                    var maxShift = 5;
+                    var channels = 4;
+
+                    function imageIndex(x, y) {
+                        return (x * data.width + y) * channels;
+                    }
+                  
+                    function interpolate(first, second, alpha) {
+                        return first * (1 - alpha) + second * alpha;
+                    }
+                    function interpolatePixels(x, y) {
+                        x = x * tileSize;
+                        y = y * tileSize;
+                        for (var offsetX = 0; offsetX < maxShift; offsetX++) {
+                            for (var offsetY = 0; offsetY < maxShift; offsetY++) {
+
+                                for (var channel = 0; channel < channels; channel++) {
+
+                                    var currentIndex = imageIndex(x - offsetX, y - offsetY) + channel;
+                                    var nextIndex = imageIndex(x + offsetX, y + offsetY) + channel;
+
+                                    newData.data[currentIndex] = interpolate(
+                                        data.data[currentIndex],
+                                        data.data[nextIndex],
+                                        improvedNoise.noise2(x - offsetX, y - offsetY)
+                                        );
+
+                                    newData.data[nextIndex] = interpolate(
+                                        data.data[currentIndex],
+                                        data.data[nextIndex],
+                                        improvedNoise.noise2(x + offsetX, y + offsetY)
+                                        );
+                                }
+                            }
+                        }
+                    }
+
+                    for (var x = 1 ; x < width - 2; x++) {
+                        for (y = 1; y < height - 2; y++) {
+                            interpolatePixels(x, y);
+                        }
+                    }
+                    imageContext.putImageData(newData, 0, 0);
                     //$('#tmp').html(texture.image);
                 }
             }

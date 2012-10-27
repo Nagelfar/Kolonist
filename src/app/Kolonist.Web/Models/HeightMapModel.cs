@@ -20,12 +20,13 @@ namespace Kolonist.Web.Models
 
         internal static HeightMapModel Create(WorldModel world)
         {
+            double heightModificator = 3.0;
             var terrainNames = TerrainType.GetTypes().ToArray();
             var random = new Random();
 
             var heights = from x in Enumerable.Range(0, world.Width)
                           from y in Enumerable.Range(0, world.Height)
-                          let height = random.NextDouble()
+                          let height = random.NextDouble() * heightModificator
                           let terrain = terrainNames[random.Next(terrainNames.Length)]
                           select new { Height = height, Terrain = terrain };
 

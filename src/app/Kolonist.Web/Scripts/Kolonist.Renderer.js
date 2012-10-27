@@ -60,13 +60,13 @@ var Renderer = (function () {
             var width = data.Width,
                 height = data.Height;
 
-            var geometry = generateHeightMap(data.Heights);
-            data.AvailiableTerrainTypes = ['http://localhost:12930/Content/texture.jpg'];
+            var geometry = generateHeightMap(data.Heights);            
             var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
 
-            geometry.computeVertexNormals();
-            geometry.computeFaceNormals();
             geometry.computeCentroids();
+            geometry.computeFaceNormals();
+            geometry.computeVertexNormals();
+            
 
             var subdivision = new THREE.SubdivisionModifier(1);
             subdivision.modify(geometry);
@@ -96,9 +96,6 @@ var Renderer = (function () {
                 var uvIndex = 0;
                 geometry.faceVertexUvs = [];
                 geometry.faceVertexUvs[uvIndex] = [];
-                geometry.faceUvs = [];
-                geometry.faceUvs[uvIndex] = [];
-
                 for (var x = 0; x < width - 1; x++) {
                     for (var y = 0; y < height - 1; y++) {
 
@@ -108,25 +105,21 @@ var Renderer = (function () {
                         var face = new THREE.Face3();
 
                         face.a = pushUVs(x, y, uvs);
-
                         face.b = pushUVs(x + 1, y, uvs);
                         face.c = pushUVs(x + 1, y + 1, uvs);
 
 
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
-                        geometry.faceUvs[uvIndex][geometry.faces.length] = new THREE.UV(x / width, y / width);
                         geometry.faces.push(face);
 
                         uvs = [];
                         face = new THREE.Face3();
 
-                        face.a = pushUVs(x + 1, y + 1, uvs);
-                        face.c = pushUVs(x, y, uvs);
+                        face.a = pushUVs(x + 1, y + 1, uvs);                        
                         face.b = pushUVs(x, y + 1, uvs);
-
+                        face.c = pushUVs(x, y, uvs);
 
                         geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
-                        geometry.faceUvs[uvIndex][geometry.faces.length] = new THREE.UV(x / width, y / width);
                         geometry.faces.push(face);
                     }
                 }
@@ -138,9 +131,12 @@ var Renderer = (function () {
 
                 var loadCount = 0;
                 var imageLoader = new THREE.ImageLoader();
-                var terrainImages = availiableTerrainTypes.map(function (terrain) {
+
+                var terrainImages = [];
+
+                availiableTerrainTypes.forEach(function (terrain) {
                     var tile = new Image();
-                    imageLoader.load(terrain, tile);
+                    imageLoader.load(terrain.Href, tile);
 
                     tile.onload = function () {
                         loadCount++;
@@ -150,11 +146,11 @@ var Renderer = (function () {
                             texture.needsUpdate = true;
                         }
                     }
-                    return { terrainType: terrain, image: tile };
+                    terrainImages[terrain.Rel] = tile;
                 });
 
                 var material = new THREE.MeshLambertMaterial({
-                    color: 0x00ff00,
+                    //color: 0x00ff00,
                     wireframe: false,
                     map: texture
                 });
@@ -177,7 +173,8 @@ var Renderer = (function () {
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
                             var terrainType = terrainTypes[calculateIndex(x, y)];
-                            var image = terrainImages[0].image;
+                            
+                            var image = terrainImages[terrainType];
 
                             imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
                         }

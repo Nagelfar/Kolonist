@@ -35,13 +35,6 @@ var Renderer = (function () {
         _$parentContainer.append(renderer.domElement);
     }
 
-    Renderer.prototype.lookAt = function (vector) {
-        camera.lookAt(vector);
-    }
-
-    Renderer.prototype.camera = function (vector) {
-        camera.position = camera.position.addSelf(vector);
-    }
 
     Renderer.prototype.addMesh = function (mesh) {
         scene.add(mesh);

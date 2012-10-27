@@ -20,7 +20,7 @@ namespace Kolonist.Web.Controllers
             var terrainTypes = TerrainType.GetTypes();
             map.AvailiableTerrainTypes = terrainTypes.Select(x => new Link
             {
-                Href = _resourceLinker.GetUri<ResourceController>(action => action.TerrainType(x.Id)),
+                Href = _resourceLinker.GetContent<ResourceController>(action => action.TerrainTile(x.Id)),
                 Rel = x.Caption
             }).ToArray();
 

@@ -11,9 +11,9 @@ namespace Kolonist.Web.Controllers
         //
         // GET: /Resource/
 
-        public ActionResult TerrainType(int id)
+        public ActionResult TerrainTile(int id)
         {
-            return File("~/Content/map/" + id, "image/png");
+            return File("~/Content/map/" + id + ".png", "image/png");
         }
 
     }

@@ -21,11 +21,22 @@ namespace Kolonist.Web.Infrastructure
             this.ctx = ctx;
         }
 
-        public Uri GetContent(string relativePath)
+        public Uri GetContent<T>(Expression<Action<T>> method)
         {
-            return new Uri(baseUri, relativePath);
+            var routeValues = ExtractRoutDictionary<T>(method);
+
+            var relativeUri = this.ctx.Url.Route("Default", routeValues);
+            return new Uri(this.baseUri, relativeUri);
         }
         public Uri GetUri<T>(Expression<Action<T>> method)
+        {
+            var routeValues = ExtractRoutDictionary<T>(method);
+
+            var relativeUri = this.ctx.Url.Route("DefaultApi", routeValues);
+            return new Uri(this.baseUri, relativeUri);
+        }
+
+        private static Dictionary<string, object> ExtractRoutDictionary<T>(Expression<Action<T>> method)
         {
             if (method == null)
                 throw new ArgumentNullException("method");
@@ -42,9 +53,9 @@ namespace Kolonist.Web.Infrastructure
             var controllerName = methodCallExp.Method.ReflectedType.Name
                 .ToLowerInvariant().Replace("controller", "");
             routeValues.Add("controller", controllerName);
+            routeValues.Add("action", methodCallExp.Method.Name);
 
-            var relativeUri = this.ctx.Url.Route("DefaultApi", routeValues);
-            return new Uri(this.baseUri, relativeUri);
+            return routeValues;
         }
 
         private static object GetValue(MethodCallExpression methodCallExp,

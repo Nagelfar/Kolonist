@@ -8,6 +8,7 @@ namespace Kolonist.Web.Infrastructure
 {
     public interface IResourceLinker
     {
+        Uri GetContent<T>(Expression<Action<T>> method);
         Uri GetUri<T>(Expression<Action<T>> method);
     }
 }

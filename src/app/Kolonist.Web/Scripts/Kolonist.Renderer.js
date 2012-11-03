@@ -191,62 +191,7 @@ var Renderer = (function () {
                     }
 
 
-                    var improvedNoise = new ImprovedNoise();
-
-                    var data = imageContext.getImageData(0, 0, texture.image.width, texture.image.height);
-                    var newData = imageContext.createImageData(data);
-                    for (var i = 0; i < data.data.length; i++)
-                        newData.data[i] = data.data[i];
-
-                    var maxShift = 5;
-                    
-
-                    function imageIndex(x, y) {
-                        return (y * data.width + x) * channels;
-                    }
-
-                    function interpolate(first, second, alpha) {
-                        return first * (1 - alpha) + second * alpha;
-                    }
-                    function interpolatePixels(x, y) {
-                        x = x * tileSize;
-                        y = y * tileSize;
-                        //for (var dx = 0; dx < tileSize; dx++) {
-                        for (var dy = 0; dy < tileSize; dy++) {
-                            var currentX = x;//+ dx;
-                            var currentY = y + dy;
-                            for (var offsetX = 1; offsetX < maxShift; offsetX++) {
-                                //for (var offsetY = 0; offsetY < maxShift; offsetY++) {
-                                var offsetY = 0;
-                                for (var channel = 0; channel < channels; channel++) {
-
-                                    var currentIndex = imageIndex(currentX - offsetX, currentY - offsetY) + channel;
-                                    var nextIndex = imageIndex(currentX + offsetX, currentY + offsetY) + channel;
-
-                                    newData.data[currentIndex] = interpolate(
-                                        data.data[currentIndex],
-                                        data.data[nextIndex],
-                                        improvedNoise.noise2((currentX - offsetX) / width, (currentY - offsetY) / height)
-                                        );
-
-                                    newData.data[nextIndex] = interpolate(
-                                        data.data[currentIndex],
-                                        data.data[nextIndex],
-                                        improvedNoise.noise2((currentX + offsetX) / width, (currentY + offsetY) / height)
-                                        );
-                                }
-                                //}
-
-                            }
-                        }
-                    }
-
-                    for (var x = 1 ; x < width - 2; x++) {
-                        for (y = 1; y < height - 2; y++) {
-                            interpolatePixels(x, y);
-                        }
-                    }
-                    imageContext.putImageData(newData, 0, 0);
+                 
                     $('#tmp').html(texture.image);
                 }
             }

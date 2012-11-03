@@ -163,20 +163,30 @@ var Renderer = (function () {
                         return Math.pow(2, Math.round(l));
                     }
 
+                    var tileTextureSize = 1024;
                     var tileSize = 32;
+                    var textureSize = nearestPow2(Math.max(width, height) * tileSize);
+                    var textureScale = textureSize / tileTextureSize;
 
                     texture.image = document.createElement('canvas');
-                    texture.image.width = nearestPow2(width * tileSize);
-                    texture.image.height = nearestPow2(height * tileSize);
+                    texture.image.width = textureSize;
+                    texture.image.height = textureSize;
                     var imageContext = texture.image.getContext('2d');
+                    var imageData = imageContext.getImageData(0, 0, textureSize, textureSize);
+
+                    var channels = 4;
+                    function imageIndex(x, y) {
+                        return (y * imageData.width + x) * channels;
+                    }
 
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
                             var terrainType = terrainTypes[calculateIndex(x, y)];
 
-                            var image = terrainImages[terrainType];
+                            imageData.data[imageIndex(x, y) + terrainType] = 255;
+                            //var image = terrainImages[terrainType];
 
-                            imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
+                            //imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
                         }
                     }
 
@@ -189,7 +199,7 @@ var Renderer = (function () {
                         newData.data[i] = data.data[i];
 
                     var maxShift = 5;
-                    var channels = 4;
+                    
 
                     function imageIndex(x, y) {
                         return (y * data.width + x) * channels;
@@ -210,13 +220,13 @@ var Renderer = (function () {
                                 var offsetY = 0;
                                 for (var channel = 0; channel < channels; channel++) {
 
-                                    var currentIndex = imageIndex(currentX - offsetX - 1, currentY - offsetY) + channel;
+                                    var currentIndex = imageIndex(currentX - offsetX, currentY - offsetY) + channel;
                                     var nextIndex = imageIndex(currentX + offsetX, currentY + offsetY) + channel;
 
                                     newData.data[currentIndex] = interpolate(
                                         data.data[currentIndex],
                                         data.data[nextIndex],
-                                        improvedNoise.noise2((currentX - offsetX - 1) / width, (currentY - offsetY) / height)
+                                        improvedNoise.noise2((currentX - offsetX) / width, (currentY - offsetY) / height)
                                         );
 
                                     newData.data[nextIndex] = interpolate(

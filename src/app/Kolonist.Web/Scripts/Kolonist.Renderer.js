@@ -148,25 +148,65 @@ var Renderer = (function () {
                     }
                     terrainImages[terrain.Rel] = tile;
                 });
+                function nearestPow2(n) {
+                    var l = Math.log(n) / Math.LN2;
+                    return Math.pow(2, Math.round(l));
+                }
 
-                var material = new THREE.MeshLambertMaterial({
-                    //color: 0x00ff00,
-                    wireframe: false,
-                    map: texture
+                var tileTextureSize = 1024;
+                var tileSize = 32;
+                var textureSize = nearestPow2(Math.max(width, height) * tileSize);
+                var textureScale = textureSize / tileTextureSize;
+
+                var tex_uniforms= {
+                    alpha: {
+                            type: 't',
+                            value: 0,
+                            texture: texture
+                    },
+                    tex0: {
+                        type: 't',
+                        value: 1,
+                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href)
+                    },
+                    tex1: {
+                        type: 't',
+                        value: 2,
+                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[1].Href)
+                    },
+                    tex2: {
+                        type: 't',
+                        value: 3,
+                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[2].Href)
+                    },
+                    tex3: {
+                        type: 't',
+                        value: 4,
+                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[3].Href)
+                    },
+                    texscale: {
+                        type: 'f',
+                        value: textureScale
+                    }
+                }
+                
+       
+                var material = new THREE.ShaderMaterial({
+                    fragmentShader: $('#fragmentShader').text(),
+                    vertexShader:$('#vertexShader').text(),
+                    uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib["common"], THREE.UniformsLib["lights"], tex_uniforms]),
+                    lights:true
                 });
+                //var material = new THREE.MeshLambertMaterial({
+                //    //color: 0x00ff00,
+                //    wireframe: false,
+                //    map: texture
+                //});
 
                 return material;
 
                 function composeTexture() {
-                    function nearestPow2(n) {
-                        var l = Math.log(n) / Math.LN2;
-                        return Math.pow(2, Math.round(l));
-                    }
 
-                    var tileTextureSize = 1024;
-                    var tileSize = 32;
-                    var textureSize = nearestPow2(Math.max(width, height) * tileSize);
-                    var textureScale = textureSize / tileTextureSize;
 
                     texture.image = document.createElement('canvas');
                     texture.image.width = textureSize;
@@ -181,17 +221,21 @@ var Renderer = (function () {
 
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
-                            var terrainType = terrainTypes[calculateIndex(x, y)];
+                            //var terrainType = terrainTypes[calculateIndex(x, y)];
+                            var terrainType = THREE.Math.randInt(0, 3);
 
-                            imageData.data[imageIndex(x, y) + terrainType] = 255;
+                            for (var tx = 0; tx < tileSize; tx++)
+                                for (var ty = 0; ty < tileSize; ty++)
+                                    imageData.data[imageIndex(x * tileSize + tx, y * tileSize + ty) + terrainType] = 255;
                             //var image = terrainImages[terrainType];
 
                             //imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
                         }
                     }
 
+                    imageContext.putImageData(imageData, 0, 0);
 
-                 
+
                     $('#tmp').html(texture.image);
                 }
             }

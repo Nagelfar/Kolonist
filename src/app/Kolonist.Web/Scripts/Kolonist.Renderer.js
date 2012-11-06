@@ -150,7 +150,7 @@ var Renderer = (function () {
                 });
                 function nearestPow2(n) {
                     var l = Math.log(n) / Math.LN2;
-                    return Math.pow(2, Math.round(l));
+                    return Math.pow(2, Math.ceil(l));
                 }
 
                 var tileTextureSize = 1024;
@@ -158,11 +158,11 @@ var Renderer = (function () {
                 var textureSize = nearestPow2(Math.max(width, height) * tileSize);
                 var textureScale = textureSize / tileTextureSize;
 
-                var tex_uniforms= {
+                var tex_uniforms = {
                     alpha: {
-                            type: 't',
-                            value: 0,
-                            texture: texture
+                        type: 't',
+                        value: 0,
+                        texture: texture
                     },
                     tex0: {
                         type: 't',
@@ -189,14 +189,16 @@ var Renderer = (function () {
                         value: textureScale
                     }
                 }
-                
-       
+
+
                 var material = new THREE.ShaderMaterial({
                     fragmentShader: $('#fragmentShader').text(),
-                    vertexShader:$('#vertexShader').text(),
+                    vertexShader: $('#vertexShader').text(),
                     uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib["common"], THREE.UniformsLib["lights"], tex_uniforms]),
-                    lights:true
+                    lights: true
                 });
+
+
                 //var material = new THREE.MeshLambertMaterial({
                 //    //color: 0x00ff00,
                 //    wireframe: false,
@@ -212,30 +214,47 @@ var Renderer = (function () {
                     texture.image.width = textureSize;
                     texture.image.height = textureSize;
                     var imageContext = texture.image.getContext('2d');
-                    var imageData = imageContext.getImageData(0, 0, textureSize, textureSize);
+                    //var imageData = imageContext.getImageData(0, 0, textureSize, textureSize);
 
-                    var channels = 4;
-                    function imageIndex(x, y) {
-                        return (y * imageData.width + x) * channels;
-                    }
+                    //var channels = 4;
+                    //function imageIndex(x, y) {
+                    //    return (y * imageData.width + x) * channels;
+                    //}
+                    
 
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
                             //var terrainType = terrainTypes[calculateIndex(x, y)];
                             var terrainType = THREE.Math.randInt(0, 3);
 
-                            for (var tx = 0; tx < tileSize; tx++)
-                                for (var ty = 0; ty < tileSize; ty++)
-                                    imageData.data[imageIndex(x * tileSize + tx, y * tileSize + ty) + terrainType] = 255;
-                            //var image = terrainImages[terrainType];
-
+                            //for (var tx = 0; tx < tileSize; tx++)
+                            //    for (var ty = 0; ty < tileSize; ty++) {
+                            //        var index = imageIndex(x * tileSize + tx, y * tileSize + ty);
+                            //        imageData.data[index + terrainType] = 255;
+                            //    }
+                            ////var image = terrainImages[terrainType];
+                            
+                            var style = "black";
+                            switch (terrainType) {
+                                case 0:
+                                    style = "red";
+                                    break;
+                                    case 1:
+                                        style = "green";
+                                        break;
+                                case 2:
+                                    style = "blue";
+                                    break;
+                            }
+                            imageContext.fillStyle = style;
+                            var r = imageContext.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
                             //imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
                         }
                     }
 
-                    imageContext.putImageData(imageData, 0, 0);
+                    //imageContext.putImageData(imageData, 0, 0);
 
-
+                    material.needsUpdate = true;
                     $('#tmp').html(texture.image);
                 }
             }

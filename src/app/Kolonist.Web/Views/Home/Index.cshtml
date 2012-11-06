@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Index";
 }
 
@@ -25,11 +26,11 @@ void main()
 {
        float texscale_=1.0;
    // Get the color information
-   vec4 mixmap    = texture2D( alpha, vUv.st ).rgba;
-   vec3 texSand  = texture2D( tex0, vUv.st * texscale_ ).rgb;
-   vec3 texGrass = texture2D( tex1,  vUv.st * texscale_ ).rgb;
-   vec3 texWater = texture2D( tex2, vUv.st * texscale_ ).rgb;
-   vec3 texRock  = texture2D( tex3,  vUv.st * texscale_ ).rgb;
+   vec4 mixmap    = texture2D( alpha, vUv ).rgba;
+   vec3 texSand  = texture2D( tex0, vUv * texscale_ ).rgb;
+   vec3 texGrass = texture2D( tex1,  vUv* texscale_ ).rgb;
+   vec3 texWater = texture2D( tex2, vUv* texscale_ ).rgb;
+   vec3 texRock  = texture2D( tex3,  vUv* texscale_ ).rgb;
         
    // Mix the colors together
    texSand *= mixmap.r;
@@ -51,7 +52,7 @@ void main()
 
    // Apply the lighting to the final color  *@ 
    @*vec4 finalColor = vec4( min(d, 1.0), 1.0);*@
-   vec4 finalColor = vec4(texSand,1.0);
+   vec4 finalColor = vec4(texGrass,1.0);
         @*vec4 finalColor = vec4(1.0, 0.0, 1.0, 1.0);*@
    @*gl_FragColor = mix(gl_Fog.color, finalColor, fogFactor);*@
         gl_FragColor  = finalColor;

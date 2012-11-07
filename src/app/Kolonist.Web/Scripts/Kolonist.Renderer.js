@@ -142,7 +142,7 @@ var Renderer = (function () {
                         loadCount++;
 
                         if (loadCount === availiableTerrainTypes.length) {
-                            composeTexture();
+                            //composeTexture();
                             texture.needsUpdate = true;
                         }
                     }
@@ -158,32 +158,39 @@ var Renderer = (function () {
                 var textureSize = nearestPow2(Math.max(width, height) * tileSize);
                 var textureScale = textureSize / tileTextureSize;
 
+                var count = 0;
+                var update = function () {
+                    count++;
+                    if (count >= 2) {
+                        material.needsUpdate = true;
+                    }
+                }
                 var tex_uniforms = {
-                    alpha: {
-                        type: 't',
-                        value: 0,
-                        texture: texture
-                    },
+                    //alpha: {
+                    //    type: 't',
+                    //    value: 0,
+                    //    texture: texture
+                    //},
                     tex0: {
                         type: 't',
-                        value: 1,
-                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href)
+                        //value: 1,
+                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href,undefined,update)
                     },
                     tex1: {
                         type: 't',
-                        value: 2,
-                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[1].Href)
+                        //value: 2,
+                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[1].Href, undefined, update)
                     },
-                    tex2: {
-                        type: 't',
-                        value: 3,
-                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[2].Href)
-                    },
-                    tex3: {
-                        type: 't',
-                        value: 4,
-                        texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[3].Href)
-                    },
+                    //tex2: {
+                    //    type: 't',
+                    //    value: 3,
+                    //    texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[2].Href, undefined, update)
+                    //},
+                    //tex3: {
+                    //    type: 't',
+                    //    value: 4,
+                    //    texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[3].Href, undefined, update)
+                    //},
                     texscale: {
                         type: 'f',
                         value: textureScale
@@ -191,14 +198,15 @@ var Renderer = (function () {
                 }
 
 
+
                 var material = new THREE.ShaderMaterial({
                     fragmentShader: $('#fragmentShader').text(),
                     vertexShader: $('#vertexShader').text(),
                     uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib["common"], THREE.UniformsLib["lights"], tex_uniforms]),
-                    lights: true
+                    //lights: true
                 });
 
-
+                composeTexture();
                 //var material = new THREE.MeshLambertMaterial({
                 //    //color: 0x00ff00,
                 //    wireframe: false,

@@ -34,7 +34,16 @@ namespace Kolonist.Web
                     )
                 );
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                    "~/Scripts/bootstrap.*"
+                    )
+                );
+            bundles.Add(new ScriptBundle("~/bundles/less").Include(
+                    "~/Scripts/less.*"
+                    )
+                );
+
+            bundles.Add(new StyleBundle("~/Content/site").Include("~/Content/site.less"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
@@ -48,7 +57,14 @@ namespace Kolonist.Web
                         "~/Content/themes/base/jquery.ui.tabs.css",
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
-                        "~/Content/themes/base/jquery.ui.theme.css"));
+                        "~/Content/themes/base/jquery.ui.theme.css")
+                );
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
+                    "~/Content/less/bootstrap.less",
+                    "~/Content/less/responsive.less"
+                    )
+                );
         }
     }
 }

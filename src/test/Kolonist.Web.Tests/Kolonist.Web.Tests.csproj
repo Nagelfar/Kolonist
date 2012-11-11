@@ -52,24 +52,25 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Controllers\JasmineController.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Scripts\jasmine\MIT.LICENSE" />
-    <None Include="Views\Jasmine\SpecRunner.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\jasmine\jasmine.css" />
-    <Content Include="Content\jasmine\jasmine_favicon.png" />
-    <Content Include="Scripts\jasmine-samples\Player.js" />
-    <Content Include="Scripts\jasmine-samples\PlayerSpec.js" />
-    <Content Include="Scripts\jasmine-samples\Song.js" />
-    <Content Include="Scripts\jasmine-samples\SpecHelper.js" />
-    <Content Include="Scripts\jasmine\jasmine-html.js" />
-    <Content Include="Scripts\jasmine\jasmine.js" />
+    <Content Include="js\jasmine-samples\Player.js" />
+    <Content Include="js\jasmine-samples\PlayerSpec.js" />
+    <Content Include="js\jasmine-samples\Song.js" />
+    <Content Include="js\jasmine-samples\SpecHelper.js" />
+    <Content Include="js\jasmine.js" />
+    <Content Include="js\Scenarios\WhenCreatingAHeightMap.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\app\Kolonist.Web\Kolonist.Web.csproj">
+      <Project>{f705fd52-eca7-45b3-bbbe-ab6aefe4fc5d}</Project>
+      <Name>Kolonist.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

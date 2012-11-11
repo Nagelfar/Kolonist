@@ -1,6 +1,7 @@
-/// <reference path="Scripts/jasmine/jasmine.js"/>
+/// <reference path="js/jasmine.js"/>
 /// <reference path="./Player.js"/>
 /// <reference path="./Song.js"/>
+/// <reference path="./SpecHelper.js"/>
 
 describe("Player", function () {
   var player;

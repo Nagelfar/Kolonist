@@ -1,14 +1,21 @@
-﻿  @{
+﻿@{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
-<div id="container" style="width:100%;height:100%;">
+<div id="hero" class="hero-unit" style="position: absolute;">
+    my content
+    <div>
+        <button class="btn">a Button</button>
+        <div class="control-group alert ">alert! attention <span class="close">x</span></div>
+    </div>
+</div>
+<div id="container" style="width: 100%; height: 100%;">
 </div>
 <div id="tmp"></div>
 @section Scripts{
     <script>
-        var oldPos = new THREE.Vector3(0, 0, 0);   
+        var oldPos = new THREE.Vector3(0, 0, 0);
 
         var renderer;
 
@@ -16,7 +23,7 @@
             var $container = $('#container');
             renderer = new Renderer($container);
 
-            renderer.init( { width: $container.width(), heigth: $container.height() });
+            renderer.init({ width: $container.width(), heigth: $container.height() });
 
             //var ambientLight = new THREE.AmbientLight(0x00ff00);
             var light = new THREE.DirectionalLight(0xffffff);
@@ -25,9 +32,9 @@
             var imageLoader = new THREE.ImageLoader();
             var image = new Image();
             imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
-            
+
             var texture = new THREE.Texture(image);
-            
+
             //renderer.addMesh(ambientLight);
             renderer.addMesh(light);
             renderer.loadMap('http://localhost:12930/api/map/1600');
@@ -38,7 +45,7 @@
             var cube = new THREE.Mesh(new THREE.CubeGeometry(10, 10, 10), material);
             cube.rotation.y += 5;
             cube.rotation.x += 5;
-        //    renderer.addMesh(cube);
+            //    renderer.addMesh(cube);
             renderer.animate(function () {
                 //mesh.rotation.x += 0.01;
                 //mesh.rotation.y += 0.02;
@@ -47,5 +54,15 @@
         }
         init();
 
+
+        $(function () {
+            $('#container').click(function (evnt) {
+                $('#hero').offset({
+                    left: evnt.clientX,
+                    top: evnt.clientY
+                });
+
+            });
+        });
     </script>
 }

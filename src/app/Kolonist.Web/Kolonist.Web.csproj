@@ -134,6 +134,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\map\1.png" />
     <Content Include="Content\map\10.png" />
     <Content Include="Content\map\11.png" />
@@ -211,22 +213,63 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\glMatrix.js" />
-    <None Include="Scripts\jquery-1.8.2.intellisense.js" >
+    <Content Include="Content\less\wells.less" />
+    <Content Include="Content\less\variables.less" />
+    <Content Include="Content\less\utilities.less" />
+    <Content Include="Content\less\type.less" />
+    <Content Include="Content\less\tooltip.less" />
+    <Content Include="Content\less\thumbnails.less" />
+    <Content Include="Content\less\tables.less" />
+    <Content Include="Content\less\sprites.less" />
+    <Content Include="Content\less\scaffolding.less" />
+    <Content Include="Content\less\responsive-utilities.less" />
+    <Content Include="Content\less\responsive-navbar.less" />
+    <Content Include="Content\less\responsive-768px-979px.less" />
+    <Content Include="Content\less\responsive-767px-max.less" />
+    <Content Include="Content\less\responsive-1200px-min.less" />
+    <Content Include="Content\less\responsive.less" />
+    <Content Include="Content\less\reset.less" />
+    <Content Include="Content\less\progress-bars.less" />
+    <Content Include="Content\less\popovers.less" />
+    <Content Include="Content\less\pagination.less" />
+    <Content Include="Content\less\pager.less" />
+    <Content Include="Content\less\navs.less" />
+    <Content Include="Content\less\navbar.less" />
+    <Content Include="Content\less\modals.less" />
+    <Content Include="Content\less\mixins.less" />
+    <Content Include="Content\less\media.less" />
+    <Content Include="Content\less\layouts.less" />
+    <Content Include="Content\less\labels-badges.less" />
+    <Content Include="Content\less\hero-unit.less" />
+    <Content Include="Content\less\grid.less" />
+    <Content Include="Content\less\forms.less" />
+    <Content Include="Content\less\dropdowns.less" />
+    <Content Include="Content\less\component-animations.less" />
+    <Content Include="Content\less\code.less" />
+    <Content Include="Content\less\close.less" />
+    <Content Include="Content\less\carousel.less" />
+    <Content Include="Content\less\buttons.less" />
+    <Content Include="Content\less\button-groups.less" />
+    <Content Include="Content\less\breadcrumbs.less" />
+    <Content Include="Content\less\bootstrap.less" />
+    <Content Include="Content\less\alerts.less" />
+    <Content Include="Content\less\accordion.less" />
+    <None Include="Scripts\jquery-1.8.2.intellisense.js">
       <DependentUpon>jquery-1.8.2.js</DependentUpon>
     </None>
     <Content Include="Scripts\jquery-1.8.2.js" />
-    <Content Include="Scripts\jquery-1.8.2.min.js" >
+    <Content Include="Scripts\jquery-1.8.2.min.js">
       <DependentUpon>jquery-1.8.2.js</DependentUpon>
     </Content>
-    <None Include="Scripts\jquery.validate-vsdoc.js" >
+    <None Include="Scripts\jquery.validate-vsdoc.js">
       <DependentUpon>jquery.validate.js</DependentUpon>
     </None>
     <Content Include="Scripts\jquery-ui-1.9.0.js" />
-    <Content Include="Scripts\jquery-ui-1.9.0.min.js" >
+    <Content Include="Scripts\jquery-ui-1.9.0.min.js">
       <DependentUpon>jquery-ui-1.9.0.js</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" >
+    <Content Include="Scripts\jquery.validate.min.js">
       <DependentUpon>jquery.validate.js</DependentUpon>
     </Content>
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
@@ -240,6 +283,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js">
       <DependentUpon>jquery.validate.unobtrusive.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\less.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\three.js" />
     <Content Include="Scripts\three.min.js">

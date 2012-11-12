@@ -142,101 +142,127 @@ var Renderer = (function () {
                         loadCount++;
 
                         if (loadCount === availiableTerrainTypes.length) {
-                            composeTexture();
+                            //composeTexture();
                             texture.needsUpdate = true;
                         }
                     }
                     terrainImages[terrain.Rel] = tile;
                 });
+                function nearestPow2(n) {
+                    var l = Math.log(n) / Math.LN2;
+                    return Math.pow(2, Math.ceil(l));
+                }
 
-                var material = new THREE.MeshLambertMaterial({
-                    //color: 0x00ff00,
-                    wireframe: false,
-                    map: texture
+                var tileTextureSize = 1024;
+                var tileSize = 32;
+                var textureSize = nearestPow2(Math.max(width, height) * tileSize);
+                var textureScale = textureSize / tileTextureSize;
+
+                var count = 0;
+                var update = function () {
+                    count++;
+                    if (count >= 2) {
+                        material.needsUpdate = true;
+                    }
+                }
+                var tex_uniforms = {
+                    //alpha: {
+                    //    type: 't',
+                    //    value: 0,
+                    //    texture: texture
+                    //},
+                    tex0: {
+                        type: 't',
+                        //value: 1,
+                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href,undefined,update)
+                    },
+                    tex1: {
+                        type: 't',
+                        //value: 2,
+                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[1].Href, undefined, update)
+                    },
+                    //tex2: {
+                    //    type: 't',
+                    //    value: 3,
+                    //    texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[2].Href, undefined, update)
+                    //},
+                    //tex3: {
+                    //    type: 't',
+                    //    value: 4,
+                    //    texture: THREE.ImageUtils.loadTexture(availiableTerrainTypes[3].Href, undefined, update)
+                    //},
+                    texscale: {
+                        type: 'f',
+                        value: textureScale
+                    }
+                }
+
+
+
+                var material = new THREE.ShaderMaterial({
+                    fragmentShader: $('#fragmentShader').text(),
+                    vertexShader: $('#vertexShader').text(),
+                    uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib["common"], THREE.UniformsLib["lights"], tex_uniforms]),
+                    //lights: true
                 });
+
+                composeTexture();
+                //var material = new THREE.MeshLambertMaterial({
+                //    //color: 0x00ff00,
+                //    wireframe: false,
+                //    map: texture
+                //});
 
                 return material;
 
                 function composeTexture() {
-                    function nearestPow2(n) {
-                        var l = Math.log(n) / Math.LN2;
-                        return Math.pow(2, Math.round(l));
-                    }
 
-                    var tileSize = 32;
 
                     texture.image = document.createElement('canvas');
-                    texture.image.width = nearestPow2(width * tileSize);
-                    texture.image.height = nearestPow2(height * tileSize);
+                    texture.image.width = textureSize;
+                    texture.image.height = textureSize;
                     var imageContext = texture.image.getContext('2d');
+                    //var imageData = imageContext.getImageData(0, 0, textureSize, textureSize);
+
+                    //var channels = 4;
+                    //function imageIndex(x, y) {
+                    //    return (y * imageData.width + x) * channels;
+                    //}
+                    
 
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
-                            var terrainType = terrainTypes[calculateIndex(x, y)];
+                            //var terrainType = terrainTypes[calculateIndex(x, y)];
+                            var terrainType = THREE.Math.randInt(0, 3);
 
-                            var image = terrainImages[terrainType];
-
-                            imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
-                        }
-                    }
-
-
-                    var improvedNoise = new ImprovedNoise();
-
-                    var data = imageContext.getImageData(0, 0, texture.image.width, texture.image.height);
-                    var newData = imageContext.createImageData(data);
-                    for (var i = 0; i < data.data.length; i++)
-                        newData.data[i] = data.data[i];
-
-                    var maxShift = 5;
-                    var channels = 4;
-
-                    function imageIndex(x, y) {
-                        return (y * data.width + x) * channels;
-                    }
-
-                    function interpolate(first, second, alpha) {
-                        return first * (1 - alpha) + second * alpha;
-                    }
-                    function interpolatePixels(x, y) {
-                        x = x * tileSize;
-                        y = y * tileSize;
-                        //for (var dx = 0; dx < tileSize; dx++) {
-                        for (var dy = 0; dy < tileSize; dy++) {
-                            var currentX = x;//+ dx;
-                            var currentY = y + dy;
-                            for (var offsetX = 1; offsetX < maxShift; offsetX++) {
-                                //for (var offsetY = 0; offsetY < maxShift; offsetY++) {
-                                var offsetY = 0;
-                                for (var channel = 0; channel < channels; channel++) {
-
-                                    var currentIndex = imageIndex(currentX - offsetX - 1, currentY - offsetY) + channel;
-                                    var nextIndex = imageIndex(currentX + offsetX, currentY + offsetY) + channel;
-
-                                    newData.data[currentIndex] = interpolate(
-                                        data.data[currentIndex],
-                                        data.data[nextIndex],
-                                        improvedNoise.noise2((currentX - offsetX - 1) / width, (currentY - offsetY) / height)
-                                        );
-
-                                    newData.data[nextIndex] = interpolate(
-                                        data.data[currentIndex],
-                                        data.data[nextIndex],
-                                        improvedNoise.noise2((currentX + offsetX) / width, (currentY + offsetY) / height)
-                                        );
-                                }
-                                //}
-
+                            //for (var tx = 0; tx < tileSize; tx++)
+                            //    for (var ty = 0; ty < tileSize; ty++) {
+                            //        var index = imageIndex(x * tileSize + tx, y * tileSize + ty);
+                            //        imageData.data[index + terrainType] = 255;
+                            //    }
+                            ////var image = terrainImages[terrainType];
+                            
+                            var style = "black";
+                            switch (terrainType) {
+                                case 0:
+                                    style = "red";
+                                    break;
+                                    case 1:
+                                        style = "green";
+                                        break;
+                                case 2:
+                                    style = "blue";
+                                    break;
                             }
+                            imageContext.fillStyle = style;
+                            var r = imageContext.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                            //imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
                         }
                     }
 
-                    for (var x = 1 ; x < width - 2; x++) {
-                        for (y = 1; y < height - 2; y++) {
-                            interpolatePixels(x, y);
-                        }
-                    }
-                    imageContext.putImageData(newData, 0, 0);
+                    //imageContext.putImageData(imageData, 0, 0);
+
+                    material.needsUpdate = true;
                     $('#tmp').html(texture.image);
                 }
             }

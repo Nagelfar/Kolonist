@@ -9,7 +9,8 @@ namespace Kolonist.Web.Models
     {
         public static IEnumerable<TerrainType> GetTypes()
         {
-            var names = new[] { "Snow", "Desert", "Swamp", "Marsh", "Mountain1", "Mountain2", "Mountain3", "Mountain4", "Oasis", "Grass1", "Grass2", "Grass3" };
+            var s2Names = new[] { "Snow", "Desert", "Swamp", "Marsh", "Mountain1", "Mountain2", "Mountain3", "Mountain4", "Oasis", "Grass1", "Grass2", "Grass3" };
+            var names = new[] { "Snow", "Sand", "Grass", "Mountain" };
 
             return names.Select((value, index) => new TerrainType
             {

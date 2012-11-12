@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Index";
 }
 
@@ -13,7 +14,76 @@
 <div id="container" style="width: 100%; height: 100%;">
 </div>
 <div id="tmp"></div>
+
 @section Scripts{
+    <script type="x-shader/x-fragment" id="fragmentShader">
+@*uniform sampler2D alpha;*@
+
+uniform sampler2D tex0;
+uniform sampler2D tex1;
+@*uniform sampler2D tex2;*@
+@*uniform sampler2D tex3;*@
+
+uniform float texscale;
+
+varying vec3 vNormal ;
+//varying vec2 vUv;
+
+void main()
+{
+       float texscale_=1.0;
+   // Get the color information
+  vec2 vUv2 = gl_PointCoord; 
+   @*vec4 mixmap    = texture2D( alpha, vUv ).rgba;*@
+   vec3 texSand  = texture2D( tex0, vUv2  ).rgb;
+   vec3 texGrass = texture2D( tex1,  vUv2).rgb;
+   @*vec3 texWater = texture2D( tex2, vUv* texscale_ ).rgb;*@
+   @*vec3 texRock  = texture2D( tex3,  vUv* texscale_ ).rgb;*@
+   texGrass = mix(texSand,  texGrass, 0.5);
+        
+   // Mix the colors together
+   //texSand *= mixmap.r;
+   //texGrass = mix(texSand,  texGrass, mixmap.g);
+   //texWater = mix(texGrass, texWater, mixmap.b);
+   @*vec3 tx  = mix(texWater, texRock,  mixmap.a);
+
+   // Lighting calculations
+   vec3 dl = vec3(1.0,1.0,0.0);   
+   vec3 al = vec3(1.0,1.0,0.0);
+   vec3 n = normalize(vNormal);
+   vec3 dir = vec3(1.0,1.0,0.0);
+   vec3 d = tx * (dl * max( dot ( n, dir), 0.0 ) + al );   *@
+
+   @*vec3 dl = gl_LightSource[0].diffuse.rgb;   
+   vec3 al = gl_LightSource[0].ambient.rgb;
+   vec3 n = normalize(normal);
+   vec3 d = tx * (dl * max( dot ( n, lightDir), 0.0 ) + al );   
+
+   // Apply the lighting to the final color  *@ 
+   @*vec4 finalColor = vec4( min(d, 1.0), 1.0);*@
+   vec4 finalColor = vec4(texGrass,1.0);
+        @*vec4 finalColor = vec4(1.0, 0.0, 1.0, 1.0);*@
+   @*gl_FragColor = mix(gl_Fog.color, finalColor, fogFactor);*@
+        gl_FragColor  = finalColor;
+}
+    </script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+            varying vec2 vUv;
+            varying vec3 vNormal;
+
+            void main()
+            {
+                vUv = uv;
+                @*vUv = uv * offsetRepeat.zw + offsetRepeat.xy;*@
+                @*vUv2 = uv2;*@
+           //gl_Position = projectionMatrix *                  modelViewMatrix *                  vec4(position,1.0);          
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                gl_Position = projectionMatrix * mvPosition;
+
+                vNormal = normalMatrix * normal;
+            }
+
+    </script>
     <script>
         var oldPos = new THREE.Vector3(0, 0, 0);
 

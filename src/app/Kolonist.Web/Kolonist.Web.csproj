@@ -165,6 +165,23 @@
     <Content Include="Content\site.min.css">
       <DependentUpon>site.less</DependentUpon>
     </Content>
+    <Content Include="Content\map\1.jpg" />
+    <Content Include="Content\map\2.jpg" />
+    <Content Include="Content\map\3.jpg" />
+    <Content Include="Content\map\4.jpg" />
+    <Content Include="Content\map\s2\1.png" />
+    <Content Include="Content\map\s2\10.png" />
+    <Content Include="Content\map\s2\11.png" />
+    <Content Include="Content\map\s2\12.png" />
+    <Content Include="Content\map\s2\2.png" />
+    <Content Include="Content\map\s2\3.png" />
+    <Content Include="Content\map\s2\4.png" />
+    <Content Include="Content\map\s2\5.png" />
+    <Content Include="Content\map\s2\6.png" />
+    <Content Include="Content\map\s2\7.png" />
+    <Content Include="Content\map\s2\8.png" />
+    <Content Include="Content\map\s2\9.png" />
+    <Content Include="Content\map\s2\Merris-New-Greenland-TEX5_LBM.png" />
     <Content Include="Content\texture.jpg" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />

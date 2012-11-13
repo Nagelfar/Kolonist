@@ -34,21 +34,24 @@ varying vec2 vUv;
 void main()
 {
         vec4 finalColor ;
-       float texscale_=1.0;
+      
    // Get the color information
-  vec2 vUv2 = vUv;
  
    vec4 mixmap    = texture2D( alpha, vUv ).rgba;
-   vec3 texSand  = texture2D( tex0, vUv *texscale_ ).rgb;
-   vec3 texGrass = texture2D( tex1,  vUv*texscale_).rgb;
-   vec3 texWater = texture2D( tex2, vUv* texscale_ ).rgb;
-   vec3 texRock  = texture2D( tex3,  vUv* texscale_ ).rgb;
+   vec3 texSand  = texture2D( tex0, vUv *texscale ).rgb;
+   vec3 texGrass = texture2D( tex1,  vUv*texscale).rgb;
+   vec3 texWater = texture2D( tex2, vUv* texscale ).rgb;
+   vec3 texRock  = texture2D( tex3,  vUv* texscale ).rgb;
         
+    float a = mixmap.a;
+    if(a<=0.01)
+        a=0.0;
+
    // Mix the colors together
-   texSand *= mixmap.a;
+   texSand *= mixmap.r;
    texGrass = mix(texSand,  texGrass, mixmap.g);
-   texWater = mix(texGrass, texWater, mixmap.r);        
-   vec3 tx  = mix(texWater, texRock,  mixmap.b);
+   texWater = mix(texGrass, texWater, mixmap.b);        
+   vec3 tex  = mix(texWater, texRock, a);
 
    @*// Lighting calculations
    vec3 dl = vec3(1.0,1.0,0.0);   
@@ -64,12 +67,12 @@ void main()
 
    // Apply the lighting to the final color  *@ 
    @*vec4 finalColor = vec4( min(d, 1.0), 1.0);*@
-        if(mixmap.g >0.0)
+        @*if(a>0.01)
         {
         finalColor = vec4(1.0,1.0,0.0,1.0);
-        }else{
-    finalColor = vec4(tx,1.0);
-        }
+        }else{*@
+    finalColor = vec4(tex,1.0);
+        @*}*@
         @*vec4 finalColor = vec4(1.0, 0.0, 1.0, 1.0);*@
    @*gl_FragColor = mix(gl_Fog.color, finalColor, fogFactor);*@
         gl_FragColor  = finalColor;

@@ -271,18 +271,11 @@ var Renderer = (function () {
                             //        break;
                             //}
                             //imageContext.fillStyle = style;
-                            var r = imageContext.fillRect(x * usedTileSize, y * usedTileSize, usedTileSize, usedTileSize);
+                            var r = imageContext.fillRect(Math.floor(x * usedTileSize), Math.floor( y * usedTileSize),Math.ceil( usedTileSize), Math.ceil( usedTileSize));
 
                             //imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
                         }
-                    }
-                    var imageData = imageContext.getImageData(0, 0, textureSize, textureSize);
-                    //for (var i = 0; i < imageData.data.length; i += 4) {
-                    //    imageData.data[i] = 255;
-                    //}
-
-                    imageContext.putImageData(imageData, 0, 0);
-                    var imageData2 = imageContext.getImageData(0, 0, textureSize, textureSize);
+                    }                  
                     material.needsUpdate = true;
                     $('#tmp').html(texture.image);
                 }

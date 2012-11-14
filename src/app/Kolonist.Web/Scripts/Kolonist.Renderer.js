@@ -199,10 +199,26 @@ var Renderer = (function () {
 
                 tex_uniforms.tex3.value.wrapS = THREE.RepeatWrapping;
                 tex_uniforms.tex3.value.wrapT = THREE.RepeatWrapping;
-                
+
+                var vertexShader = [
+                    "varying vec2 vUv;",
+                    "varying vec3 vNormal;",
+
+                    "void main()",
+                    "{",
+                        "vUv = uv;",
+
+                        THREE.ShaderChunk.default_vertex,
+                        THREE.ShaderChunk.defaultnormal_vertex,
+                    "}"].join('\n');
+
+                var fragmentShader = [
+
+                    ].join('\n');
+
                 var material = new THREE.ShaderMaterial({
                     fragmentShader: $('#fragmentShader').text(),
-                    vertexShader: $('#vertexShader').text(),
+                    vertexShader: vertexShader,
                     uniforms: tex_uniforms
                     //lights: true
                 });
@@ -211,7 +227,7 @@ var Renderer = (function () {
                 return material;
 
                 function composeTexture() {
-                    
+
                     texture.image = document.createElement('canvas');
                     texture.image.width = textureSize;
                     texture.image.height = textureSize;
@@ -224,7 +240,7 @@ var Renderer = (function () {
                             //var terrainType = terrainTypes[calculateIndex(x, y)];
                             var terrainType = THREE.Math.randInt(0, 3);
 
-                         
+
                             imageContext.fillStyle =
                                 'rgba('
                                     + (terrainType === 0 ? 255 : 0) + ','
@@ -232,13 +248,13 @@ var Renderer = (function () {
                                     + (terrainType === 2 ? 255 : 0) + ','
                                     + (terrainType === 3 ? 1 : 0.01)
                                     + ')';
-                            
+
                             imageContext.fillRect(
                                 Math.floor(x * usedTileSize), Math.floor(y * usedTileSize),
                                 Math.ceil(usedTileSize), Math.ceil(usedTileSize)
                                 );
                         }
-                    }                  
+                    }
                     material.needsUpdate = true;
                     $('#tmp').html(texture.image);
                 }

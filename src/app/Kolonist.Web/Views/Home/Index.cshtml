@@ -56,20 +56,7 @@ void main()
     gl_FragColor  = finalColor;
 }
     </script>
-    <script id="vertexShader" type="x-shader/x-vertex">
-            varying vec2 vUv;
-            varying vec3 vNormal;
 
-            void main()
-            {
-                vUv = uv;
-        
-                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-                gl_Position = projectionMatrix * mvPosition;
-
-                vNormal = normalMatrix * normal;
-            }
-    </script>
     <script>
         var oldPos = new THREE.Vector3(0, 0, 0);
 

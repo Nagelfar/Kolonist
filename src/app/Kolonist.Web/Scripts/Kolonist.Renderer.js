@@ -158,13 +158,6 @@ var Renderer = (function () {
                 var textureSize = nearestPow2(Math.max(width, height) * tileSize);
                 var textureScale = textureSize / tileTextureSize;
 
-                var count = 0;
-                var update = function () {
-                    count++;
-                    if (count >= 2) {
-                        material.needsUpdate = true;
-                    }
-                }
                 var tex_uniforms = {
                     alpha: {
                         type: 't',
@@ -206,41 +199,23 @@ var Renderer = (function () {
 
                 tex_uniforms.tex3.value.wrapS = THREE.RepeatWrapping;
                 tex_uniforms.tex3.value.wrapT = THREE.RepeatWrapping;
-
-
-
-
+                
                 var material = new THREE.ShaderMaterial({
                     fragmentShader: $('#fragmentShader').text(),
                     vertexShader: $('#vertexShader').text(),
-                    uniforms: tex_uniforms//THREE.UniformsUtils.merge([THREE.UniformsLib["common"], THREE.UniformsLib["lights"], tex_uniforms]),
+                    uniforms: tex_uniforms
                     //lights: true
                 });
 
-                //composeTexture();
-                //var material = new THREE.MeshLambertMaterial({
-                //    //color: 0x00ff00,
-                //    wireframe: false,
-                //    map: texture
-                //});
 
                 return material;
 
                 function composeTexture() {
-
-
+                    
                     texture.image = document.createElement('canvas');
                     texture.image.width = textureSize;
                     texture.image.height = textureSize;
                     var imageContext = texture.image.getContext('2d');
-                    //imageContext.globalAlpha=1.0
-                    //imageContext.globalCompositeOperation = 'copy';
-                    //var imageData = imageContext.createImageData(textureSize, textureSize);
-
-                    //var channels = 4;
-                    //function imageIndex(x, y) {
-                    //    return ((y * imageData.width )+ x) * channels;
-                    //}
 
                     var usedTileSize = textureSize / width;
 
@@ -249,31 +224,19 @@ var Renderer = (function () {
                             //var terrainType = terrainTypes[calculateIndex(x, y)];
                             var terrainType = THREE.Math.randInt(0, 3);
 
-                            //for (var tx = 0; tx < usedTileSize; tx++)
-                            //    for (var ty = 0; ty < usedTileSize; ty++) {
-                            //        var index = imageIndex((x * usedTileSize )+ tx, (y * usedTileSize )+ ty);
-                            //        imageData.data[index + terrainType] = 255;
-                            //        imageData.data[index + 3] = 255;
-                            //    }
-                            //var image = terrainImages[terrainType];(terrainType == 3 ? 1 : 0)
-                            imageContext.fillStyle = 'rgba(' + (terrainType === 0 ? 255 : 0) + ',' + (terrainType === 1 ? 255 : 0) + ',' + (terrainType === 2 ? 255 : 0) + ',' + (terrainType === 3 ? 1 : 0.01) + ')';
-                            //imageContext.fillStyle = 'rgba(255,0,0,0.01)'; 
-                            //var style = "black";
-                            //switch (terrainType) {
-                            //    case 0:
-                            //        style = "red";
-                            //        break;
-                            //    case 1:
-                            //        style = "green";
-                            //        break;
-                            //    case 2:
-                            //        style = "blue";
-                            //        break;
-                            //}
-                            //imageContext.fillStyle = style;
-                            var r = imageContext.fillRect(Math.floor(x * usedTileSize), Math.floor( y * usedTileSize),Math.ceil( usedTileSize), Math.ceil( usedTileSize));
-
-                            //imageContext.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
+                         
+                            imageContext.fillStyle =
+                                'rgba('
+                                    + (terrainType === 0 ? 255 : 0) + ','
+                                    + (terrainType === 1 ? 255 : 0) + ','
+                                    + (terrainType === 2 ? 255 : 0) + ','
+                                    + (terrainType === 3 ? 1 : 0.01)
+                                    + ')';
+                            
+                            imageContext.fillRect(
+                                Math.floor(x * usedTileSize), Math.floor(y * usedTileSize),
+                                Math.ceil(usedTileSize), Math.ceil(usedTileSize)
+                                );
                         }
                     }                  
                     material.needsUpdate = true;

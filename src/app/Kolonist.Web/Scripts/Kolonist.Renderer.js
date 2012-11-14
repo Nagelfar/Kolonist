@@ -213,11 +213,45 @@ var Renderer = (function () {
                     "}"].join('\n');
 
                 var fragmentShader = [
+                    "uniform sampler2D alpha;",
 
+                    "uniform sampler2D tex0;",
+                    "uniform sampler2D tex1;",
+                    "uniform sampler2D tex2;",
+                    "uniform sampler2D tex3;",
+
+                    "uniform float texscale;",
+
+                    "varying vec2 vUv;",
+
+                    "void main()",
+                    "{",
+                        "vec4 finalColor ;",
+      
+                        // Get the color information 
+                        "vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
+                        "vec3 texSand  = texture2D( tex0, vUv * texscale ).rgb;",
+                        "vec3 texGrass = texture2D( tex1, vUv * texscale).rgb;",
+                        "vec3 texWater = texture2D( tex2, vUv * texscale ).rgb;",
+                        "vec3 texRock  = texture2D( tex3, vUv * texscale ).rgb;",
+        
+                        "float a = mixmap.a;",
+                        "if(a<=0.01)",
+                            "a=0.0;",
+
+                        // Mix the colors together"
+                        "texSand *= mixmap.r;",
+                        "texGrass = mix(texSand,  texGrass, mixmap.g);",
+                        "texWater = mix(texGrass, texWater, mixmap.b);  ",      
+                        "vec3 tex  = mix(texWater, texRock, a);",
+
+                        "finalColor = vec4(tex,1.0);",
+                        "gl_FragColor  = finalColor;",
+                    "}"
                     ].join('\n');
 
                 var material = new THREE.ShaderMaterial({
-                    fragmentShader: $('#fragmentShader').text(),
+                    fragmentShader: fragmentShader,
                     vertexShader: vertexShader,
                     uniforms: tex_uniforms
                     //lights: true

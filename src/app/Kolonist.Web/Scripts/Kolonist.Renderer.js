@@ -61,6 +61,7 @@ var Renderer = (function () {
                 height = data.Height;
 
             var geometry = generateHeightMap(data.Heights);
+
             var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
 
             geometry.computeCentroids();
@@ -209,8 +210,10 @@ var Renderer = (function () {
                         "vUv = uv;",
 
                         THREE.ShaderChunk.default_vertex,
+
                         THREE.ShaderChunk.defaultnormal_vertex,
-                    "}"].join('\n');
+                    "}"
+                ].join('\n');
 
                 var fragmentShader = [
                     "uniform sampler2D alpha;",
@@ -227,14 +230,14 @@ var Renderer = (function () {
                     "void main()",
                     "{",
                         "vec4 finalColor ;",
-      
+
                         // Get the color information 
                         "vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
                         "vec3 texSand  = texture2D( tex0, vUv * texscale ).rgb;",
                         "vec3 texGrass = texture2D( tex1, vUv * texscale).rgb;",
                         "vec3 texWater = texture2D( tex2, vUv * texscale ).rgb;",
                         "vec3 texRock  = texture2D( tex3, vUv * texscale ).rgb;",
-        
+
                         "float a = mixmap.a;",
                         "if(a<=0.01)",
                             "a=0.0;",
@@ -242,22 +245,43 @@ var Renderer = (function () {
                         // Mix the colors together"
                         "texSand *= mixmap.r;",
                         "texGrass = mix(texSand,  texGrass, mixmap.g);",
-                        "texWater = mix(texGrass, texWater, mixmap.b);  ",      
+                        "texWater = mix(texGrass, texWater, mixmap.b);  ",
                         "vec3 tex  = mix(texWater, texRock, a);",
 
                         "finalColor = vec4(tex,1.0);",
                         "gl_FragColor  = finalColor;",
                     "}"
-                    ].join('\n');
+                ].join('\n');
 
-                var material = new THREE.ShaderMaterial({
+                var rtMaterial = new THREE.ShaderMaterial({
                     fragmentShader: fragmentShader,
                     vertexShader: vertexShader,
                     uniforms: tex_uniforms
-                    //lights: true
                 });
 
+                var cameraRTT = new THREE.OrthographicCamera(textureSize / -2, textureSize / 2, textureSize / 2, textureSize / -2, -10000, 10000);
+                cameraRTT.position.z = 100;
 
+                var sceneRTT = new THREE.Scene();
+
+                var light = new THREE.DirectionalLight(0xffffff);
+                light.position.set(0, 0, 1).normalize();
+                sceneRTT.add(light);
+
+                var rtTexture = new THREE.WebGLRenderTarget(textureSize, textureSize, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBFormat });
+                
+                var plane = new THREE.PlaneGeometry(textureSize, textureSize);
+
+                quad = new THREE.Mesh(plane, rtMaterial);
+                quad.position.z = -100;
+                sceneRTT.add(quad);
+
+                renderer.render(sceneRTT, cameraRTT, rtTexture, true);
+
+                var material = new THREE.MeshBasicMaterial({
+                    map: rtTexture
+                });
+               
                 return material;
 
                 function composeTexture() {
@@ -289,7 +313,13 @@ var Renderer = (function () {
                                 );
                         }
                     }
+
                     material.needsUpdate = true;
+                    rtMaterial.needsUpdate = true;
+                    renderer.render(sceneRTT, cameraRTT, rtTexture, true);
+
+                    material.needsUpdate = true;
+                    //rtTexture.needsUpdate = true;
                     $('#tmp').html(texture.image);
                 }
             }

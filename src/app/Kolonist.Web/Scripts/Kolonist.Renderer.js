@@ -10,7 +10,8 @@ var Renderer = (function () {
     };
 
     var camera, scene, renderer, controls;
-
+    var cameraRTT, sceneRTT, rtTexture;
+    var single;
     var _$parentContainer;
 
     function Renderer($parentContainer) {
@@ -48,7 +49,10 @@ var Renderer = (function () {
             callback();
 
             controls.update();
-
+            //if (sceneRTT && !single) {
+                renderer.render(sceneRTT, cameraRTT, rtTexture, true);
+                //single = true;
+            //}
             renderer.render(scene, camera);
         }
         animation();
@@ -259,29 +263,30 @@ var Renderer = (function () {
                     uniforms: tex_uniforms
                 });
 
-                var cameraRTT = new THREE.OrthographicCamera(textureSize / -2, textureSize / 2, textureSize / 2, textureSize / -2, -10000, 10000);
+
+                cameraRTT = new THREE.OrthographicCamera(textureSize / -2, textureSize / 2, textureSize / 2, textureSize / -2, -10000, 10000);
                 cameraRTT.position.z = 100;
 
-                var sceneRTT = new THREE.Scene();
+                sceneRTT = new THREE.Scene();
 
                 var light = new THREE.DirectionalLight(0xffffff);
                 light.position.set(0, 0, 1).normalize();
                 sceneRTT.add(light);
 
-                var rtTexture = new THREE.WebGLRenderTarget(textureSize, textureSize, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBFormat });
-                
+                rtTexture = new THREE.WebGLRenderTarget(textureSize, textureSize, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBFormat });
+
                 var plane = new THREE.PlaneGeometry(textureSize, textureSize);
 
                 quad = new THREE.Mesh(plane, rtMaterial);
                 quad.position.z = -100;
                 sceneRTT.add(quad);
 
-                renderer.render(sceneRTT, cameraRTT, rtTexture, true);
+                renderer.render(sceneRTT, cameraRTT, rtTexture, false);
 
-                var material = new THREE.MeshBasicMaterial({
+                var material = new THREE.MeshLambertMaterial({
                     map: rtTexture
                 });
-               
+
                 return material;
 
                 function composeTexture() {

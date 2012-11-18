@@ -158,6 +158,7 @@
     <Content Include="Content\map\7.png" />
     <Content Include="Content\map\8.png" />
     <Content Include="Content\map\9.png" />
+    <Content Include="Content\map\ComposedTexture.png" />
     <Content Include="Content\map\Merris-New-Greenland-TEX5_LBM.png" />
     <Content Include="Content\site.css">
       <DependentUpon>site.less</DependentUpon>

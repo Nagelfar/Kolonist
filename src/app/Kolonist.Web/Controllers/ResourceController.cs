@@ -13,7 +13,8 @@ namespace Kolonist.Web.Controllers
 
         public ActionResult TerrainTile(int id)
         {
-            return File("~/Content/map/" + id + ".jpg", "image/jpg");
+            //return File("~/Content/map/" + id + ".jpg", "image/jpg");
+            return File("~/Content/map/ComposedTexture.png", "image/png");
         }
 
     }

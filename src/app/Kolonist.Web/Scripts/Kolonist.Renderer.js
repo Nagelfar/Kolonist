@@ -10,8 +10,7 @@ var Renderer = (function () {
     };
 
     var camera, scene, renderer, controls;
-    var cameraRTT, sceneRTT, rtTexture;
-    var single;
+    
     var _$parentContainer;
 
     function Renderer($parentContainer) {
@@ -49,10 +48,7 @@ var Renderer = (function () {
             callback();
 
             controls.update();
-            //if (sceneRTT && !single) {
-                renderer.render(sceneRTT, cameraRTT, rtTexture, true);
-                //single = true;
-            //}
+ 
             renderer.render(scene, camera);
         }
         animation();
@@ -168,22 +164,11 @@ var Renderer = (function () {
                         type: 't',
                         value: texture,
                     },
-                    tex0: {
+                    tileTexture: {
                         type: 't',
                         value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href)
                     },
-                    tex1: {
-                        type: 't',
-                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[1].Href)
-                    },
-                    tex2: {
-                        type: 't',
-                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[2].Href)
-                    },
-                    tex3: {
-                        type: 't',
-                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[3].Href)
-                    },
+             
                     texscale: {
                         type: 'f',
                         value: textureScale
@@ -192,19 +177,10 @@ var Renderer = (function () {
 
                 tex_uniforms.alpha.value.wrapS = THREE.ClampToEdgeWrapping;
                 tex_uniforms.alpha.value.wrapT = THREE.ClampToEdgeWrapping;
-
-                tex_uniforms.tex0.value.wrapS = THREE.RepeatWrapping;
-                tex_uniforms.tex0.value.wrapT = THREE.RepeatWrapping;
-
-                tex_uniforms.tex1.value.wrapS = THREE.RepeatWrapping;
-                tex_uniforms.tex1.value.wrapT = THREE.RepeatWrapping;
-
-                tex_uniforms.tex2.value.wrapS = THREE.RepeatWrapping;
-                tex_uniforms.tex2.value.wrapT = THREE.RepeatWrapping;
-
-                tex_uniforms.tex3.value.wrapS = THREE.RepeatWrapping;
-                tex_uniforms.tex3.value.wrapT = THREE.RepeatWrapping;
-
+                
+                tex_uniforms.tileTexture.value.wrapS = THREE.RepeatWrapping;
+                tex_uniforms.tileTexture.value.wrapT = THREE.RepeatWrapping;
+           
                 var vertexShader = [
                     "varying vec2 vUv;",
                     "varying vec3 vNormal;",
@@ -227,9 +203,30 @@ var Renderer = (function () {
                     "uniform sampler2D tex2;",
                     "uniform sampler2D tex3;",
 
+                    "uniform sampler2D tileTexture;",
+
                     "uniform float texscale;",
 
                     "varying vec2 vUv;",
+
+                    "vec3 get_terrain_uv(float type, vec2 uv)",
+                    "{",
+                        "float tiles_per_row = 2.0;",
+                        "float tile_size = 1.0 / tiles_per_row;",
+
+                        // handles repeat of the tiles
+                        "uv.x = mod(mod((uv.x / (1.0 / texscale)) , texscale),1.0);",
+                        "uv.y = mod(mod((uv.y / (1.0 / texscale)) , texscale),1.0);",
+
+                        "float tileX = mod(type, tiles_per_row) * tile_size;",
+                        "float tileY = floor(type / tiles_per_row) * tile_size;",
+
+                        "uv.x = tileX + clamp((uv.x * tile_size), 0.0, 1.0);",
+                        "uv.y = tileY + clamp((uv.y * tile_size), 0.0, 1.0);",
+
+                        "return texture2D(tileTexture, uv).rgb;",
+                    "}",
+
 
                     "void main()",
                     "{",
@@ -237,10 +234,10 @@ var Renderer = (function () {
 
                         // Get the color information 
                         "vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
-                        "vec3 texSand  = texture2D( tex0, vUv * texscale ).rgb;",
-                        "vec3 texGrass = texture2D( tex1, vUv * texscale).rgb;",
-                        "vec3 texWater = texture2D( tex2, vUv * texscale ).rgb;",
-                        "vec3 texRock  = texture2D( tex3, vUv * texscale ).rgb;",
+                        "vec3 texSand  = get_terrain_uv( 1.0, vUv );",
+                        "vec3 texGrass = get_terrain_uv(2.0 , vUv );",
+                        "vec3 texSnow = get_terrain_uv(0.0 , vUv );",
+                        "vec3 texRock  = get_terrain_uv(3.0 , vUv );",
 
                         "float a = mixmap.a;",
                         "if(a<=0.01)",
@@ -249,42 +246,18 @@ var Renderer = (function () {
                         // Mix the colors together"
                         "texSand *= mixmap.r;",
                         "texGrass = mix(texSand,  texGrass, mixmap.g);",
-                        "texWater = mix(texGrass, texWater, mixmap.b);  ",
-                        "vec3 tex  = mix(texWater, texRock, a);",
+                        "texSnow = mix(texGrass, texSnow, mixmap.b);  ",
+                        "vec3 tex  = mix(texSnow, texRock, a);",
 
                         "finalColor = vec4(tex,1.0);",
                         "gl_FragColor  = finalColor;",
                     "}"
                 ].join('\n');
 
-                var rtMaterial = new THREE.ShaderMaterial({
+                var material = new THREE.ShaderMaterial({
                     fragmentShader: fragmentShader,
                     vertexShader: vertexShader,
                     uniforms: tex_uniforms
-                });
-
-
-                cameraRTT = new THREE.OrthographicCamera(textureSize / -2, textureSize / 2, textureSize / 2, textureSize / -2, -10000, 10000);
-                cameraRTT.position.z = 100;
-
-                sceneRTT = new THREE.Scene();
-
-                var light = new THREE.DirectionalLight(0xffffff);
-                light.position.set(0, 0, 1).normalize();
-                sceneRTT.add(light);
-
-                rtTexture = new THREE.WebGLRenderTarget(textureSize, textureSize, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBFormat });
-
-                var plane = new THREE.PlaneGeometry(textureSize, textureSize);
-
-                quad = new THREE.Mesh(plane, rtMaterial);
-                quad.position.z = -100;
-                sceneRTT.add(quad);
-
-                renderer.render(sceneRTT, cameraRTT, rtTexture, false);
-
-                var material = new THREE.MeshLambertMaterial({
-                    map: rtTexture
                 });
 
                 return material;
@@ -320,11 +293,6 @@ var Renderer = (function () {
                     }
 
                     material.needsUpdate = true;
-                    rtMaterial.needsUpdate = true;
-                    renderer.render(sceneRTT, cameraRTT, rtTexture, true);
-
-                    material.needsUpdate = true;
-                    //rtTexture.needsUpdate = true;
                     $('#tmp').html(texture.image);
                 }
             }

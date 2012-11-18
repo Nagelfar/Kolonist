@@ -10,7 +10,7 @@ var Renderer = (function () {
     };
 
     var camera, scene, renderer, controls;
-    
+
     var _$parentContainer;
 
     function Renderer($parentContainer) {
@@ -48,7 +48,7 @@ var Renderer = (function () {
             callback();
 
             controls.update();
- 
+
             renderer.render(scene, camera);
         }
         animation();
@@ -61,6 +61,11 @@ var Renderer = (function () {
                 height = data.Height;
 
             var geometry = generateHeightMap(data.Heights);
+            var perlin = ImprovedNoise();
+            for (var i = 0; i < geometry.vertices.length; i++) {
+                var vertex = geometry.vertices[i];
+                vertex.z = perlin.noise3(vertex.x, vertex.y, vertex.z) * 3;
+            }
 
             var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
 
@@ -69,7 +74,7 @@ var Renderer = (function () {
             geometry.computeVertexNormals();
 
 
-            var subdivision = new THREE.SubdivisionModifier(1);
+            var subdivision = new THREE.SubdivisionModifier(2);
             subdivision.modify(geometry);
 
             var mesh = new THREE.Mesh(geometry, material);
@@ -168,7 +173,7 @@ var Renderer = (function () {
                         type: 't',
                         value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href)
                     },
-             
+
                     texscale: {
                         type: 'f',
                         value: textureScale
@@ -177,10 +182,10 @@ var Renderer = (function () {
 
                 tex_uniforms.alpha.value.wrapS = THREE.ClampToEdgeWrapping;
                 tex_uniforms.alpha.value.wrapT = THREE.ClampToEdgeWrapping;
-                
+
                 tex_uniforms.tileTexture.value.wrapS = THREE.RepeatWrapping;
                 tex_uniforms.tileTexture.value.wrapT = THREE.RepeatWrapping;
-           
+
                 var vertexShader = [
                     "varying vec2 vUv;",
                     "varying vec3 vNormal;",

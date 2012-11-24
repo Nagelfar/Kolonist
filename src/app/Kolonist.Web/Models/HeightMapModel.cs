@@ -1,5 +1,6 @@
 ﻿using Kolonist.Web.Infrastructure;
 using LibNoise.Filter;
+using LibNoise.Modifier;
 using LibNoise.Primitive;
 using System;
 using System.Collections.Generic;
@@ -24,22 +25,49 @@ namespace Kolonist.Web.Models
         {
             //double heightModificator = 3.0;
             var terrainNames = TerrainType.GetTypes()
-                .OrderBy(x=>x.BaseHeight)
+                .OrderBy(x => x.BaseHeight)
                 .ToArray();
 
-            var noiseMap = new LibNoise.Builder.NoiseMap(world.Width, world.Height);
-            var noise = new ImprovedPerlin()
-                    {
-                        Quality = LibNoise.NoiseQuality.Best
-                    };
-            var noiseBuilder = new LibNoise.Builder.NoiseMapBuilderPlane(0.0f, 1.0f, 0.0f, 1.0f, false)
+            var noiseMap = new LibNoise.Builder.NoiseMap(world.Width, world.Height)
             {
-                SourceModule = new MultiFractal()
+                BorderValue = 0.0f
+            };
+
+            var noise = new ImprovedPerlin()
+            {
+                Quality = LibNoise.NoiseQuality.Best,
+                Seed = DateTime.Now.Millisecond
+            };
+            var noiseBuilder = new LibNoise.Builder.NoiseMapBuilderPlane(0.0f, 1.0f, 0.0f, 1.0f, true)
+            {
+                SourceModule = new ScaleBias()
                 {
-                    Lacunarity = 2.0f,
-                    Frequency = 1.0f,
-                    Primitive2D = noise,
-                    Primitive3D = noise
+                    Scale = 10.0f,
+                    Bias = 10.0f,
+                    SourceModule = new LibNoise.Modifier.Select
+                    {
+                        ControlModule = new Pipe()
+                        {
+                            Frequency = 0.5f,
+                            Lacunarity = 0.25f,
+                            Primitive3D = noise
+                        },
+                        LeftModule = new ScaleBias
+                        {
+                            Scale = 0.125f,
+                            Bias = -0.75f,
+                            SourceModule = new Billow
+                            {
+                                Frequency = 2.0f,
+                                Primitive3D = noise
+                            }
+                        },
+                        RightModule = new RidgedMultiFractal
+                        {
+                            Lacunarity = 2.0f,
+                        },
+                        EdgeFalloff = 0.125f
+                    }
                 },
                 NoiseMap = noiseMap,
             };
@@ -52,7 +80,7 @@ namespace Kolonist.Web.Models
             var heights = noiseMap.Share().Select(x => (double)x).ToList();
             float max = 0.0f, min = 0.0f;
             noiseMap.MinMax(out min, out max);
-            
+
             return new HeightMapModel
             {
                 Heights = heights.ToArray(),

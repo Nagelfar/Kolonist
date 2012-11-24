@@ -145,11 +145,12 @@ var Renderer = (function () {
 
                 var vertexShader = [
                     "varying vec2 vUv;",
-                    "varying vec3 vNormal;",
+                    "varying vec3 vPosition;",
 
                     "void main()",
                     "{",
                         "vUv = uv;",
+                        "vPosition = position;",
 
                         THREE.ShaderChunk.default_vertex,
 
@@ -164,6 +165,7 @@ var Renderer = (function () {
                     "uniform float texscale;",
 
                     "varying vec2 vUv;",
+                    "varying vec3 vPosition;",
 
                     "vec3 get_terrain_uv(float type, vec2 uv)",
                     "{",
@@ -194,27 +196,48 @@ var Renderer = (function () {
                         "return alpha;",
                     "}",
 
+                    "vec4 getBlendings(float z) \
+                    { \
+                        vec4 result = vec4(0.0, 0.0, 0.0, 0.0); \
+                        float sgnZ = sign(z) * z; \
+                        result.r = min(abs(0.5 - sgnZ ), 1.0); \
+                        result.g = min(abs(1.0 - sgnZ ), 1.0); \
+                        result.b = min(abs(1.5 - sgnZ ), 1.0); \
+                        result.a = min(max(abs(2.0 - sgnZ ),0.0), 1.0); \
+                        return result; \
+                }",
+
+            //if(z <=0.5) \
+            //    result.r = 1.0; \
+            //else if(z <= 1.0)\
+            //    result.g = 1.0; \
+            //else if (z <= 1.2)\
+            //    result.b = 1.0; \
+            //else \
+            //    result.a = 1.0; \
                     "void main()",
                     "{",
                         "vec4 finalColor ;",
 
                         // Get the blend information 
-                        "vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
+                        //"vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
+                        "vec4 mixmap    = getBlendings(vPosition.z / 10.0);",
 
                         "vec3 texRock  = get_terrain_uv( 1.0, vUv );",
                         "vec3 texGrass = get_terrain_uv(0.0 , vUv );",
                         "vec3 texSnow = get_terrain_uv(2.0 , vUv );",
                         "vec3 texSand  = get_terrain_uv(3.0 , vUv );",
 
-                        "float a = correctAlphaValue(mixmap.a);",
+                        //"float a = correctAlphaValue(mixmap.a);",
 
                         // Mix the colors together
                         "texSand *= mixmap.r;",
                         "texGrass = mix(texSand,  texGrass, mixmap.g);",
                         "texRock = mix(texGrass, texRock, mixmap.b);  ",
-                        "vec3 finalTexture  = mix(texRock,texSnow, a);",
+                        "vec3 finalTexture  = mix(texRock,texSnow, mixmap.a);",
 
                         "finalColor = vec4(finalTexture, 1.0);",
+                        //"if(vPosition.z/10.0 >= 1.0) finalColor = vec4(1.0,1.0,0.0,1.0);",
                         "gl_FragColor  = finalColor;",
                     "}"
                 ].join('\n');

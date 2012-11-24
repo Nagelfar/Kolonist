@@ -148,6 +148,11 @@ var Renderer = (function () {
                         "uv.x = mod(mod((uv.x / (1.0 / texscale)) , texscale),1.0);",
                         "uv.y = mod(mod((uv.y / (1.0 / texscale)) , texscale),1.0);",
 
+
+                        // cutoff to prevent texutres from overlapping
+                        "uv.x = (uv.x * .6) + .2;",
+                        "uv.y = (uv.y * .6) + .2;",
+
                         // calculates the base coordinates for the tiles ("0/0" position of the tile)
                         "float tileX = mod(type, tiles_per_row) * tile_size;",
                         "float tileY = floor(type / tiles_per_row) * tile_size;",
@@ -188,8 +193,6 @@ var Renderer = (function () {
                         "vec3 texGrass = get_terrain_uv(0.0 , vUv );",
                         "vec3 texSnow = get_terrain_uv(2.0 , vUv );",
                         "vec3 texSand  = get_terrain_uv(3.0 , vUv );",
-
-                        //"float a = correctAlphaValue(mixmap.a);",
 
                         // Mix the colors together
                         "texSand *= mixmap.r;",

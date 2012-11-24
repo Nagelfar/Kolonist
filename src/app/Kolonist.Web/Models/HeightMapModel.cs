@@ -28,7 +28,11 @@ namespace Kolonist.Web.Models
                           from y in Enumerable.Range(0, world.Height)
                           let height = random.NextDouble() * heightModificator
                           let terrain = terrainNames[random.Next(terrainNames.Length)]
-                          select new { Height = height, Terrain = terrain };
+                          select new
+                          {
+                              Height = height,
+                              Terrain = terrain
+                          };
 
 
 

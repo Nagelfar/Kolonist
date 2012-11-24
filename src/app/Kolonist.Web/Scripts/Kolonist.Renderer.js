@@ -203,11 +203,6 @@ var Renderer = (function () {
                 var fragmentShader = [
                     "uniform sampler2D alpha;",
 
-                    "uniform sampler2D tex0;",
-                    "uniform sampler2D tex1;",
-                    "uniform sampler2D tex2;",
-                    "uniform sampler2D tex3;",
-
                     "uniform sampler2D tileTexture;",
 
                     "uniform float texscale;",
@@ -239,6 +234,7 @@ var Renderer = (function () {
 
                         // Get the color information 
                         "vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
+
                         "vec3 texSand  = get_terrain_uv( 1.0, vUv );",
                         "vec3 texGrass = get_terrain_uv(2.0 , vUv );",
                         "vec3 texSnow = get_terrain_uv(0.0 , vUv );",

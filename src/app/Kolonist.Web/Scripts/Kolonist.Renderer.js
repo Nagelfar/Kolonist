@@ -187,21 +187,11 @@ var Renderer = (function () {
                         "return texture2D(tileTexture, uv).rgb;",
                     "}",
 
-                    "float correctAlphaValue(float alpha)",
-                    "{",
-                        // correction for alpha value (alpha 0.0 does not work in texture)
-                        "if(alpha<=0.01)",
-                            "alpha=0.0;",
-
-                        "return alpha;",
-                    "}",
-
                     "float blend(float coordinate, float offset)",
                     "{",
                         "float fullBlendWidth = 1.5;",
                         "float blendingSpeed = 2.0;",
 
-                        //"return  max(min(fullBlendWidth - abs(coordinate - offset) * blendingSpeed, 1.0), 0.0); ",
                         "return clamp(fullBlendWidth - abs(coordinate - offset) * blendingSpeed, 0.0, 1.0);",
                     "}",
 
@@ -215,20 +205,11 @@ var Renderer = (function () {
                         "return result;",
                    "}",
 
-            //if(z <=0.5) \
-            //    result.r = 1.0; \
-            //else if(z <= 1.0)\
-            //    result.g = 1.0; \
-            //else if (z <= 1.2)\
-            //    result.b = 1.0; \
-            //else \
-            //    result.a = 1.0; \
                     "void main()",
                     "{",
                         "vec4 finalColor ;",
 
-                        // Get the blend information 
-                        //"vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
+                        // Get the blend information                     
                         "vec4 mixmap    = getBlendings(vPosition.z / 10.0);",
 
                         "vec3 texRock  = get_terrain_uv( 1.0, vUv );",

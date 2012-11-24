@@ -202,7 +202,6 @@ var Renderer = (function () {
 
                 var fragmentShader = [
                     "uniform sampler2D alpha;",
-
                     "uniform sampler2D tileTexture;",
 
                     "uniform float texscale;",
@@ -218,21 +217,31 @@ var Renderer = (function () {
                         "uv.x = mod(mod((uv.x / (1.0 / texscale)) , texscale),1.0);",
                         "uv.y = mod(mod((uv.y / (1.0 / texscale)) , texscale),1.0);",
 
+                        // calculates the base coordinates for the tiles ("0/0" position of the tile)
                         "float tileX = mod(type, tiles_per_row) * tile_size;",
                         "float tileY = floor(type / tiles_per_row) * tile_size;",
 
+                        // calculates the actual position within the base texture
                         "uv.x = tileX + clamp((uv.x * tile_size), 0.0, 1.0);",
                         "uv.y = tileY + clamp((uv.y * tile_size), 0.0, 1.0);",
 
                         "return texture2D(tileTexture, uv).rgb;",
                     "}",
 
+                    "float correctAlphaValue(float alpha)",
+                    "{",
+                        // correction for alpha value (alpha 0.0 does not work in texture)
+                        "if(alpha<=0.01)",
+                            "alpha=0.0;",
+
+                        "return alpha;",
+                    "}",
 
                     "void main()",
                     "{",
                         "vec4 finalColor ;",
 
-                        // Get the color information 
+                        // Get the blend information 
                         "vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
 
                         "vec3 texRock  = get_terrain_uv( 1.0, vUv );",
@@ -240,17 +249,15 @@ var Renderer = (function () {
                         "vec3 texSnow = get_terrain_uv(2.0 , vUv );",
                         "vec3 texSand  = get_terrain_uv(3.0 , vUv );",
 
-                        "float a = mixmap.a;",
-                        "if(a<=0.01)",
-                            "a=0.0;",
+                        "float a = correctAlphaValue(mixmap.a);",
 
                         // Mix the colors together
                         "texSand *= mixmap.r;",
                         "texGrass = mix(texSand,  texGrass, mixmap.g);",
                         "texSnow = mix(texGrass, texSnow, mixmap.b);  ",
-                        "vec3 tex  = mix(texSnow, texRock, a);",
+                        "vec3 finalTexture  = mix(texSnow, texRock, a);",
 
-                        "finalColor = vec4(tex,1.0);",
+                        "finalColor = vec4(finalTexture, 1.0);",
                         "gl_FragColor  = finalColor;",
                     "}"
                 ].join('\n');

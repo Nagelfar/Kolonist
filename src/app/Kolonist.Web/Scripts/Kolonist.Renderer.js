@@ -79,55 +79,13 @@ var Renderer = (function () {
             }
 
             function generateHeightMap(heights) {
-
-                var geometry = new THREE.Geometry();
-                var perlin = ImprovedNoise();
                 var scale = 10;
-                for (var x = 0; x < width; x++) {
-                    var posX = x * scale;
-                    for (var y = 0; y < height; y++) {
-                        var posY = y * scale;
-                        var calculatedHeight = heights[calculateIndex(x, y)];
-
-                        geometry.vertices.push(new THREE.Vector3(posX, posY,  calculatedHeight*100));
-                    }
+                var geometry = new THREE.PlaneGeometry(width, height, width - 1, height - 1);
+                for (var i = 0; i < geometry.vertices.length; i++) {
+                    var calculatedHeight = heights[i];
+                    geometry.vertices[i].z = calculatedHeight * scale;
                 }
 
-                function pushUVs(x, y, uvs) {
-                    uvs.push(new THREE.UV(x / width, y / height));
-                    return calculateIndex(x, y);
-                }
-
-                var uvIndex = 0;
-                geometry.faceVertexUvs = [];
-                geometry.faceVertexUvs[uvIndex] = [];
-                for (var x = 0; x < width - 1; x++) {
-                    for (var y = 0; y < height - 1; y++) {
-
-                        // generate the faces (2 per cell)
-                        // and assign the uv-indices
-                        var uvs = [];
-                        var face = new THREE.Face3();
-
-                        face.a = pushUVs(x, y, uvs);
-                        face.b = pushUVs(x + 1, y, uvs);
-                        face.c = pushUVs(x + 1, y + 1, uvs);
-
-
-                        geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
-                        geometry.faces.push(face);
-
-                        uvs = [];
-                        face = new THREE.Face3();
-
-                        face.a = pushUVs(x + 1, y + 1, uvs);
-                        face.b = pushUVs(x, y + 1, uvs);
-                        face.c = pushUVs(x, y, uvs);
-
-                        geometry.faceVertexUvs[uvIndex][geometry.faces.length] = uvs;
-                        geometry.faces.push(face);
-                    }
-                }
                 return geometry;
             }
             function generateMaterial(terrainTypes, availiableTerrainTypes) {
@@ -281,7 +239,7 @@ var Renderer = (function () {
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
                             var terrainType = terrainTypes[calculateIndex(x, y)];
-                            
+
                             imageContext.fillStyle =
                                 'rgba('
                                     + (terrainType === 0 ? 255 : 0) + ','

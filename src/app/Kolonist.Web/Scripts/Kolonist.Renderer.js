@@ -196,16 +196,24 @@ var Renderer = (function () {
                         "return alpha;",
                     "}",
 
-                    "vec4 getBlendings(float z) \
-                    { \
-                        vec4 result = vec4(0.0, 0.0, 0.0, 0.0); \
-                        float sgnZ = sign(z) * z; \
-                        result.r = max(min(1.5-abs(z-0.8)*2.0, 1.0),0.0); \
-                        result.g =max( min(1.5-abs( z-1.4 )*2.0, 1.0),0.0); \
-                        result.b = max(min(1.5-abs(z-1.8 )*2.0, 1.0),0.0); \
-                        result.a = max(min(1.5-abs(z-2.5)*2.0,1.0), 0.0); \
-                        return result; \
-                }",
+                    "float blend(float coordinate, float offset)",
+                    "{",
+                        "float fullBlendWidth = 1.5;",
+                        "float blendingSpeed = 2.0;",
+
+                        //"return  max(min(fullBlendWidth - abs(coordinate - offset) * blendingSpeed, 1.0), 0.0); ",
+                        "return clamp(fullBlendWidth - abs(coordinate - offset) * blendingSpeed, 0.0, 1.0);",
+                    "}",
+
+                    "vec4 getBlendings(float z)",
+                    "{",
+                        "vec4 result = vec4(0.0, 0.0, 0.0, 0.0);",
+                        "result.r = blend(z, 0.8);",
+                        "result.g = blend(z, 1.4);",
+                        "result.b = blend(z, 1.8);",
+                        "result.a = blend(z, 2.5);",
+                        "return result;",
+                   "}",
 
             //if(z <=0.5) \
             //    result.r = 1.0; \

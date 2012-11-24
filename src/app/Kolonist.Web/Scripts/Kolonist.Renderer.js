@@ -89,28 +89,7 @@ var Renderer = (function () {
                 return geometry;
             }
             function generateMaterial(terrainTypes, availiableTerrainTypes) {
-
-                var texture = new THREE.Texture();
-
-                var loadCount = 0;
-                var imageLoader = new THREE.ImageLoader();
-
-                var terrainImages = [];
-
-                availiableTerrainTypes.forEach(function (terrain) {
-                    var tile = new Image();
-                    imageLoader.load(terrain.Href, tile);
-
-                    tile.onload = function () {
-                        loadCount++;
-
-                        if (loadCount === availiableTerrainTypes.length) {
-                            composeTexture();
-                            texture.needsUpdate = true;
-                        }
-                    }
-                    terrainImages[terrain.Rel] = tile;
-                });
+                
                 function nearestPow2(n) {
                     var l = Math.log(n) / Math.LN2;
                     return Math.pow(2, Math.ceil(l));
@@ -122,10 +101,6 @@ var Renderer = (function () {
                 var textureScale = textureSize / tileTextureSize;
 
                 var tex_uniforms = {
-                    alpha: {
-                        type: 't',
-                        value: texture,
-                    },
                     tileTexture: {
                         type: 't',
                         value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href)
@@ -136,9 +111,6 @@ var Renderer = (function () {
                         value: textureScale
                     }
                 }
-
-                tex_uniforms.alpha.value.wrapS = THREE.ClampToEdgeWrapping;
-                tex_uniforms.alpha.value.wrapT = THREE.ClampToEdgeWrapping;
 
                 tex_uniforms.tileTexture.value.wrapS = THREE.RepeatWrapping;
                 tex_uniforms.tileTexture.value.wrapT = THREE.RepeatWrapping;
@@ -238,38 +210,6 @@ var Renderer = (function () {
                 });
 
                 return material;
-
-                function composeTexture() {
-
-                    texture.image = document.createElement('canvas');
-                    texture.image.width = textureSize;
-                    texture.image.height = textureSize;
-                    var imageContext = texture.image.getContext('2d');
-
-                    var usedTileSize = textureSize / width;
-
-                    for (var x = 0; x < width; x++) {
-                        for (var y = 0; y < height; y++) {
-                            var terrainType = terrainTypes[calculateIndex(x, y)];
-
-                            imageContext.fillStyle =
-                                'rgba('
-                                    + (terrainType === 0 ? 255 : 0) + ','
-                                    + (terrainType === 1 ? 255 : 0) + ','
-                                    + (terrainType === 2 ? 255 : 0) + ','
-                                    + (terrainType === 3 ? 1 : 0.01)
-                                    + ')';
-
-                            imageContext.fillRect(
-                                Math.floor(x * usedTileSize), Math.floor(y * usedTileSize),
-                                Math.ceil(usedTileSize), Math.ceil(usedTileSize)
-                                );
-                        }
-                    }
-
-                    material.needsUpdate = true;
-                    $('#tmp').html(texture.image);
-                }
             }
         });
     }

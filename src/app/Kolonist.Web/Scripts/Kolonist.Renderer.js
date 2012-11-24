@@ -61,12 +61,6 @@ var Renderer = (function () {
                 height = data.Height;
 
             var geometry = generateHeightMap(data.Heights);
-            var perlin = ImprovedNoise();
-            for (var i = 0; i < geometry.vertices.length; i++) {
-                var vertex = geometry.vertices[i];
-                vertex.z = perlin.noise3(vertex.x, vertex.y, vertex.z) * 3;
-            }
-
             var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
 
             geometry.computeCentroids();
@@ -87,10 +81,15 @@ var Renderer = (function () {
             function generateHeightMap(heights) {
 
                 var geometry = new THREE.Geometry();
-
+                var perlin = ImprovedNoise();
+                var scale = 10;
                 for (var x = 0; x < width; x++) {
+                    var posX = x * scale;
                     for (var y = 0; y < height; y++) {
-                        geometry.vertices.push(new THREE.Vector3(x, y, heights[calculateIndex(x, y)]));
+                        var posY = y * scale;
+                        var calculatedHeight = heights[calculateIndex(x, y)];
+
+                        geometry.vertices.push(new THREE.Vector3(posX, posY, perlin.noise2(posX / width, posY / height) * scale * calculatedHeight));
                     }
                 }
 

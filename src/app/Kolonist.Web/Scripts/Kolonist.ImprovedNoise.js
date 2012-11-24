@@ -42,25 +42,28 @@ var ImprovedNoise = function () {
     function grad2(hash, x, y) {
 
         var h = hash & 3;
-        var u =  (h & 2) == 0 ? x : -x;
+        var u = (h & 2) == 0 ? x : -x;
         var v = (h & 1) == 0 ? y : -y
-        return u+v;
+        return u + v;
     }
 
     return {
 
         noise2: function (x, y) {
 
-            var floorX = ~~x, floorY = ~~y;
+            var floorX = ~~x,
+                floorY = ~~y;
 
-            var X = floorX & 255, Y = floorY & 255;
+            var X = floorX & 255,
+                Y = floorY & 255;
 
             x -= floorX;
             y -= floorY;
 
-            var xMinus1 = x - 1, yMinus1 = y - 1;
+            var xMinus1 = x - 1,
+                yMinus1 = y - 1;
 
-            var u = fade(x), 
+            var u = fade(x),
                 v = fade(y);
 
             var A = p[X] + Y,
@@ -98,5 +101,5 @@ var ImprovedNoise = function () {
 							grad3(p[BB + 1], xMinus1, yMinus1, zMinus1))));
 
         }
-}
+    }
 }

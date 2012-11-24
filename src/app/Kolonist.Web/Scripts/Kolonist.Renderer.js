@@ -75,7 +75,7 @@ var Renderer = (function () {
             scene.add(mesh);
 
             function calculateIndex(x, y) {
-                return x * width + y;
+                return x + y * width;
             }
 
             function generateHeightMap(heights) {
@@ -89,7 +89,7 @@ var Renderer = (function () {
                         var posY = y * scale;
                         var calculatedHeight = heights[calculateIndex(x, y)];
 
-                        geometry.vertices.push(new THREE.Vector3(posX, posY, perlin.noise2(posX / width, posY / height) * scale * calculatedHeight));
+                        geometry.vertices.push(new THREE.Vector3(posX, posY,  calculatedHeight*100));
                     }
                 }
 
@@ -253,8 +253,8 @@ var Renderer = (function () {
                         // Mix the colors together
                         "texSand *= mixmap.r;",
                         "texGrass = mix(texSand,  texGrass, mixmap.g);",
-                        "texSnow = mix(texGrass, texSnow, mixmap.b);  ",
-                        "vec3 finalTexture  = mix(texSnow, texRock, a);",
+                        "texRock = mix(texGrass, texRock, mixmap.b);  ",
+                        "vec3 finalTexture  = mix(texRock,texSnow, a);",
 
                         "finalColor = vec4(finalTexture, 1.0);",
                         "gl_FragColor  = finalColor;",
@@ -280,10 +280,8 @@ var Renderer = (function () {
 
                     for (var x = 0; x < width; x++) {
                         for (var y = 0; y < height; y++) {
-                            //var terrainType = terrainTypes[calculateIndex(x, y)];
-                            var terrainType = THREE.Math.randInt(0, 3);
-
-
+                            var terrainType = terrainTypes[calculateIndex(x, y)];
+                            
                             imageContext.fillStyle =
                                 'rgba('
                                     + (terrainType === 0 ? 255 : 0) + ','

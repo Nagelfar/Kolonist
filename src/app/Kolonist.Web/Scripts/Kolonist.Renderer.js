@@ -200,10 +200,10 @@ var Renderer = (function () {
                     { \
                         vec4 result = vec4(0.0, 0.0, 0.0, 0.0); \
                         float sgnZ = sign(z) * z; \
-                        result.r = min(abs(0.5 - sgnZ ), 1.0); \
-                        result.g = min(abs(1.0 - sgnZ ), 1.0); \
-                        result.b = min(abs(1.5 - sgnZ ), 1.0); \
-                        result.a = min(max(abs(2.0 - sgnZ ),0.0), 1.0); \
+                        result.r = max(min(1.5-abs(z-0.8)*2.0, 1.0),0.0); \
+                        result.g =max( min(1.5-abs( z-1.4 )*2.0, 1.0),0.0); \
+                        result.b = max(min(1.5-abs(z-1.8 )*2.0, 1.0),0.0); \
+                        result.a = max(min(1.5-abs(z-2.5)*2.0,1.0), 0.0); \
                         return result; \
                 }",
 

@@ -42,17 +42,17 @@ namespace Kolonist.Web.Models
             {
                 SourceModule = new ScaleBias()
                 {
-                    Scale = 10.0f,
-                    Bias = 10.0f,
-                    SourceModule = new LibNoise.Modifier.Select
-                    {
-                        ControlModule = new Pipe()
+                    //Scale = 10.0f,
+                    //Bias = 10.0f,
+                    SourceModule = new LibNoise.Modifier.Select(
+
+                        controlModule: new Pipe()
                         {
                             Frequency = 0.5f,
                             Lacunarity = 0.25f,
                             Primitive3D = noise
                         },
-                        LeftModule = new ScaleBias
+                        rightModule: new ScaleBias
                         {
                             Scale = 0.125f,
                             Bias = -0.75f,
@@ -62,14 +62,17 @@ namespace Kolonist.Web.Models
                                 Primitive3D = noise
                             }
                         },
-                        RightModule = new RidgedMultiFractal
+                        leftModule: new RidgedMultiFractal
                         {
+                            Primitive3D = noise,
                             Lacunarity = 2.0f,
                         },
-                        EdgeFalloff = 0.125f
-                    }
+                        edge: 0.125f,
+                        lower: 0.0f,
+                        upper: 1000.0f
+                    )
                 },
-                NoiseMap = noiseMap,
+                NoiseMap = noiseMap
             };
 
 

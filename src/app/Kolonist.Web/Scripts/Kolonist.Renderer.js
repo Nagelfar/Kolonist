@@ -235,16 +235,16 @@ var Renderer = (function () {
                         // Get the color information 
                         "vec4 mixmap    = texture2D( alpha, vUv ).rgba;",
 
-                        "vec3 texSand  = get_terrain_uv( 1.0, vUv );",
-                        "vec3 texGrass = get_terrain_uv(2.0 , vUv );",
-                        "vec3 texSnow = get_terrain_uv(0.0 , vUv );",
-                        "vec3 texRock  = get_terrain_uv(3.0 , vUv );",
+                        "vec3 texRock  = get_terrain_uv( 1.0, vUv );",
+                        "vec3 texGrass = get_terrain_uv(0.0 , vUv );",
+                        "vec3 texSnow = get_terrain_uv(2.0 , vUv );",
+                        "vec3 texSand  = get_terrain_uv(3.0 , vUv );",
 
                         "float a = mixmap.a;",
                         "if(a<=0.01)",
                             "a=0.0;",
 
-                        // Mix the colors together"
+                        // Mix the colors together
                         "texSand *= mixmap.r;",
                         "texGrass = mix(texSand,  texGrass, mixmap.g);",
                         "texSnow = mix(texGrass, texSnow, mixmap.b);  ",

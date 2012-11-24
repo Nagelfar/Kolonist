@@ -98,7 +98,7 @@ var Renderer = (function () {
                 var tileTextureSize = 1024;
                 var tileSize = 32;
                 var textureSize = nearestPow2(Math.max(width, height) * tileSize);
-                var textureScale = textureSize / tileTextureSize;
+                var textureScale =Math.min( textureSize / tileTextureSize, 3.0);
 
                 var tex_uniforms = {
                     tileTexture: {

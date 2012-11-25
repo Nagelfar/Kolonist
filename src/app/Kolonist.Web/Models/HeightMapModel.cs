@@ -105,17 +105,9 @@ namespace Kolonist.Web.Models
                 TerrainTypes = heights.Select(x =>
                 {
                     var selected = terrainNames.SkipWhile(terrain => terrain.BaseHeight <= x).FirstOrDefault();
-                    return selected ?? terrainNames.Last();
-                    //if (x <= 0.2)
-                    //    return terrainNames[0];
-                    //else if (x <= 0.5)
-                    //    return terrainNames[1];
-                    //else if (x <= 0.8)
-                    //    return terrainNames[2];
-                    //else
-                    //    return terrainNames[3];
+                    return selected ?? terrainNames.Last();         
                 }).Select(x => x.Id).ToArray(),
-                //AvailiableTerrainTypes = terrainNames,
+                
                 Width = world.Width,
                 Height = world.Height
             };

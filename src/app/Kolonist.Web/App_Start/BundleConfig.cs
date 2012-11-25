@@ -12,7 +12,7 @@ namespace Kolonist.Web
         {
             var allBundles = GetScriptBundles().Concat(GetStyleBundles());
 
-            foreach(var bundle in allBundles)
+            foreach (var bundle in allBundles)
                 bundles.Add(bundle);
 
         }
@@ -49,8 +49,8 @@ namespace Kolonist.Web
                 );
 
             yield return new ScriptBundle("~/bundles/kolonist")
-                .Include(
-                    "~/Scripts/Kolonist.*"
+                .IncludeDirectory(
+                    "~/Scripts/Kolonist", "*.js"
                 );
 
             yield return new ScriptBundle("~/bundles/bootstrap")

@@ -314,7 +314,8 @@
     </Content>
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
-    <Content Include="Scripts\Kolonist.ImprovedNoise.js" />
+    <Content Include="Scripts\Kolonist\Heightmap.js" />
+    <Content Include="Scripts\ImprovedNoise.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js">
       <DependentUpon>jquery.unobtrusive-ajax.js</DependentUpon>
@@ -323,6 +324,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js">
       <DependentUpon>jquery.validate.unobtrusive.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\Kolonist\Util.js" />
     <Content Include="Scripts\less.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\three.js" />
@@ -344,7 +346,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\NeHe\Lesson1.cshtml" />
     <Content Include="Views\NeHe\Three.cshtml" />
-    <Content Include="Scripts\Kolonist.Renderer.js" />
+    <Content Include="Scripts\Kolonist\Renderer.js" />
     <Content Include="Views\NeHe\ThreeTest.cshtml" />
     <Content Include="Scripts\three.min.js.map">
       <DependentUpon>three.js</DependentUpon>

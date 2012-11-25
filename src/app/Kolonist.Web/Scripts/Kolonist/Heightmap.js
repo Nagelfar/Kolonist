@@ -8,7 +8,8 @@
         Heightmap.prototype.loadMap = function (data) {
 
             var width = data.Width,
-                height = data.Height;
+                height = data.Height,
+                scale = 10;
 
             var geometry = generateHeightMap(data.Heights);
             var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
@@ -23,7 +24,7 @@
 
             var mesh = new THREE.Mesh(geometry, material);
 
-            mesh.rotation.x = - Kolonist.Util.Degree2Rad(90);
+            mesh.rotation.x = -Kolonist.Util.Degree2Rad(90);
             renderer.addMesh(mesh);
 
             function calculateIndex(x, y) {
@@ -31,11 +32,11 @@
             }
 
             function generateHeightMap(heights) {
-                var scale = 10;
+                
                 var geometry = new THREE.PlaneGeometry(width, height, width - 1, height - 1);
                 for (var i = 0; i < geometry.vertices.length; i++) {
                     var calculatedHeight = heights[i];
-                    geometry.vertices[i].z = calculatedHeight * scale;
+                    geometry.vertices[i].z = calculatedHeight ;
                 }
 
                 return geometry;
@@ -61,6 +62,11 @@
                     texscale: {
                         type: 'f',
                         value: textureScale
+                    },
+
+                    scale: {
+                        type: 'f',
+                        value: scale
                     }
                 }
 
@@ -69,14 +75,16 @@
 
                 var vertexShader = [
                     "varying vec2 vUv;",
-                    "varying vec3 vPosition;",
+                    "varying float height;",
+                    "uniform float scale;",
 
                     "void main()",
                     "{",
                         "vUv = uv;",
-                        "vPosition = position;",
-
-                        THREE.ShaderChunk.default_vertex,
+                        "height = position.z;",
+                        
+                        "vec4 mvPosition = modelViewMatrix * vec4(position.x, position.y, height * scale, 1.0 );",
+                        "gl_Position = projectionMatrix * mvPosition;",
 
                         THREE.ShaderChunk.defaultnormal_vertex,
                     "}"
@@ -87,9 +95,9 @@
                     "uniform sampler2D tileTexture;",
 
                     "uniform float texscale;",
-
+                    
                     "varying vec2 vUv;",
-                    "varying vec3 vPosition;",
+                    "varying float height;",
 
                     "vec3 get_terrain_uv(float type, vec2 uv)",
                     "{",
@@ -139,7 +147,7 @@
                         "vec4 finalColor ;",
 
                         // Get the blend information                     
-                        "vec4 mixmap    = getBlendings(vPosition.z / 10.0);",
+                        "vec4 mixmap    = getBlendings(height );",
 
                         "vec3 texRock  = get_terrain_uv( 1.0, vUv );",
                         "vec3 texGrass = get_terrain_uv(0.0 , vUv );",

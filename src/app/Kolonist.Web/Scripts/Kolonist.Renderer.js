@@ -37,8 +37,7 @@ var Renderer = (function () {
         controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.userRotate = false;
         controls.rotateUp(Degree2Rad(45));
-        //camera.rotation.x = Degree2Rad(45);
-
+        
         function onKeyDown(event) {
 
             var vector = new THREE.Vector3();
@@ -62,7 +61,13 @@ var Renderer = (function () {
             camera.position.addSelf(vector);
             controls.center.addSelf(vector);
         };
-        document.addEventListener('keydown', onKeyDown, false);
+        controls.domElement.addEventListener('keydown', onKeyDown, false);
+        controls.domElement.addEventListener('mousedown', function () {
+            controls.domElement.focus();
+        },false);
+        
+        controls.domElement.setAttribute('tabindex', -1);
+        
 
         _$parentContainer.append(renderer.domElement);
     }

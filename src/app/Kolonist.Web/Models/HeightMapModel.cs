@@ -24,7 +24,7 @@ namespace Kolonist.Web.Models
 
         internal static HeightMapModel Create(WorldModel world)
         {
-            //world.Width = world.Height = 128;
+            world.Width = world.Height = 128;
             //double heightModificator = 3.0;
             var terrainNames = TerrainType.GetTypes()
                 .OrderBy(x => x.BaseHeight)
@@ -40,7 +40,7 @@ namespace Kolonist.Web.Models
                 Quality = LibNoise.NoiseQuality.Best,
                 Seed = DateTime.Now.Millisecond
             };
-            var noiseBuilder = new LibNoise.Builder.NoiseMapBuilderPlane(0.0f, 10.0f, 0.0f, 10.0f, true)
+            var noiseBuilder = new LibNoise.Builder.NoiseMapBuilderPlane(0.0f, 3.0f, 0.0f, 3.0f, true)
             {
                 SourceModule = new HybridMultiFractal
                 {

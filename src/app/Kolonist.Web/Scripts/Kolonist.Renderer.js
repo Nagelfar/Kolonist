@@ -5,7 +5,7 @@ var Renderer = (function () {
         height: 400,
         viewAngle: 45,
         near: 0.1,
-        far: 1000.0,
+        far: 10000.0,
         cameraZPosition: 100
     };
 
@@ -15,6 +15,10 @@ var Renderer = (function () {
 
     function Renderer($parentContainer) {
         _$parentContainer = $parentContainer;
+    }
+
+    function Degree2Rad(degree) {
+        return Math.PI / 180 * degree
     }
 
     Renderer.prototype.init = function (parameters) {
@@ -30,11 +34,40 @@ var Renderer = (function () {
         //renderer.setFaceCulling(false);
         renderer.setSize(parameters.width, parameters.height);
 
-        controls = new THREE.TrackballControls(camera, renderer.domElement);
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.userRotate = false;
+        controls.rotateUp(Degree2Rad(45));
+        //camera.rotation.x = Degree2Rad(45);
+
+        function onKeyDown(event) {
+
+            var vector = new THREE.Vector3();
+            //event.preventDefault();
+            var movement = 1;
+            switch (event.keyCode) {
+
+                case 38: /*up*/
+                case 87: /*W*/ vector.z += -movement; break;
+
+                case 37: /*left*/
+                case 65: /*A*/ vector.x += -movement; break;
+
+                case 40: /*down*/
+                case 83: /*S*/ vector.z += movement; break;
+
+                case 39: /*right*/
+                case 68: /*D*/ vector.x += movement; break;
+
+            }
+            camera.position.addSelf(vector);
+            controls.center.addSelf(vector);
+        };
+        document.addEventListener('keydown', onKeyDown, false);
 
         _$parentContainer.append(renderer.domElement);
     }
 
+  
 
     Renderer.prototype.addMesh = function (mesh) {
         scene.add(mesh);
@@ -72,6 +105,8 @@ var Renderer = (function () {
             subdivision.modify(geometry);
 
             var mesh = new THREE.Mesh(geometry, material);
+
+            mesh.rotation.x = -Degree2Rad(90);
             scene.add(mesh);
 
             function calculateIndex(x, y) {
@@ -89,7 +124,7 @@ var Renderer = (function () {
                 return geometry;
             }
             function generateMaterial(terrainTypes, availiableTerrainTypes) {
-                
+
                 function nearestPow2(n) {
                     var l = Math.log(n) / Math.LN2;
                     return Math.pow(2, Math.ceil(l));
@@ -97,8 +132,8 @@ var Renderer = (function () {
 
                 var tileTextureSize = 1024;
                 var tileSize = 32;
-                var textureSize = nearestPow2(Math.max(width, height) * tileSize);
-                var textureScale =Math.min( textureSize / tileTextureSize, 3.0);
+                var textureSize = Math.min(nearestPow2(Math.max(width, height) * tileSize), 2048);
+                var textureScale = Math.min(textureSize / tileTextureSize, 3.0);
 
                 var tex_uniforms = {
                     tileTexture: {

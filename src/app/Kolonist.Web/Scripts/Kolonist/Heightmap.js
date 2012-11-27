@@ -12,12 +12,8 @@
         Heightmap.prototype.highlightOnMap = function (point) {
 
             if (this._material && point) {
-                //this.mesh.materials[0].uniforms.highlight_position.value.x = point.x;
-                //this.mesh.materials[0].uniforms.highlight_position.value.y = -point.z;
                 this._material.highlight.position.x = point.x;
-                this._material.highlight.position.y = -point.z;
-                this._material.highlight.needsUpdate = true;
-                this._material.needsUpdate = true;
+                this._material.highlight.position.y = -point.z;                
             }
         }
 

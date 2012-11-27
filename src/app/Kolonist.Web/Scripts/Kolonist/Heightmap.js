@@ -23,7 +23,7 @@
             geometry.computeVertexNormals();
 
 
-            var subdivision = new THREE.SubdivisionModifier(2);
+            var subdivision = new THREE.SubdivisionModifier(1);
             subdivision.modify(geometry);
 
             this._geometry = geometry;

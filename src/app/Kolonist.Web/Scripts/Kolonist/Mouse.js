@@ -17,8 +17,6 @@ var Kolonist;
             button: 0,
             state: States.UP,
             point: null,
-            plot_coordinates: { x: null, y: null },
-            vertex_coordinates: { x: null, y: null }
         };
 
         var _renderer, _sceneObject, _projector;
@@ -78,11 +76,6 @@ var Kolonist;
             } else {
                 mouse_info.point = intersection[0].point;
 
-                mouse_info.plot_coordinates.x = Math.floor(mouse_info.point.x - map_left);
-                mouse_info.plot_coordinates.y = Math.floor(mouse_info.point.z - map_top);
-
-                mouse_info.vertex_coordinates.x = Math.floor((mouse_info.point.x * plot_vertices) - (map_left * plot_vertices));
-                mouse_info.vertex_coordinates.y = Math.floor((mouse_info.point.z * plot_vertices) - (map_top * plot_vertices));
             }
 
             //ground.materials[0].uniforms.ring_center.value.x = mouse_info.point.x;

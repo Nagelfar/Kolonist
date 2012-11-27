@@ -72,8 +72,6 @@
 
             this.initializeCamara();
 
-            this.mouse = new Kolonist.Mouse(this, this.scene);
-
             _$parentContainer.append(this.renderer.domElement);
         }
 
@@ -91,9 +89,10 @@
 
                 that.controls.update();
 
-                //var mousePosition = mouse.getInformation();
-                //heightMap.material.highlight.position.x = mousePosition.point.x;
-                //heightMap.material.highlight.position.y = mousePosition.point.y;
+                if (that.mouse && that.heightMap) {
+                    var mousePosition = that.mouse.getInformation();
+                    that.heightMap.highlightOnMap(mousePosition.point);
+                }
 
                 that.renderer.render(that.scene, that.camera);
             }
@@ -102,17 +101,19 @@
 
         Renderer.prototype.loadMap = function (url) {
             var heightMap = new Kolonist.Heightmap(this);
-
+            var that = this;
             $.getJSON(url, '', function (data) {
                 var result = heightMap.loadMap(data);
 
-                var mesh = new THREE.Mesh(result.geometry, result.material);
-
-                mesh.rotation.x = -Kolonist.Util.Degree2Rad(90);
-                heightMap._renderer.addMesh(mesh);
+                that.mouse = new Kolonist.Mouse(that, result);
+                
+                that.addMesh(result);
             });
 
+
+
             this.heightMap = heightMap;
+
         }
 
         Renderer.prototype.getCamera = function () {
@@ -123,7 +124,7 @@
         }
         Renderer.prototype.getParameters = function () {
             return this._parameters;
-        }        
+        }
 
         return Renderer;
     })();

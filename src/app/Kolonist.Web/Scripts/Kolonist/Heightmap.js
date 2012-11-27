@@ -1,12 +1,24 @@
 ﻿var Kolonist;
 (function (Kolonist) {
     var Heightmap = (function () {
-              
+
 
         function Heightmap(renderer) {
             this._renderer = renderer;
             this._material = null;
             this._geometry = null;
+        }
+
+        Heightmap.prototype.highlightOnMap = function (point) {
+
+            if (this._material && point) {
+                //this.mesh.materials[0].uniforms.highlight_position.value.x = point.x;
+                //this.mesh.materials[0].uniforms.highlight_position.value.y = -point.z;
+                this._material.highlight.position.x = point.x;
+                this._material.highlight.position.y = -point.z;
+                this._material.highlight.needsUpdate = true;
+                this._material.needsUpdate = true;
+            }
         }
 
         Heightmap.prototype.loadMap = function (data) {
@@ -29,10 +41,14 @@
             this._geometry = geometry;
             this._material = material;
 
-            return {
-                geometry: geometry,
-                material: material
-            };
+            var mesh = new THREE.Mesh(geometry, material);
+
+            mesh.rotation.x = -Kolonist.Util.Degree2Rad(90);
+            mesh.dynamic = true;
+
+            this.mesh = mesh;
+
+            return mesh;
 
             function calculateIndex(x, y) {
                 return x + y * width;
@@ -180,24 +196,25 @@
                         "texRock = mix(texGrass, texRock, mixmap.b);  ",
                         "vec3 finalTexture  = mix(texRock,texSnow, mixmap.a);",
 
-                        //"float distance = sqrt((vPosition.x - highlight_position.x) * (vPosition.x - highlight_position.x) + (vPosition.y - highlight_position.y) * (vPosition.y - highlight_position.y));",
-		
-                        //"bool show_highlight=false;",
-                        //"float highlight_size=5.0;",
-                        //"vec4 highlight_color = vec4(1.0, 0.0, 0.0, 1.0);",
-
-                        //// Ring
-                        //"if (show_highlight == true && distance < highlight_size / 2.0 ) {",
-			
-                        //    "gl_FragColor.r += highlight_color.r;",
-                        //    "gl_FragColor.b += highlight_color.b;",
-                        //    "gl_FragColor.g += highlight_color.g;",
-                        //    "gl_FragColor.a += highlight_color.a;",
-                        //    "gl_FragColor = normalize(gl_FragColor);",
-			
-                        //"}",
-
                         "finalColor = vec4(finalTexture, 1.0);",
+
+                        "float distance = sqrt((vPosition.x - highlight_position.x) * (vPosition.x - highlight_position.x) + (vPosition.y - highlight_position.y) * (vPosition.y - highlight_position.y));",
+
+                        "bool show_highlight=true;",
+                        "float highlight_size=15.0;",
+                        "vec4 highlight_color = vec4(1.0, 0.0, 0.0, 1.0);",
+
+                        // Ring
+                        "if (show_highlight == true && distance < highlight_size / 2.0 ) {",
+
+                            "finalColor.r += highlight_color.r;",
+                            "finalColor.b += highlight_color.b;",
+                            "finalColor.g += highlight_color.g;",
+                            "finalColor.a += highlight_color.a;",
+                            "finalColor = normalize(finalColor);",
+
+                        "}",
+
                         //"if(vPosition.z/10.0 >= 1.0) finalColor = vec4(1.0,1.0,0.0,1.0);",
                         "gl_FragColor  = finalColor;",
                     "}"
@@ -207,10 +224,10 @@
                     fragmentShader: fragmentShader,
                     vertexShader: vertexShader,
                     uniforms: tex_uniforms
-                });
+                });                
 
                 material.highlight = {
-                    position: tex_uniforms.highlight_position
+                    position: tex_uniforms.highlight_position.value
                 };
 
                 return material;

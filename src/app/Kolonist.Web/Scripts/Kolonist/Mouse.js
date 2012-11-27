@@ -59,7 +59,10 @@ var Kolonist;
 
         var updateMouseCoordinates = function () {
             var camera = _renderer.getCamera();
-            var vector = new THREE.Vector3((mouse_info.x / _renderer.getParameters().width) * 2 - 1, -(mouse_info.y / _renderer.getParameters().height) * 2 + 1, 0.5);
+            var vector = new THREE.Vector3(
+                (mouse_info.x / _renderer.getParameters().width) * 2 - 1,
+                -(mouse_info.y / _renderer.getParameters().height) * 2 + 1,
+                0.5);
             _projector.unprojectVector(vector, camera);
 
             var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());

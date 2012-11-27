@@ -61,7 +61,7 @@
         Renderer.prototype.init = function (parameters) {
             this._parameters = $.extend(true, {}, defaultParameters, parameters);
 
-            this.camera = new THREE.PerspectiveCamera(parameters.viewAngle, parameters.width / parameters.height, parameters.near, parameters.far);
+            this.camera = new THREE.PerspectiveCamera(this._parameters.viewAngle, this._parameters.width / this._parameters.height, this._parameters.near, this._parameters.far);
             this.camera.position.z = this._parameters.cameraZPosition;
 
             this.scene = new THREE.Scene();

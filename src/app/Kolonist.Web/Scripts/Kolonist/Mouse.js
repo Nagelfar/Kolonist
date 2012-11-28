@@ -68,13 +68,7 @@ var Kolonist;
             var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
 
             var intersection = ray.intersectObject(_sceneObject);
-            if (intersection.length === 0) {
-                mouse_info.plot_coordinates.x = null;
-                mouse_info.plot_coordinates.y = null;
-
-                mouse_info.vertex_coordinates.x = null;
-                mouse_info.vertex_coordinates.y = null;
-
+            if (intersection.length === 0) {              
                 return null;
             } else {
                 mouse_info.point = intersection[0].point;

@@ -52,8 +52,8 @@ var Kolonist;
             e.preventDefault();
             e.cancelBubble = true;
 
-            mouse_info.x = e.layerX;
-            mouse_info.y = e.layerY;
+            mouse_info.x = e.offsetX;
+            mouse_info.y = e.offsetY;
             mouse_info.button = e.button;
         };
 

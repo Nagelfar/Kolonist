@@ -165,11 +165,12 @@
                         "result.r = blend(z, 0.8);",
                         "result.g = blend(z, 1.4);",
                         "result.b = blend(z, 1.8);",
-                        "result.a = blend(z, 2.5);",
+                        "result.a = blend(z, 2.5); ",
                         "return result;",
                    "}",
 
                    	"float dist_falloff(float distance, float falloff) {",
+                        "if(distance == 0.0) return 1.0;",
                    	    "float alpha = (falloff - distance) / falloff;",
 
                         "return clamp(alpha, 0.0, 1.0);",
@@ -203,6 +204,8 @@
                         // Ring
                         "if (show_highlight == true && distance < highlight_size / 2.0 ) {",
 
+                            "float cutoff = dist_falloff(distance, highlight_size/ 2.0);",
+                            "highlight_color = highlight_color  * cutoff;",
                             "finalColor.r += highlight_color.r;",
                             "finalColor.b += highlight_color.b;",
                             "finalColor.g += highlight_color.g;",

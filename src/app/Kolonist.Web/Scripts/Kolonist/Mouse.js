@@ -9,7 +9,7 @@ var Kolonist;
             UP: 0,
             DOWN: 1,
             DRAGGING: 3
-        }
+        };
 
         
         function Mouse(renderer, sceneObject) {
@@ -41,7 +41,7 @@ var Kolonist;
                 updateMouse(e);
             };
             canvasRenderer.domElement.onmousemove = function onmousemove(e) {
-                if (mouse_info.state == States.UP) {
+                if (mouse_info.state === States.UP) {
                     mouse_info.state = States.DRAGGING;
                 }
                 updateMouse(e);
@@ -81,7 +81,7 @@ var Kolonist;
 
             this.getInformation = function () {
                 return mouse_info;
-            }
+            };
         }        
 
         return Mouse;

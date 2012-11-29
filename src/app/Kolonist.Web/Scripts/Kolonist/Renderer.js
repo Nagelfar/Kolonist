@@ -49,7 +49,7 @@
                     }
                     controls.object.position.addSelf(vector);
                     controls.center.addSelf(vector);
-                };
+                }
 
                 controls.domElement.addEventListener('keydown', onKeyDown, false);
                 controls.domElement.addEventListener('mousedown', function () {
@@ -59,7 +59,7 @@
                 controls.domElement.setAttribute('tabindex', -1);
 
                 this.controls = controls;
-            }
+            };
         }
 
         Renderer.prototype.init = function (parameters) {
@@ -67,17 +67,17 @@
 
             this.camera = new THREE.PerspectiveCamera(this._parameters.viewAngle, this._parameters.width / this._parameters.height, this._parameters.near, this._parameters.far);
             this.camera.position.z = this._parameters.cameraZPosition;
-//renderer.setFaceCulling(false);
+            //renderer.setFaceCulling(false);
             this.renderer.setSize(parameters.width, parameters.height);
 
             this.initializeCamara();
 
             this._$parentContainer.append(this.renderer.domElement);
-        }
+        };
 
         Renderer.prototype.addMesh = function (mesh) {
             this.scene.add(mesh);
-        }
+        };
 
         Renderer.prototype.animate = function (callback) {
 
@@ -95,9 +95,9 @@
                 }
 
                 that.renderer.render(that.scene, that.camera);
-            }
+            };
             animation();
-        }
+        };
 
         Renderer.prototype.loadMap = function (url) {
             var heightMap = new Kolonist.Heightmap(this);
@@ -113,17 +113,17 @@
                 });
 
             this.heightMap = heightMap;
-        }
+        };
 
         Renderer.prototype.getCamera = function () {
             return this.camera;
-        }
+        };
         Renderer.prototype.getRenderer = function () {
             return this.renderer;
-        }
+        };
         Renderer.prototype.getParameters = function () {
             return this._parameters;
-        }
+        };
 
         return Renderer;
     })();

@@ -15,7 +15,7 @@
                 this._material.highlight.position.x = point.x;
                 this._material.highlight.position.y = -point.z;
             }
-        }
+        };
 
         Heightmap.prototype.loadMap = function (data) {
 
@@ -39,7 +39,7 @@
             this.mesh = mesh;
 
             return mesh;
-            
+
             function generateHeightMap(heights) {
 
                 var geometry = new THREE.PlaneGeometry(width, height, width - 1, height - 1);
@@ -76,7 +76,7 @@
                         type: 'v3',
                         value: new THREE.Vector3()
                     }
-                }
+                };
 
                 tex_uniforms.tileTexture.value.wrapS = THREE.RepeatWrapping;
                 tex_uniforms.tileTexture.value.wrapT = THREE.RepeatWrapping;
@@ -216,7 +216,7 @@
 
                 return material;
             }
-        }
+        };
 
         return Heightmap;
     })();

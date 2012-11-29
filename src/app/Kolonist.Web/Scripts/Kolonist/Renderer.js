@@ -16,7 +16,11 @@
         //var heightMap;
 
         function Renderer($parentContainer) {
-            _$parentContainer = $parentContainer;
+            this._$parentContainer = $parentContainer;
+
+            this.scene = new THREE.Scene();
+
+            this.renderer = new THREE.WebGLRenderer();
 
             this.initializeCamara = function () {
                 var controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
@@ -63,16 +67,12 @@
 
             this.camera = new THREE.PerspectiveCamera(this._parameters.viewAngle, this._parameters.width / this._parameters.height, this._parameters.near, this._parameters.far);
             this.camera.position.z = this._parameters.cameraZPosition;
-
-            this.scene = new THREE.Scene();
-
-            this.renderer = new THREE.WebGLRenderer();
-            //renderer.setFaceCulling(false);
+//renderer.setFaceCulling(false);
             this.renderer.setSize(parameters.width, parameters.height);
 
             this.initializeCamara();
 
-            _$parentContainer.append(this.renderer.domElement);
+            this._$parentContainer.append(this.renderer.domElement);
         }
 
         Renderer.prototype.addMesh = function (mesh) {
@@ -102,18 +102,17 @@
         Renderer.prototype.loadMap = function (url) {
             var heightMap = new Kolonist.Heightmap(this);
             var that = this;
-            $.getJSON(url, '', function (data) {
-                var result = heightMap.loadMap(data);
 
-                that.mouse = new Kolonist.Mouse(that, result);
-                
-                that.addMesh(result);
-            });
+            $.ajax(url)
+                .success(function (data) {
+                    var result = heightMap.loadMap(data);
 
+                    that.mouse = new Kolonist.Mouse(that, result);
 
+                    that.addMesh(result);
+                });
 
             this.heightMap = heightMap;
-
         }
 
         Renderer.prototype.getCamera = function () {

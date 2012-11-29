@@ -13,7 +13,7 @@
 
             if (this._material && point) {
                 this._material.highlight.position.x = point.x;
-                this._material.highlight.position.y = -point.z;                
+                this._material.highlight.position.y = -point.z;
             }
         }
 
@@ -23,21 +23,15 @@
                 height = data.Height,
                 scale = 10;
 
-            var geometry = generateHeightMap(data.Heights);
-            var material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
+            this._geometry = generateHeightMap(data.Heights);
+            this._material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
 
-            geometry.computeCentroids();
-            geometry.computeFaceNormals();
-            geometry.computeVertexNormals();
-
+            this._geometry.computeCentroids();
 
             var subdivision = new THREE.SubdivisionModifier(1);
-            subdivision.modify(geometry);
+            subdivision.modify(this._geometry);
 
-            this._geometry = geometry;
-            this._material = material;
-
-            var mesh = new THREE.Mesh(geometry, material);
+            var mesh = new THREE.Mesh(this._geometry, this._material);
 
             mesh.rotation.x = -Kolonist.Util.Degree2Rad(90);
             mesh.dynamic = true;
@@ -45,11 +39,7 @@
             this.mesh = mesh;
 
             return mesh;
-
-            function calculateIndex(x, y) {
-                return x + y * width;
-            }
-
+            
             function generateHeightMap(heights) {
 
                 var geometry = new THREE.PlaneGeometry(width, height, width - 1, height - 1);
@@ -62,14 +52,9 @@
             }
             function generateMaterial(terrainTypes, availiableTerrainTypes) {
 
-                function nearestPow2(n) {
-                    var l = Math.log(n) / Math.LN2;
-                    return Math.pow(2, Math.ceil(l));
-                }
-
                 var tileTextureSize = 1024;
                 var tileSize = 32;
-                var textureSize = Math.min(nearestPow2(Math.max(width, height) * tileSize), 2048);
+                var textureSize = Math.min(Kolonist.Util.nearestPow2(Math.max(width, height) * tileSize), 2048);
                 var textureScale = Math.min(textureSize / tileTextureSize, 3.0);
 
                 var tex_uniforms = {
@@ -223,7 +208,7 @@
                     fragmentShader: fragmentShader,
                     vertexShader: vertexShader,
                     uniforms: tex_uniforms
-                });                
+                });
 
                 material.highlight = {
                     position: tex_uniforms.highlight_position.value

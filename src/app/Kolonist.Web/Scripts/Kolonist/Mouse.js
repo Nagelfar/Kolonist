@@ -27,6 +27,7 @@ var Kolonist;
                 y: 0,
                 button: 0,
                 state: States.UP,
+                point: null
             };
 
             var canvasRenderer = renderer.getRenderer();
@@ -83,7 +84,7 @@ var Kolonist;
                         intersection = ray.intersectObject(sceneObjects);
 
                     if (intersection.length > 0) {
-                        registeredSceneObjects[i].point = intersection[0].point;
+                        mouse_info.point = registeredSceneObjects[i].point = intersection[0].point;
 
                         var info = buildHitInformation(registeredSceneObjects[i].point);
                         for (var callback in registeredSceneObjects[i].callbacks) {
@@ -91,13 +92,6 @@ var Kolonist;
                         }
                     }
                 }
-
-                //var intersection = ray.intersectObjects(sceneObject);
-                //if (intersection.length === 0) {
-                //    return null;
-                //} else {
-                //    mouse_info.point = intersection[0].point;
-                //}
             };
 
             this.getInformation = function (sceneObjects) {

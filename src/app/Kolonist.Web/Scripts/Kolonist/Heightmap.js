@@ -44,7 +44,7 @@
                 for (var i = 0; i < geometry.vertices.length; i++) {
                     var vertex = geometry.vertices[i];
                     var calculatedHeight = heights[i];
-                    vertex.z = calculatedHeight;
+                    vertex.z = calculatedHeight * scale;
                     vertex.x = vertex.x * scale / 2;
                     vertex.y = vertex.y * scale / 2;
                 }
@@ -92,9 +92,9 @@
                     "void main()",
                     "{",
                         "vUv = uv;",
-                        "height = position.z;",
+                        "height = position.z/scale;",
 
-                        "vPosition = vec3(position.x, position.y, height * scale);",
+                        "vPosition = vec3(position.x, position.y, position.z);",
 
                         "vec4 mvPosition = modelViewMatrix * vec4(vPosition, 1.0 );",
                         "gl_Position = projectionMatrix * mvPosition;",

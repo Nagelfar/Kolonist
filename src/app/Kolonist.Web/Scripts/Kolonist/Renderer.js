@@ -10,11 +10,6 @@
             cameraZPosition: 100
         };
 
-        //var camera, scene, renderer, controls, mouse;
-
-        //var _$parentContainer;
-        //var heightMap;
-
         function Renderer($parentContainer) {
             this._$parentContainer = $parentContainer;
 
@@ -100,7 +95,7 @@
         };
 
         Renderer.prototype.loadMap = function (url) {
-            var heightMap = new Kolonist.Heightmap(this);
+            var heightMap = new Kolonist.Heightmap();
             var that = this;
 
             $.ajax(url)

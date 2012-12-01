@@ -17,15 +17,13 @@ namespace Kolonist.Web.Models
         public IEnumerable<double> Heights { get; set; }
         public IEnumerable<int> TerrainTypes { get; set; }
 
-        public IEnumerable<Link> AvailiableTerrainTypes { get; set; }
-
         public int Width { get; set; }
         public int Height { get; set; }
 
+        public Link CompositeTerrainTile { get; set; }
+
         internal static HeightMapModel Create(WorldModel world)
         {
-            world.Width = world.Height = 128;
-            //double heightModificator = 3.0;
             var terrainNames = TerrainType.GetTypes()
                 .OrderBy(x => x.BaseHeight)
                 .ToArray();
@@ -96,8 +94,8 @@ namespace Kolonist.Web.Models
             noiseBuilder.Build();
 
             var heights = noiseMap.Share().Select(x => (double)x).ToList();
-            float max = 0.0f, min = 0.0f;
-            noiseMap.MinMax(out min, out max);
+            //float max = 0.0f, min = 0.0f;
+            //noiseMap.MinMax(out min, out max);
 
             return new HeightMapModel
             {
@@ -105,9 +103,9 @@ namespace Kolonist.Web.Models
                 TerrainTypes = heights.Select(x =>
                 {
                     var selected = terrainNames.SkipWhile(terrain => terrain.BaseHeight <= x).FirstOrDefault();
-                    return selected ?? terrainNames.Last();         
+                    return selected ?? terrainNames.Last();
                 }).Select(x => x.Id).ToArray(),
-                
+
                 Width = world.Width,
                 Height = world.Height
             };

@@ -2,9 +2,7 @@
 (function (Kolonist) {
     var Heightmap = (function () {
 
-
-        function Heightmap(renderer) {
-            this._renderer = renderer;
+        function Heightmap() {
             this._material = null;
             this._geometry = null;
         }
@@ -24,7 +22,7 @@
                 scale = 10;
 
             this._geometry = generateHeightMap(data.Heights);
-            this._material = generateMaterial(data.TerrainTypes, data.AvailiableTerrainTypes);
+            this._material = generateMaterial(data.TerrainTypes, data.CompositeTerrainTile);
 
             this._geometry.computeCentroids();
 
@@ -50,7 +48,7 @@
 
                 return geometry;
             }
-            function generateMaterial(terrainTypes, availiableTerrainTypes) {
+            function generateMaterial(terrainTypes, tileTexture) {
 
                 var tileTextureSize = 1024;
                 var tileSize = 32;
@@ -60,7 +58,7 @@
                 var tex_uniforms = {
                     tileTexture: {
                         type: 't',
-                        value: THREE.ImageUtils.loadTexture(availiableTerrainTypes[0].Href)
+                        value: THREE.ImageUtils.loadTexture(tileTexture.Href)
                     },
 
                     texscale: {

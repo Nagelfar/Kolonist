@@ -18,15 +18,15 @@ namespace Kolonist.Web.Controllers
             var map = HeightMapModel.Create(world);
 
             var terrainTypes = TerrainType.GetTypes();
-            map.AvailiableTerrainTypes = terrainTypes.Select(x => new Link
+            map.CompositeTerrainTile = new Link
             {
-                Href = _resourceLinker.GetContent<ResourceController>(action => action.TerrainTile(x.Id)),
-                Rel = x.Caption
-            }).ToArray();
+                Href = _resourceLinker.GetContent<ResourceController>(action => action.CompositeTile(id)),
+                Rel = "TileTexture"
+            };
 
             return map;
         }
-        
+
         // POST api/<controller>
         public void Post([FromBody]string value)
         {

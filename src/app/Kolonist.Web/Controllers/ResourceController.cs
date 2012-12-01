@@ -7,15 +7,11 @@ using System.Web.Mvc;
 namespace Kolonist.Web.Controllers
 {
     public class ResourceController : Controller
-    {
-        //
-        // GET: /Resource/
+    {        
 
-        public ActionResult TerrainTile(int id)
+        public ActionResult CompositeTile(int worldId)
         {
-            //return File("~/Content/map/" + id + ".jpg", "image/jpg");
             return File("~/Content/map/ComposedTexture.png", "image/png");
         }
-
     }
 }

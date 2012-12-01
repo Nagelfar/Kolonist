@@ -42,8 +42,11 @@
 
                 var geometry = new THREE.PlaneGeometry(width, height, width - 1, height - 1);
                 for (var i = 0; i < geometry.vertices.length; i++) {
+                    var vertex = geometry.vertices[i];
                     var calculatedHeight = heights[i];
-                    geometry.vertices[i].z = calculatedHeight;
+                    vertex.z = calculatedHeight;
+                    vertex.x = vertex.x * scale / 2;
+                    vertex.y = vertex.y * scale / 2;
                 }
 
                 return geometry;

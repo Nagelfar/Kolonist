@@ -17,6 +17,8 @@
 
             this.renderer = new THREE.WebGLRenderer();
 
+            this.mouse = new Kolonist.Mouse(this);
+
             this.initializeCamara = function () {
                 var controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
                 controls.userRotate = false;
@@ -83,9 +85,9 @@
                 callback();
 
                 that.controls.update();
-
-                if (that.mouse && that.heightMap) {
-                    var mousePosition = that.mouse.getInformation();
+                
+                if (that.heightMap) {
+                    var mousePosition = that.mouse.getInformation(that.heightMap.mesh);
                     that.heightMap.highlightOnMap(mousePosition.point);
                 }
 
@@ -102,7 +104,7 @@
                 .success(function (data) {
                     var result = heightMap.loadMap(data);
 
-                    that.mouse = new Kolonist.Mouse(that, result);
+                    that.mouse.registerSceneObject(result);
 
                     that.addMesh(result);
                 });

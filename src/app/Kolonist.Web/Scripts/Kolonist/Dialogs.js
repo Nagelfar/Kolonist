@@ -59,7 +59,7 @@ var Kolonist;
                     .done(function (result) {
                       alert('success' + result);
 
-                      $dialog.modal('close');
+                      $dialog.modal('hide');
                     }).error(function(data){
                         alert('error ' + data);
                     });

@@ -8,7 +8,7 @@ using System.Web;
 
 namespace Kolonist.Web.App_Start
 {
-    public class MassTransistConfig : IWindsorInstaller
+    public class MassTransistConfig //: IWindsorInstaller
     {
         public void Install(Castle.Windsor.IWindsorContainer container, Castle.MicroKernel.SubSystems.Configuration.IConfigurationStore store)
         {

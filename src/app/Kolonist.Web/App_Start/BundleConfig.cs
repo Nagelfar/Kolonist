@@ -2,10 +2,11 @@
 using System.Web;
 using System.Web.Optimization;
 using System.Linq;
+using Castle.MicroKernel.Registration;
 
 namespace Kolonist.Web
 {
-    public class BundleConfig
+    public class BundleConfig : IWindsorInstaller
     {
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
@@ -90,6 +91,13 @@ namespace Kolonist.Web
                     "~/Content/less/responsive.less"
                 );
 
+        }
+
+        public void Install(Castle.Windsor.IWindsorContainer container, Castle.MicroKernel.SubSystems.Configuration.IConfigurationStore store)
+        {
+            var bundles = BundleTable.Bundles;
+
+            RegisterBundles(bundles);
         }
     }
 }

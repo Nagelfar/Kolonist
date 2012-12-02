@@ -134,12 +134,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AreaConfig.cs" />
     <Compile Include="App_Start\Bootstrapper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\MassTransistConfig.cs" />
+    <Compile Include="App_Start\Installers\MassTransistInstaller.cs" />
+    <Compile Include="App_Start\Installers\MvcWebApiControllerInstaller.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NeHeController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
@@ -151,6 +152,8 @@
     <Compile Include="Infrastructure\IResourceLinker.cs" />
     <Compile Include="Infrastructure\KolonistControllerBase.cs" />
     <Compile Include="Infrastructure\Link.cs" />
+    <Compile Include="Infrastructure\Mvc\ReleasingHttpControllerFactory.cs" />
+    <Compile Include="Infrastructure\Mvc\WindsorControllerFactory.cs" />
     <Compile Include="Infrastructure\RouteLinker.cs" />
     <Compile Include="Models\BuildingModel.cs" />
     <Compile Include="Models\HeightMapModel.cs" />

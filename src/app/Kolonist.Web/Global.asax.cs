@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Castle.Windsor;
+using Kolonist.Web.App_Start;
+using Kolonist.Web.Infrastructure.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -14,14 +18,20 @@ namespace Kolonist.Web
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        static IWindsorContainer _container;
+
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
+            _container = Bootstrapper.BootUp();
 
-            WebApiConfig.Register(GlobalConfiguration.Configuration);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(_container.Kernel));
+            GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerActivator), new ReleasingHttpControllerFactory(_container));
+        }
+
+        protected void Application_End()
+        {
+            if (_container != null)
+                _container.Dispose();
         }
     }
 }

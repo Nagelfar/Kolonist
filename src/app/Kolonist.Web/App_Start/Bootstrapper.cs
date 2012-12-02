@@ -13,7 +13,7 @@ namespace Kolonist.Web.App_Start
             var container = new WindsorContainer();
 
             container.Install(Castle.Windsor.Installer.FromAssembly.This());
-
+            
             return container;
         }
     }

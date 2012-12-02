@@ -27,7 +27,14 @@ var Kolonist;
                 y: 0,
                 button: 0,
                 state: States.UP,
-                point: null
+                point: null,
+
+                isLeft: function () {
+                    return this.button === 0;
+                },
+                isRight: function () {
+                    return this.button === 2;
+                }
             };
 
             var canvasRenderer = renderer.getRenderer();

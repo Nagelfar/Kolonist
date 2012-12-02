@@ -3,21 +3,27 @@
 }
 
 <h2>Index</h2>
-<div id="hero" class="hero-unit" style="position: absolute;">
-    my content
-    <div>
-        <button class="btn">a Button</button>
-        <div class="control-group alert ">alert! attention <span class="close">x</span></div>
+<div id="build-dialog" class="modal hide" data-backdrop="false">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Build something</h3>
+    </div>
+    <div class="modal-body">
+        <div class="btn-group">
+            <button class="btn">Woodworker</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
     </div>
 </div>
-<div id="container" style="min-width: 1024px;width:100%; min-height: 768px;height:100%;">
+<div id="container" style="min-width: 1024px; width: 100%; min-height: 768px; height: 100%; position: static">
 </div>
-<div id="tmp"></div>
 
 @section Scripts{
 
     <script>
-        var oldPos = new THREE.Vector3(0, 0, 0);
 
         var renderer;
 
@@ -26,28 +32,38 @@
             renderer = new Kolonist.Renderer($container);
 
             renderer.init({ width: $container.innerWidth(), height: $container.innerHeight() });
-            
-            //var ambientLight = new THREE.AmbientLight(0x00ff00);
+
+            renderer.mouse.registerClickHandler(function (data) {
+                if (data.point) {
+                    var cube = new THREE.Mesh(
+                        new THREE.CubeGeometry(5, 5, 5),
+                        new THREE.MeshBasicMaterial({
+                            color: 0x0000ff
+                        })
+                    );
+                    cube.position.addSelf(new THREE.Vector3(data.point.x, data.point.y, data.point.z));
+
+                    renderer.addMesh(cube);
+
+
+                    $('#build-dialog').modal()
+                        .css({
+                            "left": data.x,
+                            "top": data.y, 
+                            "margin-left": 0,
+                            "margin-top": 0,
+                            "width": 'auto'
+                        })
+                    ;
+                }
+            });
+
             var light = new THREE.DirectionalLight(0xffffff);
-            //light.translateZ(200);
             light.position.set(0, 0, 1).normalize();
-            var imageLoader = new THREE.ImageLoader();
-            var image = new Image();
-            imageLoader.load('@Url.Content("~/Content/texture.jpg")', image);
-
-            var texture = new THREE.Texture(image);
-
-            //renderer.addMesh(ambientLight);
             renderer.addMesh(light);
+
             renderer.loadMap('http://localhost:12930/api/map/1600');
 
-            var material = new THREE.MeshLambertMaterial({
-                color: 0x0000ff
-            });
-            var cube = new THREE.Mesh(new THREE.CubeGeometry(10, 10, 10), material);
-            cube.rotation.y += 5;
-            cube.rotation.x += 5;
-            //    renderer.addMesh(cube);
             renderer.animate(function () {
                 //mesh.rotation.x += 0.01;
                 //mesh.rotation.y += 0.02;
@@ -55,16 +71,6 @@
 
         }
         init();
-
-
-        $(function () {
-            $('#container').click(function (evnt) {
-                //$('#hero').offset({
-                //    left: evnt.clientX,
-                //    top: evnt.clientY
-                //});
-
-            });
-        });
+        
     </script>
 }

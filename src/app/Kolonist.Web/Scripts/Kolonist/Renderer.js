@@ -69,21 +69,6 @@
 
             this.initializeCamara();
 
-            var that = this;
-            this.mouse.registerClickHandler(function (data) {
-                if (data.point) {
-                    var cube = new THREE.Mesh(
-                        new THREE.CubeGeometry(5, 5, 5),
-                        new THREE.MeshBasicMaterial({
-                            color: 0x0000ff
-                        })
-                    );
-                    cube.position.addSelf(new THREE.Vector3(data.point.x, data.point.y, data.point.z));
-                    //cube.position.addSelf(new THREE.Vector3(0, 0, -50));
-
-                    that.scene.add(cube);
-                }
-            });
 
             this._$parentContainer.append(this.renderer.domElement);
         };

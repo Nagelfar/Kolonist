@@ -65,6 +65,7 @@
     <Content Include="js\jasmine-samples\SpecHelper.js" />
     <Content Include="js\jasmine.js" />
     <Content Include="js\Scenarios\WhenCreatingAHeightMap.js" />
+    <Content Include="js\Scenarios\WhenUsingUtil.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\Kolonist.Web\Kolonist.Web.csproj">

@@ -7481,3 +7481,7 @@ body {
     overflow: visible !important;
   }
 }
+#build-dialog .modal {
+  position: relative;
+  width: auto;
+}

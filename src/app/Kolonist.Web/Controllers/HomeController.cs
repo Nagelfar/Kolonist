@@ -1,4 +1,5 @@
-﻿using Kolonist.Web.Models;
+﻿using Kolonist.Contracts.Commands;
+using Kolonist.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,15 @@ namespace Kolonist.Web.Controllers
             };
 
             return View(buildings);
+        }
+
+        [HttpPost]
+        public ActionResult Construct(ConstructANewBuilding command)
+        {
+            if (ModelState.IsValid)
+            {
+            }
+            return Content("ok");
         }
     }
 }

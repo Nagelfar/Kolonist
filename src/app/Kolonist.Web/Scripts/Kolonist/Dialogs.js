@@ -4,6 +4,11 @@ var Kolonist;
     var Build = (function () {
 
         function Build($dialog) {
+            $dialog = $($dialog);
+
+            var currentPoint = {
+                position: null
+            };
 
             this.openDialog = function (data) {
                 if (data.point && data.isLeft()) {
@@ -17,10 +22,11 @@ var Kolonist;
 
                     renderer.addMesh(cube);
 
-                    
+                    currentPoint.position = data.point;
+
                     $dialog
                         .modal({
-                            keyboard:true
+                            keyboard: true
                         })
                         .css({
                             "left": data.x,
@@ -36,6 +42,31 @@ var Kolonist;
                     ;
                 }
             }
+
+            $dialog.find('.btn.build').click(function () {
+                var data = {
+                    Position: {
+                        X: currentPoint.position.x,
+                        Y: currentPoint.position.y
+                    },
+                    BuildingTypeId: $(this).data('building-type')
+                };
+                Kolonist.Util
+                    .jsonPost($(this).parents('form').attr('action'), data)
+                //$.ajax({
+                //    type: 'POST',
+                //    url: $(this).parents('form').attr('action'),
+                //    dataType: 'json',
+                //    data: JSON.stringify(data),
+                //    contentType: "application/json; charset=utf-8"
+                //})
+                  .success(function (result) {
+                      alert('success' + result);
+
+                      $dialog.modal('close');
+                  });
+            });
+
         }
         return Build;
     })();

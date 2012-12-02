@@ -132,6 +132,7 @@
     <Compile Include="Infrastructure\KolonistControllerBase.cs" />
     <Compile Include="Infrastructure\Link.cs" />
     <Compile Include="Infrastructure\RouteLinker.cs" />
+    <Compile Include="Models\BuildingModel.cs" />
     <Compile Include="Models\HeightMapModel.cs" />
     <Compile Include="Models\TerrainType.cs" />
     <Compile Include="Models\WorldModel.cs" />
@@ -309,6 +310,7 @@
     </Content>
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
+    <Content Include="Scripts\Kolonist\Dialogs.js" />
     <Content Include="Scripts\Kolonist\Heightmap.js" />
     <Content Include="Scripts\ImprovedNoise.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -347,6 +349,8 @@
     <Content Include="Scripts\three.min.js.map">
       <DependentUpon>three.js</DependentUpon>
     </Content>
+    <Content Include="Views\Home\BuildDialog.cshtml" />
+    <Content Include="Views\Home\EditorTemplates\BuildingModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

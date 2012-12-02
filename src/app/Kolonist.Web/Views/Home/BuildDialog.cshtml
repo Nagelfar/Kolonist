@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Kolonist.Web.Models.BuildingModel>
+
+<div id="build-dialog" class="modal hide" data-backdrop="false">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Build something</h3>
+    </div>
+    <div class="modal-body">
+        <div class="btn-group">
+            <h1>Simple Buildings</h1>
+            @foreach (var building in Model)
+            {
+                @Html.EditorFor(_ => building)            
+            }
+        </div>
+    </div>
+</div>

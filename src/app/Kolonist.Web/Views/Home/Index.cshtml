@@ -3,20 +3,8 @@
 }
 
 <h2>Index</h2>
-<div id="build-dialog" class="modal hide" data-backdrop="false">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Build something</h3>
-    </div>
-    <div class="modal-body">
-        <div class="btn-group">
-            <button class="btn">Woodworker</button>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn">Close</a>
-        <a href="#" class="btn btn-primary">Save changes</a>
-    </div>
+<div >
+    @Html.Action("BuildDialog")
 </div>
 <div id="container" style="min-width: 1024px; width: 100%; min-height: 768px; height: 100%; position: static">
 </div>
@@ -33,30 +21,7 @@
 
             renderer.init({ width: $container.innerWidth(), height: $container.innerHeight() });
 
-            renderer.mouse.registerClickHandler(function (data) {
-                if (data.point && data.isLeft()) {
-                    var cube = new THREE.Mesh(
-                        new THREE.CubeGeometry(5, 5, 5),
-                        new THREE.MeshBasicMaterial({
-                            color: 0x0000ff
-                        })
-                    );
-                    cube.position.addSelf(new THREE.Vector3(data.point.x, data.point.y, data.point.z));
-
-                    renderer.addMesh(cube);
-
-
-                    $('#build-dialog').modal()
-                        .css({
-                            "left": data.x,
-                            "top": data.y, 
-                            "margin-left": 0,
-                            "margin-top": 0,
-                            "width": 'auto'
-                        })
-                    ;
-                }
-            });
+            renderer.mouse.registerClickHandler(new Kolonist.Build($('#build-dialog')).openDialog);
 
             var light = new THREE.DirectionalLight(0xffffff);
             light.position.set(0, 0, 1).normalize();
@@ -71,6 +36,6 @@
 
         }
         init();
-        
+
     </script>
 }

@@ -1,0 +1,10 @@
+﻿@model Kolonist.Web.Models.BuildingModel
+@{
+    Layout = null;
+    var disabledClass = Model.IsAvaliable
+        ? string.Empty
+        : "disabled";
+}
+
+
+<button class="btn build @disabledClass" data-building-type="@Html.DisplayFor(x => x.BuildingTypeId)" title="@Html.DisplayFor(x => x.Description)">@Html.DisplayFor(x => x.Caption)</button>

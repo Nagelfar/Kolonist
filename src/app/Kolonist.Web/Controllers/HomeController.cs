@@ -49,7 +49,7 @@ namespace Kolonist.Web.Controllers
             if (ModelState.IsValid)
             {
             }
-            return Content("ok");
+            return Json(new { r = "ok" });
         }
     }
 }

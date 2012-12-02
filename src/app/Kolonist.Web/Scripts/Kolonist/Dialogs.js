@@ -43,6 +43,9 @@ var Kolonist;
                 }
             }
 
+            $dialog.find('form').submit(function () {
+                return false;
+            });
             $dialog.find('.btn.build').click(function () {
                 var data = {
                     Position: {
@@ -53,18 +56,13 @@ var Kolonist;
                 };
                 Kolonist.Util
                     .jsonPost($(this).parents('form').attr('action'), data)
-                //$.ajax({
-                //    type: 'POST',
-                //    url: $(this).parents('form').attr('action'),
-                //    dataType: 'json',
-                //    data: JSON.stringify(data),
-                //    contentType: "application/json; charset=utf-8"
-                //})
-                  .success(function (result) {
+                    .done(function (result) {
                       alert('success' + result);
 
                       $dialog.modal('close');
-                  });
+                    }).error(function(data){
+                        alert('error ' + data);
+                    });
             });
 
         }

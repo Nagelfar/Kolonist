@@ -103,7 +103,7 @@ var Kolonist;
 
             this.registerClickHandler = function (handler) {
                 clickHandlers.push(handler);
-            }
+            };
 
             this.registerSceneObject = function (sceneObjects, callback) {
                 if (!sceneObjects)
@@ -123,7 +123,7 @@ var Kolonist;
                     matches.forEach(function (value) {
                         value.callbacks.push(callback);
                     });
-            }
+            };
 
             function buildHitInformation(hitInformation) {
                 var info = {
@@ -136,7 +136,7 @@ var Kolonist;
             }
             function findRegisteredObject(sceneObjects) {
                 return registeredSceneObjects.filter(function (value) {
-                    return value.objects == sceneObjects;
+                    return value.objects === sceneObjects;
                 });
             }
 

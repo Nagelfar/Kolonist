@@ -12,8 +12,16 @@ namespace Kolonist.Web.App_Start.Installers
     {
         public void Install(Castle.Windsor.IWindsorContainer container, Castle.MicroKernel.SubSystems.Configuration.IConfigurationStore store)
         {
-            container.Register(Classes.FromThisAssembly().BasedOn<IController>().LifestyleTransient());
-            container.Register(Classes.FromThisAssembly().BasedOn<IHttpController>().LifestyleTransient());
+            container.Register(
+                Classes.FromThisAssembly()
+                    .BasedOn<IController>()
+                    .LifestyleTransient()
+                    );
+            container.Register(
+                Classes.FromThisAssembly()
+                .BasedOn<IHttpController>()
+                .LifestyleTransient()
+                );
         }
     }
 }

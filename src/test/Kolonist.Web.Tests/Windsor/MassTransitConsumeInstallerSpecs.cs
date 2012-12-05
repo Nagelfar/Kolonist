@@ -1,4 +1,5 @@
-﻿using Kolonist.Web.App_Start.Installers;
+﻿using Kolonist.Contracts.Commands;
+using Kolonist.Web.App_Start.Installers;
 using Machine.Specifications;
 using MassTransit;
 using System;
@@ -23,5 +24,6 @@ namespace Kolonist.Web.Tests.Windsor
         It should_register_classes = () => handlers.ShouldNotBeEmpty();
         It should_register_classes_as_transient = () => handlers.ShouldEachConformTo(x => x.ComponentModel.LifestyleType == Castle.Core.LifestyleType.Transient);
 
+        It should_be_resolvable = () => windsorContainer.Resolve<Consumes<ConstructANewBuilding>.All>().ShouldNotBeNull();
     }
 }

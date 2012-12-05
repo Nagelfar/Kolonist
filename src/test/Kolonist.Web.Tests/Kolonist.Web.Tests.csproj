@@ -102,6 +102,10 @@
     <Content Include="js\Scenarios\WhenUsingUtil.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\app\Kolonist.Contracts\Kolonist.Contracts.csproj">
+      <Project>{c1ffd30d-fa2b-48c3-8c2d-9ed2457793fa}</Project>
+      <Name>Kolonist.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\app\Kolonist.Domain\Kolonist.Domain.csproj">
       <Project>{b438a8e3-617d-4c40-b53e-c0f8b2a93879}</Project>
       <Name>Kolonist.Domain</Name>

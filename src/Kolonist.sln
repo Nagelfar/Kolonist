@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kolonist.Web.Tests", "test\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kolonist.Contracts", "app\Kolonist.Contracts\Kolonist.Contracts.csproj", "{C1FFD30D-FA2B-48C3-8C2D-9ED2457793FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kolonist.Domain", "app\Kolonist.Domain\Kolonist.Domain.csproj", "{B438A8E3-617D-4C40-B53E-C0F8B2A93879}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{C1FFD30D-FA2B-48C3-8C2D-9ED2457793FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1FFD30D-FA2B-48C3-8C2D-9ED2457793FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1FFD30D-FA2B-48C3-8C2D-9ED2457793FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B438A8E3-617D-4C40-B53E-C0F8B2A93879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B438A8E3-617D-4C40-B53E-C0F8B2A93879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B438A8E3-617D-4C40-B53E-C0F8B2A93879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B438A8E3-617D-4C40-B53E-C0F8B2A93879}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

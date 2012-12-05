@@ -6,7 +6,7 @@ using System.Web.Http;
 
 namespace Kolonist.Web.Infrastructure
 {
-    public abstract class KolonistControllerBase : ApiController
+    public abstract class KolonistApiControllerBase : ApiController
     {
         protected IResourceLinker _resourceLinker;
 

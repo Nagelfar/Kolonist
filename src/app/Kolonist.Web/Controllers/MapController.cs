@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace Kolonist.Web.Controllers
 {
-    public class MapController : KolonistControllerBase
+    public class MapController : KolonistApiControllerBase
     {
         // GET api/<controller>/5
         public HeightMapModel Get(int id)

@@ -49,6 +49,7 @@ namespace Kolonist.Web.Controllers
             if (ModelState.IsValid)
             {
             }
+            
             return Json(new { r = "ok" });
         }
     }

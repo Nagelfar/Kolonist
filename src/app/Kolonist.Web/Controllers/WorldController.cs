@@ -11,7 +11,7 @@ using Kolonist.Web.Infrastructure;
 
 namespace Kolonist.Web.Controllers
 {
-    public class WorldController : KolonistControllerBase
+    public class WorldController : KolonistApiControllerBase
     {
         public static readonly WorldModel[] MapModels = new[]{
             WorldModel.Create()

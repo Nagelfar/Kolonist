@@ -1,4 +1,5 @@
 ﻿using Kolonist.Contracts.Commands;
+using Kolonist.Web.Infrastructure;
 using Kolonist.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Kolonist.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : KolonistMvcControllerBase
     {
         //
         // GET: /Home/
@@ -49,7 +50,7 @@ namespace Kolonist.Web.Controllers
             if (ModelState.IsValid)
             {
             }
-            
+
             return Json(new { r = "ok" });
         }
     }

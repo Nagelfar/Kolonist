@@ -150,6 +150,7 @@
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Infrastructure\IResourceLinker.cs" />
     <Compile Include="Infrastructure\KolonistApiControllerBase.cs" />
+    <Compile Include="Infrastructure\KolonistMvcControllerBase.cs" />
     <Compile Include="Infrastructure\Link.cs" />
     <Compile Include="Infrastructure\Mvc\ReleasingHttpControllerFactory.cs" />
     <Compile Include="Infrastructure\Mvc\WindsorControllerFactory.cs" />

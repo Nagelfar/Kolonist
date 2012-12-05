@@ -15,16 +15,10 @@ using System.Web.Mvc;
 namespace Kolonist.Web.Tests.Windsor
 {
     [Subject(typeof(MvcWebApiControllerInstaller))]
-    public abstract class ControllerInstallerSpecs
+    public abstract class ControllerInstallerSpecs : WindsorSpecs
     {
-        internal static IWindsorContainer windsorContainer;
-
-        Establish context = () => windsorContainer = new WindsorContainer();
-
+        
         Because of = () => windsorContainer.Install(new MvcWebApiControllerInstaller());
-
-
-
 
         internal static IHandler[] GetAllHandlers(IWindsorContainer container)
         {
@@ -58,8 +52,8 @@ namespace Kolonist.Web.Tests.Windsor
         It should_have_all_concrete_HttpControllers_with_an_Controller_suffix = () =>
             GetPublicClassesFromApplicationAssembly(c => c.Is<IHttpController>() && !c.IsAbstract && c.Name.EndsWith("Controller")).ShouldEqual(GetImplementationTypesFor(typeof(IHttpController), windsorContainer));
 
-        It should_verify_that_all_MvcControllers_live_in_a_controller_namespace =()=>
-            GetPublicClassesFromApplicationAssembly(c=>c.Namespace.Contains("Controllers") && !c.IsAbstract && c.Is<IController>()).ShouldEqual(GetImplementationTypesFor(typeof(IController),windsorContainer));
+        It should_verify_that_all_MvcControllers_live_in_a_controller_namespace = () =>
+            GetPublicClassesFromApplicationAssembly(c => c.Namespace.Contains("Controllers") && !c.IsAbstract && c.Is<IController>()).ShouldEqual(GetImplementationTypesFor(typeof(IController), windsorContainer));
         It should_verify_that_all_HttpControllers_live_in_a_controller_namespace = () =>
             GetPublicClassesFromApplicationAssembly(c => c.Namespace.Contains("Controllers") && !c.IsAbstract && c.Is<IHttpController>()).ShouldEqual(GetImplementationTypesFor(typeof(IHttpController), windsorContainer));
 
@@ -91,6 +85,4 @@ namespace Kolonist.Web.Tests.Windsor
                 .ToArray();
         }
     }
-
-
 }

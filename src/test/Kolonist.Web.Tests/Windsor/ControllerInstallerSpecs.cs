@@ -19,16 +19,7 @@ namespace Kolonist.Web.Tests.Windsor
     {
         
         Because of = () => windsorContainer.Install(new MvcWebApiControllerInstaller());
-
-        internal static IHandler[] GetAllHandlers(IWindsorContainer container)
-        {
-            return GetHandlersFor(typeof(object), container);
-        }
-
-        internal static IHandler[] GetHandlersFor(Type type, IWindsorContainer container)
-        {
-            return container.Kernel.GetAssignableHandlers(type);
-        }
+        
     }
 
     public class when_registering_controllers : ControllerInstallerSpecs

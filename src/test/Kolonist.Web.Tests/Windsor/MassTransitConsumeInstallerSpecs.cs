@@ -21,6 +21,7 @@ namespace Kolonist.Web.Tests.Windsor
         private static Castle.MicroKernel.IHandler[] handlers;
 
         Because of_getting_handlers = () => handlers = GetHandlersFor<IConsumer>();
+
         It should_register_classes = () => handlers.ShouldNotBeEmpty();
         It should_register_classes_as_transient = () => handlers.ShouldEachConformTo(x => x.ComponentModel.LifestyleType == Castle.Core.LifestyleType.Transient);
 

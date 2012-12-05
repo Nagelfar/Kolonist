@@ -1,6 +1,7 @@
 ﻿using Kolonist.Contracts.Commands;
 using Kolonist.Web.Infrastructure;
 using Kolonist.Web.Models;
+using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,11 +45,14 @@ namespace Kolonist.Web.Controllers
             return View(buildings);
         }
 
+        public IServiceBus Bus { get; set; }
+
         [HttpPost]
         public ActionResult Construct(ConstructANewBuilding command)
         {
             if (ModelState.IsValid)
             {
+                Bus.Publish(command);
             }
 
             return Json(new { r = "ok" });

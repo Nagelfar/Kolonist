@@ -15,7 +15,7 @@ namespace Kolonist.Web.App_Start.Installers
             container.Register(
                 AllTypes.FromAssemblyContaining<Buildings>()
                     .BasedOn<IConsumer>()
-                    .WithServiceAllInterfaces()
+                    //.WithServiceAllInterfaces()
                     .LifestyleTransient()
                 );
         }

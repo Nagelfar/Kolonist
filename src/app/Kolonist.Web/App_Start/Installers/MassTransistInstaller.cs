@@ -23,7 +23,7 @@ namespace Kolonist.Web.App_Start
 
                             sbc.UseMulticastSubscriptionClient();
 
-                            sbc.ReceiveFrom("msmq://localhost/test_queue");
+                            sbc.ReceiveFrom("msmq://localhost/web");
                             sbc.SetCreateMissingQueues(true);
                             sbc.UseJsonSerializer();
 

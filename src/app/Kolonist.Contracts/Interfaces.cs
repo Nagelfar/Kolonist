@@ -9,4 +9,7 @@ namespace Kolonist.Contracts
     public interface ICommand
     {
     }
+    public interface IEvent
+    {
+    }
 }

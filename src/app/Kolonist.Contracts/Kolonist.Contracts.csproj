@@ -36,7 +36,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ConstructANewBuilding.cs" />
-    <Compile Include="ICommand.cs" />
+    <Compile Include="Events\BuildingConstructed.cs" />
+    <Compile Include="Interfaces.cs" />
     <Compile Include="MapPosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -37,6 +37,9 @@
   <ItemGroup>
     <Compile Include="Commands\ConstructANewBuilding.cs" />
     <Compile Include="Events\BuildingConstructed.cs" />
+    <Compile Include="Identities\BuildingId.cs" />
+    <Compile Include="Identities\BuildingTypeId.cs" />
+    <Compile Include="Identities\Identity.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="MapPosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

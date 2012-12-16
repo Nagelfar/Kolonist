@@ -15,6 +15,7 @@ namespace Kolonist.Domain
 
         public void Consume(ConstructANewBuilding message)
         {
+            
             //var proxy = Magnum.Reflection.InterfaceImplementationExtensions.InitializeProxy<BuildingConstructed>(new { });
             //Bus.Publish<BuildingConstructed>(proxy
             //, ctx =>

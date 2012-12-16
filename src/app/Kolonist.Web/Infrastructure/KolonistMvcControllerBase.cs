@@ -12,16 +12,21 @@ namespace Kolonist.Web.Infrastructure
     {
         public IServiceBus Bus { get; set; }
 
-        protected void ExecuteCommand(ICommand command)
+        protected internal virtual bool IsValid(object potentialCommand)
+        {
+            return potentialCommand != null && ModelState.IsValid && TryValidateModel(potentialCommand);
+        }
+
+        protected internal virtual void ExecuteCommand(ICommand command)
         {
             Bus.Publish(command);
         }
 
-        protected TCommand ExecuteCommand<TCommand>(ICommandConverter<TCommand> potentialCommand, Action<TCommand> callback = null)
+        protected internal TCommand ExecuteCommand<TCommand>(ICommandConverter<TCommand> potentialCommand, Action<TCommand> callback = null)
             where TCommand : ICommand
         {
             // Model-State validation check first to prevent duplicate validation of the command!
-            if (ModelState.IsValid && TryValidateModel(potentialCommand))
+            if (IsValid(potentialCommand))
             {
                 var command = potentialCommand.ToCommand();
                 if (callback != null)

@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Kolonist.Contracts.Identities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Kolonist.Contracts.Events
 {
-    public interface BuildingConstructed : IEvent
+    public interface BuildingConstructed : IEvent<BuildingId>
     {
         //MapPosition Position { get; set; }
 
-        Guid BuildingType { get; set; }
+        BuildingTypeId BuildingType { get; set; }
 
-        Guid BuildingId { get; set; }
     }
 }

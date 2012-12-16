@@ -61,7 +61,7 @@ namespace Kolonist.Web.Tests.Infrastructure
     {
         static MyModel model;
 
-        Establish modelContext = () => model = new MyModel();
+        Establish context = () => model = new MyModel();
 
         Because of = () => controller.ExecuteCommand(model);
 
@@ -74,8 +74,11 @@ namespace Kolonist.Web.Tests.Infrastructure
     {
         static MyModel model;
 
-        Establish modelContext = () => model = new MyModel { };
-        Establish validController = () => controller.Valid = true;
+        Establish context = () =>
+        {
+            model = new MyModel { };
+            controller.Valid = true;
+        };
 
         Because of = () => controller.ExecuteCommand(model);
 
@@ -89,8 +92,11 @@ namespace Kolonist.Web.Tests.Infrastructure
         static MyModel model;
         private static bool WasCalled;
 
-        Establish modelContext = () => model = new MyModel { };
-        Establish validController = () => controller.Valid = true;
+        Establish context = () =>
+        {
+            model = new MyModel { };
+            controller.Valid = true;
+        };
 
         static void Callback(MyCommand command)
         {

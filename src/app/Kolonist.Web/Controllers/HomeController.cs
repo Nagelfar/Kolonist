@@ -47,11 +47,11 @@ namespace Kolonist.Web.Controllers
 
 
         [HttpPost]
-        public ActionResult Construct(ConstructBuilding command)
+        public ActionResult Construct(ConstructBuilding construct)
         {
-            ExecuteCommand(command);
+            var command = ExecuteCommand(construct);
 
-            return Json(new { r = "ok" });
+            return Json(new { r = "ok - " + command.Id.ToString() });
         }
     }
 }

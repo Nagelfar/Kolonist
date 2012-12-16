@@ -17,13 +17,17 @@ namespace Kolonist.Web.Infrastructure
             Bus.Publish(command);
         }
 
-        protected void ExecuteCommand<TCommand>(ICommandConverter<TCommand> potentialCommand)
+        protected TCommand ExecuteCommand<TCommand>(ICommandConverter<TCommand> potentialCommand)
             where TCommand : ICommand
         {
             if (ModelState.IsValid && TryValidateModel(potentialCommand))
             {
-                ExecuteCommand(potentialCommand.ToCommand());
+                var command = potentialCommand.ToCommand();
+                ExecuteCommand(command);
+                return command;
             }
+
+            return default(TCommand);
         }
     }
 }

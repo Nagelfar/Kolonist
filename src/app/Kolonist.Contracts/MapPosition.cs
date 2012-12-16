@@ -8,16 +8,14 @@ namespace Kolonist.Contracts
 {
     public class MapPosition
     {
-        //public readonly double Y;
-        //public readonly double X;
+        public readonly double Y;
+        public readonly double X;
 
-        //public MapPosition(double x, double y)
-        //{
-        //    X = x;
-        //    Y = y;
-        //}
+        public MapPosition(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
 
-        public double X { get; set; }
-        public double Y { get; set; }
     }
 }

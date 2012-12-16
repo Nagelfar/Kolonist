@@ -48,11 +48,11 @@ namespace Kolonist.Web.Controllers
         public IServiceBus Bus { get; set; }
 
         [HttpPost]
-        public ActionResult Construct(ConstructANewBuilding command)
+        public ActionResult Construct(ConstructBuilding command)
         {
             if (ModelState.IsValid)
             {
-                Bus.Publish(command);
+                Bus.Publish(command.ToCommand());
             }
 
             return Json(new { r = "ok" });

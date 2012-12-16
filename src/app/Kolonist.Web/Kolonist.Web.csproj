@@ -157,6 +157,7 @@
     <Compile Include="Infrastructure\Mvc\WindsorControllerFactory.cs" />
     <Compile Include="Infrastructure\RouteLinker.cs" />
     <Compile Include="Models\BuildingModel.cs" />
+    <Compile Include="Models\ConstructBuilding.cs" />
     <Compile Include="Models\HeightMapModel.cs" />
     <Compile Include="Models\TerrainType.cs" />
     <Compile Include="Models\WorldModel.cs" />

@@ -1,4 +1,5 @@
 ﻿using Kolonist.Contracts.Commands;
+using Kolonist.Web.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Web;
 
 namespace Kolonist.Web.Models
 {
-    public class ConstructBuilding
+    public class ConstructBuilding : ICommandConverter<ConstructANewBuilding>
     {
         public class PositionOnMap
         {
@@ -24,7 +25,7 @@ namespace Kolonist.Web.Models
         public PositionOnMap Position { get; set; }
 
 
-        internal ConstructANewBuilding ToCommand()
+        public ConstructANewBuilding ToCommand()
         {
             return new ConstructANewBuilding
             {

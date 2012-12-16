@@ -159,6 +159,7 @@
     <Compile Include="Models\BuildingModel.cs" />
     <Compile Include="Models\ConstructBuilding.cs" />
     <Compile Include="Models\HeightMapModel.cs" />
+    <Compile Include="Infrastructure\ICommandConverter.cs" />
     <Compile Include="Models\TerrainType.cs" />
     <Compile Include="Models\WorldModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

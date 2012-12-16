@@ -154,6 +154,7 @@
     <Compile Include="Infrastructure\KolonistMvcControllerBase.cs" />
     <Compile Include="Infrastructure\Link.cs" />
     <Compile Include="Infrastructure\Mvc\ReleasingHttpControllerFactory.cs" />
+    <Compile Include="Infrastructure\Mvc\ValidationActionFilter.cs" />
     <Compile Include="Infrastructure\Mvc\WindsorControllerFactory.cs" />
     <Compile Include="Infrastructure\RouteLinker.cs" />
     <Compile Include="Models\BuildingModel.cs" />

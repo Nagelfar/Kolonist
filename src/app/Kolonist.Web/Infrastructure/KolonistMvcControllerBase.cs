@@ -20,6 +20,7 @@ namespace Kolonist.Web.Infrastructure
         protected TCommand ExecuteCommand<TCommand>(ICommandConverter<TCommand> potentialCommand)
             where TCommand : ICommand
         {
+            // Model-State validation check first to prevent duplicate validation of the command!
             if (ModelState.IsValid && TryValidateModel(potentialCommand))
             {
                 var command = potentialCommand.ToCommand();

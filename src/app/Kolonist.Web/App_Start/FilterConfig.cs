@@ -11,11 +11,12 @@ namespace Kolonist.Web
         public static void RegisterGlobalMvcFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new ValidationActionFilter.MvcActionFilter());
         }
 
         public static void RegisterGlobalWebApiFilters(System.Web.Http.Filters.HttpFilterCollection filters)
         {
-            filters.Add(new ValidationActionFilter());
+            filters.Add(new ValidationActionFilter.WebApiActionFilter());
         }
 
         public void Install(Castle.Windsor.IWindsorContainer container, Castle.MicroKernel.SubSystems.Configuration.IConfigurationStore store)

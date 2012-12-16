@@ -57,11 +57,11 @@ var Kolonist;
                 Kolonist.Util
                     .jsonPost($(this).parents('form').attr('action'), data)
                     .done(function (result) {
-                      alert('success' + result);
+                      alert('success' + result.toString());
 
                       $dialog.modal('hide');
                     }).error(function(data){
-                        alert('error ' + data);
+                        alert('error ' + data.toString());
                     });
             });
 

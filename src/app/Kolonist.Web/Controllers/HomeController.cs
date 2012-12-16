@@ -49,9 +49,11 @@ namespace Kolonist.Web.Controllers
         [HttpPost]
         public ActionResult Construct(ConstructBuilding construct)
         {
-            var command = ExecuteCommand(construct);
+            var id = Guid.Empty;
+            var command = ExecuteCommand(construct, x => id = x.Id.Id);
 
-            return Json(new { r = "ok - " + command.Id.ToString() });
+
+            return Json(new { r = "ok - " + id.ToString() });
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Kolonist.Web.Infrastructure
 
         protected internal virtual void ExecuteCommand(ICommand command)
         {
-            Bus.Publish(command);
+            Bus.Endpoint.Send(command);
         }
 
         protected internal TCommand ExecuteCommand<TCommand>(ICommandConverter<TCommand> potentialCommand, Action<TCommand> callback = null)

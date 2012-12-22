@@ -1,29 +1,49 @@
 ﻿using Kolonist.Contracts.Commands;
 using MassTransit;
+using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Kolonist.Contracts.Events;
+using Kolonist.Contracts;
+using MassTransit.Saga;
 
 namespace Kolonist.Domain
 {
-    public class Buildings : Consumes<ConstructANewBuilding>.All
+    public class Buildings : //SagaStateMachine<Buildings>, ISaga
+        Consumes<ConstructANewBuilding>.All
     {
+
+        //static Buildings()
+        //{
+        //    Define(() =>
+        //    {
+        //        Initially(When(
+        //    });
+        //}
 
         public IServiceBus Bus { get; set; }
 
         public void Consume(ConstructANewBuilding message)
         {
-            
-            //var proxy = Magnum.Reflection.InterfaceImplementationExtensions.InitializeProxy<BuildingConstructed>(new { });
-            //Bus.Publish<BuildingConstructed>(proxy
-            //, ctx =>
-            //{
-            //    //ctx.Message.Position = message.Position;
-            //    ctx.Message.BuildingType = message.BuildingTypeId;
-            //    ctx.Message.Id = message.BuildingId;
-            //});
+
+            Bus.Publish(new BuildingConstructedImpl
+            {
+                Id = message.Id,
+                BuildingType = message.BuildingTypeId,
+                Position = message.Position
+            });
+        
         }
+
+        private class BuildingConstructedImpl : BuildingConstructed
+        {
+            public Contracts.Identities.BuildingTypeId BuildingType { get; set; }
+
+            public Contracts.Identities.BuildingId Id { get; set; }
+            public MapPosition Position { get; set; }
+        }
+
     }
 }

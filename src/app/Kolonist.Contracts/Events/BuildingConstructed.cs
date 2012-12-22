@@ -8,9 +8,9 @@ namespace Kolonist.Contracts.Events
 {
     public interface BuildingConstructed : IEvent<BuildingId>
     {
-        //MapPosition Position { get; set; }
+        MapPosition Position { get; }
 
-        BuildingTypeId BuildingType { get; set; }
+        BuildingTypeId BuildingType { get; }
 
     }
 }

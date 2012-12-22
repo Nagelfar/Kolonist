@@ -9,7 +9,7 @@ namespace Kolonist.Contracts.Commands
 {
     public class ConstructANewBuilding : ICommand<BuildingId>
     {
-        public BuildingTypeId BuildingTypeId { get; set; }
+        public BuildingTypeId BuildingType { get; set; }
         public MapPosition Position { get; set; }
         public BuildingId Id { get; set; }
     }

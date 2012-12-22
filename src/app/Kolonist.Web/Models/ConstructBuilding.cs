@@ -29,7 +29,7 @@ namespace Kolonist.Web.Models
         {
             return new ConstructANewBuilding
             {
-                BuildingTypeId = new Contracts.Identities.BuildingTypeId(BuildingTypeId.Value),
+                BuildingType = new Contracts.Identities.BuildingTypeId(BuildingTypeId.Value),
                 Id = new Contracts.Identities.BuildingId(Guid.NewGuid()),
                 Position = new Contracts.MapPosition(Position.X.Value, Position.Y.Value)
             };

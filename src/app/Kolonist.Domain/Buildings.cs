@@ -31,7 +31,7 @@ namespace Kolonist.Domain
             Bus.Publish(new BuildingConstructedImpl
             {
                 Id = message.Id,
-                BuildingType = message.BuildingTypeId,
+                BuildingType = message.BuildingType,
                 Position = message.Position
             });
         

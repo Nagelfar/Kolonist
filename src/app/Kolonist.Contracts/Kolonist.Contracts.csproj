@@ -36,7 +36,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ConstructANewBuilding.cs" />
-    <Compile Include="Events\BuildingConstructed.cs" />
+    <Compile Include="Events\Buildings\BuildingConstructed.cs" />
+    <Compile Include="Events\Buildings\BuildingTypeCreated.cs" />
     <Compile Include="Identities\BuildingId.cs" />
     <Compile Include="Identities\BuildingTypeId.cs" />
     <Compile Include="Identities\Identity.cs" />

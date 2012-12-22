@@ -12,6 +12,8 @@ var Kolonist;
 
             this.openDialog = function (data) {
                 if (data.point && data.isLeft()) {
+
+                    // works only because we are in renderer  context!
                     var cube = new THREE.Mesh(
                         new THREE.CubeGeometry(5, 5, 5),
                         new THREE.MeshBasicMaterial({

@@ -8,6 +8,7 @@ using System.Web;
 using Kolonist.Contracts.Events;
 using Kolonist.Contracts;
 using MassTransit.Saga;
+using Kolonist.Contracts.Events.Buildings;
 
 namespace Kolonist.Domain
 {

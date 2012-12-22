@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Kolonist.Contracts.Events
+namespace Kolonist.Contracts.Events.Buildings
 {
     public interface BuildingConstructed : IEvent<BuildingId>
     {

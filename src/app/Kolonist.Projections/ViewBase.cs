@@ -37,6 +37,7 @@ namespace Kolonist.Projections
 
         protected virtual void Update(TDto dto)
         {
+            Contract.Requires(dto != null);
 
         }
 
@@ -49,6 +50,7 @@ namespace Kolonist.Projections
 
         protected virtual void Delete(TDto dto)
         {
+            Contract.Requires(dto != null);
         }
 
         protected virtual void Delete(TId id)

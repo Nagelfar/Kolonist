@@ -1,5 +1,6 @@
 ﻿using Castle.MicroKernel.Registration;
 using Kolonist.Domain;
+using Kolonist.Projections;
 using MassTransit;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,10 @@ namespace Kolonist.Web.App_Start.Installers
         {
             container.Register(
                 AllTypes.FromAssemblyContaining<Buildings>()
+                    .BasedOn<IConsumer>()
+                    .LifestyleTransient(),
+
+                AllTypes.FromAssemblyContaining<ViewBase>()
                     .BasedOn<IConsumer>()
                     .LifestyleTransient()
                 );

@@ -143,6 +143,7 @@
     <Compile Include="App_Start\Installers\MvcWebApiControllerInstaller.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ResetController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\WorldController.cs" />
     <Compile Include="Global.asax.cs">
@@ -390,6 +391,10 @@
     <ProjectReference Include="..\Kolonist.Domain\Kolonist.Domain.csproj">
       <Project>{b438a8e3-617d-4c40-b53e-c0f8b2a93879}</Project>
       <Name>Kolonist.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kolonist.Projections\Kolonist.Projections.csproj">
+      <Project>{1c5b7591-0949-4a62-bf54-6305dd6ecfd6}</Project>
+      <Name>Kolonist.Projections</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace Kolonist.Contracts.Events.Buildings
 {
-    public interface BuildingTypeCreated : IEvent<BuildingTypeId>
+    public class BuildingTypeCreated : IEvent<BuildingTypeId>
     {
-        string Name { get; set; }
+        public string Name { get; set; }
+
+        public BuildingTypeId Id
+        {
+            get;
+            set;
+        }
     }
 }

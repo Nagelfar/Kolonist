@@ -14,6 +14,7 @@ namespace Kolonist.Web.Infrastructure
 
         protected internal virtual bool IsValid(object potentialCommand)
         {
+            // Model-State validation check first to prevent duplicate validation of the command!
             return potentialCommand != null && ModelState.IsValid && TryValidateModel(potentialCommand);
         }
 
@@ -24,8 +25,7 @@ namespace Kolonist.Web.Infrastructure
 
         protected internal TCommand ExecuteCommand<TCommand>(ICommandConverter<TCommand> potentialCommand, Action<TCommand> callback = null)
             where TCommand : ICommand
-        {
-            // Model-State validation check first to prevent duplicate validation of the command!
+        {            
             if (IsValid(potentialCommand))
             {
                 var command = potentialCommand.ToCommand();

@@ -9,6 +9,7 @@ using Kolonist.Contracts.Commands;
 using Kolonist.Contracts.Identities;
 using Kolonist.Contracts.Events;
 using MassTransit;
+using Kolonist.Contracts;
 
 namespace Kolonist.Domain.Tests.Scenarios.Buildings
 {
@@ -31,7 +32,7 @@ namespace Kolonist.Domain.Tests.Scenarios.Buildings
                 {
                     BuildingType = TypeId,
                     Id = BuildingId,
-                    Position = new Contracts.MapPosition(10, 12)
+                    Position = new MapPosition(10, 12)
                 });
                 x.Validate();
             });

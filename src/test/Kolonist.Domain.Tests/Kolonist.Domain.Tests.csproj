@@ -72,6 +72,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Contracts\IdentityConvertTests.cs" />
     <Compile Include="Scenarios\Buildings\WhenConstructingABuilding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -163,6 +164,34 @@ namespace Kolonist.Contracts.Identities
         public static string ToTransportable(IIdentity identity)
         {
             return identity.GetTag() + "-" + identity.GetId();
+        }
+
+        private static Type FindType(string name)
+        {
+            return typeof(IIdentity)
+                .Assembly
+                .ExportedTypes
+                .FirstOrDefault(x => x.Name.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+        }
+        public static IIdentity FromTransportable(string transportable)
+        {
+            var index = transportable.IndexOf('-');
+            var tag = transportable.Substring(0, index);
+            var id = transportable.Substring(index + 1);
+
+            var identityType = FindType(tag)
+                ?? FindType(tag + "id")
+                ?? FindType(tag + "identity");
+            if (identityType == null)
+                throw new InvalidOperationException("No class found with tag name " + tag);
+
+            var idType = identityType.BaseType.GenericTypeArguments.First();
+            var converter = TypeDescriptor.GetConverter(idType);
+            var identityParam = converter.ConvertFromString(id);
+
+            var instance = Activator.CreateInstance(identityType, identityParam);
+
+            return instance as IIdentity;
         }
     }
 }

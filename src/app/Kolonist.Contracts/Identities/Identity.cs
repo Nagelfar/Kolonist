@@ -166,12 +166,17 @@ namespace Kolonist.Contracts.Identities
             return identity.GetTag() + "-" + identity.GetId();
         }
 
-        private static Type FindType(string name)
-        {
-            return typeof(IIdentity)
+        private static readonly IEnumerable<Type> IdentityTypes =
+            typeof(IIdentity)
                 .Assembly
                 .ExportedTypes
-                .FirstOrDefault(x => x.Name.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+                .Where(x => !x.IsAbstract && !x.IsInterface)
+                .Where(x => typeof(IIdentity).IsAssignableFrom(x))
+                .ToList();
+
+        private static Type FindType(string name)
+        {
+            return IdentityTypes.FirstOrDefault(x => x.Name.EndsWith(name, StringComparison.OrdinalIgnoreCase));
         }
         public static IIdentity FromTransportable(string transportable)
         {

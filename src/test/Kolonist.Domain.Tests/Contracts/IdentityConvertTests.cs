@@ -29,7 +29,7 @@ namespace Kolonist.Domain.Tests.Contracts
         It should_be_of_type_BuildingId = () => Identity.ShouldBeOfType<BuildingId>();
         It should_have_the_correct_id = () => ((BuildingId)Identity).Id.ShouldEqual(Id);
     }
-
+     
     public class Can_Convert_BuildingTypeId_From_Transportable : IdentityConvertTests
     {
         static string Transportable;

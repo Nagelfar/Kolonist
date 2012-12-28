@@ -6,6 +6,7 @@ using Kolonist.Contracts.Identities;
 using Raven.Client;
 using Raven.Client.Converters;
 using Raven.Client.Embedded;
+using Raven.Database.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,11 @@ namespace Kolonist.Web.App_Start.Installers
         {
             var docStore = new EmbeddableDocumentStore
             {
-                UseEmbeddedHttpServer = true,
+                UseEmbeddedHttpServer = true,                
                 ConnectionStringName = "RavenDB"
             };
             docStore.Conventions.IdentityTypeConvertors.Add(new Converter());
+            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(docStore.Configuration.Port);
 
             container.Register(
                 Component.For<IDocumentStore>()

@@ -61,7 +61,7 @@ namespace Kolonist.Contracts.Identities
 
         public string GetId()
         {
-            return Id.ToString();
+            return Id.ToString();            
         }
 
         public virtual string GetTag()

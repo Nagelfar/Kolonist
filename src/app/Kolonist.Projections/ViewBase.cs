@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Kolonist.Contracts.Identities;
+using Raven.Client;
+using Raven.Client.Converters;
+using Raven.Client.Document;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -9,6 +13,7 @@ namespace Kolonist.Projections
 {
     public abstract class ViewBase
     {
+        public IDocumentSession Session { get; set; }
     }
     public abstract class ViewBaseWithId<TDto, TId> : ViewBase<TDto, TId> where TDto : DtoBase<TId>
     {
@@ -21,6 +26,9 @@ namespace Kolonist.Projections
         protected virtual void AddOrThrow(TDto dto)
         {
             Contract.Requires(dto != null);
+
+            Session.Store(dto);
+            Session.SaveChanges();
         }
 
         protected virtual void Update(TId id, Action<TDto> change)
@@ -39,22 +47,39 @@ namespace Kolonist.Projections
         {
             Contract.Requires(dto != null);
 
+            Session.Store(dto);
+            Session.SaveChanges();
         }
 
+        protected virtual TDto Get(IIdentity id)
+        {
+            return Get(IdentityConvert.ToTransportable(id));
+        }
+        protected virtual TDto Get(string id)
+        {
+            return Session.Load<TDto>(id);
+        }
         protected virtual TDto Get(TId id)
         {
             Contract.Requires(id != null);
 
-            return default(TDto);
+            var identity = id as IIdentity;
+            if (identity != null)
+                return Get(identity);
+            else
+                return Get(id.ToString());
         }
 
         protected virtual void Delete(TDto dto)
         {
             Contract.Requires(dto != null);
+
+            Session.Delete(dto);
         }
 
         protected virtual void Delete(TId id)
         {
+            Session.Delete(Get(id));
         }
 
     }

@@ -10,6 +10,7 @@ namespace Kolonist.Web.Infrastructure
 {
     public abstract class KolonistMvcControllerBase : Controller
     {
+        public Raven.Client.IDocumentSession DocumentSession { get; set; }
         public IServiceBus Bus { get; set; }
 
         protected internal virtual bool IsValid(object potentialCommand)
@@ -38,5 +39,6 @@ namespace Kolonist.Web.Infrastructure
 
             return default(TCommand);
         }
+        
     }
 }

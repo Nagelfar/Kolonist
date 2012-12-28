@@ -20,6 +20,11 @@ namespace Kolonist.Web
     {
         static IWindsorContainer _container;
 
+        public static IWindsorContainer Container
+        {
+            get { return _container; }
+        }
+
         protected void Application_Start()
         {
             _container = Bootstrapper.BootUp();

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Kolonist.Contracts
 {
-    public class MapPosition
+    public struct MapPosition
     {
         public readonly double Y;
         public readonly double X;
-
+        
         public MapPosition(double x, double y)
         {
             X = x;

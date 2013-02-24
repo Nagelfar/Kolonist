@@ -27,12 +27,11 @@ namespace Kolonist.Web.Models
 
         public ConstructANewBuilding ToCommand()
         {
-            return new ConstructANewBuilding
-            {
-                BuildingType = new Contracts.Identities.BuildingTypeId(BuildingTypeId.Value),
-                Id = new Contracts.Identities.BuildingId(Guid.NewGuid()),
-                Position = new Contracts.MapPosition(Position.X.Value, Position.Y.Value)
-            };
+            return new ConstructANewBuilding(
+                new Contracts.Identities.BuildingId(Guid.NewGuid()),
+                new Contracts.Identities.BuildingTypeId(BuildingTypeId.Value),
+                new Contracts.MapPosition(Position.X.Value, Position.Y.Value)
+            );
         }
     }
 }

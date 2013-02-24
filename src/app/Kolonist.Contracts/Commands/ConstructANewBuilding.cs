@@ -12,5 +12,12 @@ namespace Kolonist.Contracts.Commands
         public BuildingTypeId BuildingType { get; set; }
         public MapPosition Position { get; set; }
         public BuildingId Id { get; set; }
+
+        public ConstructANewBuilding(BuildingId id, BuildingTypeId type, MapPosition position)
+        {
+            Id = id;
+            BuildingType = type;
+            Position = position;
+        }
     }
 }

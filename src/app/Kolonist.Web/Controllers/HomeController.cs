@@ -5,6 +5,7 @@ using MassTransit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -50,10 +51,16 @@ namespace Kolonist.Web.Controllers
         public ActionResult Construct(ConstructBuilding construct)
         {
             var id = Guid.Empty;
+
             var command = ExecuteCommand(construct, x => id = x.Id.Id);
 
+            if(ModelState.IsValid)
+                return Json(id.ToString());
+                        
+            this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            this.Response.TrySkipIisCustomErrors=true;
 
-            return Json(new { r = "ok - " + id.ToString() });
+            return Json(ModelState.Where(x => x.Value.Errors.Any()));
         }
     }
 }
